@@ -28,15 +28,18 @@ export function AppHeader({
 }: AppHeaderProps) {
   return (
     <header className={cn("border-b border-slate-100 bg-white", className)}>
-      <div className="relative mx-auto h-16 max-w-[1600px] px-6 md:px-8">
-        {/* لوگو + منو — سمت راست صفحه */}
-        <div className="absolute inset-y-0 right-6 flex items-center gap-5 md:right-8 md:gap-8">
+      <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-4 px-6 md:px-8">
+        {/* سمت راست: لوگو + منو */}
+        <div className="flex min-w-0 items-center gap-4 md:gap-6 lg:gap-8">
           <Link href="/" className="flex shrink-0 items-center gap-2.5">
             <OwjLogo />
             <span className="text-xl font-extrabold text-primary-deep">اوج</span>
           </Link>
 
-          <nav className="hidden items-center gap-4 md:flex lg:gap-5" aria-label="منوی اصلی">
+          <nav
+            className="hidden min-w-0 items-center gap-4 overflow-hidden md:flex lg:gap-5"
+            aria-label="منوی اصلی"
+          >
             {headerNavLinks.map((link) => (
               <Link
                 key={link.label}
@@ -49,8 +52,8 @@ export function AppHeader({
           </nav>
         </div>
 
-        {/* ورود + اعلان — سمت چپ صفحه */}
-        <div className="absolute inset-y-0 left-6 flex items-center gap-3 md:left-8">
+        {/* سمت چپ: ورود + اعلان */}
+        <div className="flex shrink-0 items-center gap-3">
           {showAuth && (
             <Link
               href={authHref}
