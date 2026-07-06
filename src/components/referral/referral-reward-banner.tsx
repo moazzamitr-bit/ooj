@@ -4,7 +4,9 @@ import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { Gift, Sparkles } from "lucide-react";
 
-const BANKNOTE_SRC = "/images/banknote-100k.png";
+import { assetPath } from "@/lib/utils/asset";
+
+const BANKNOTE_SRC = assetPath("/images/banknote-100k.png");
 
 const confettiBills = Array.from({ length: 20 }, (_, i) => {
   const spread = ((i % 10) / 9) * Math.PI * 1.35 - Math.PI * 0.85;
