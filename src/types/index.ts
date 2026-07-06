@@ -165,6 +165,9 @@ export interface InvitedFriend {
   phone: string;
   status: ReferralStatus;
   earnedChances: number;
+  firstTestCompleted?: boolean;
+  invitedAgo?: string;
+  avatarColor?: string;
 }
 
 export interface ParentDailyReport {
