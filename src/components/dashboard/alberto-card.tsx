@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { MessageCircle, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
-import { assetPath } from "@/lib/utils/asset";
+import albertoImage from "@/assets/images/alberto.png";
 import { getAlbertBullets } from "@/lib/data/profile-mock-data";
 import { AlbertoChatModal } from "@/components/dashboard/alberto-chat-modal";
 import { useApp } from "@/providers/app-provider";
@@ -63,13 +63,13 @@ export function AlbertoCard({ className, compact }: AlbertoCardProps) {
             </button>
           </div>
 
-          <div className="relative order-first h-64 w-full shrink-0 overflow-hidden md:order-none md:h-full md:min-h-0 md:w-[44%]">
+          <div className="relative order-first h-72 w-full shrink-0 overflow-hidden md:order-none md:h-full md:min-h-0 md:w-[44%]">
             <Image
-              src={assetPath("/images/alberto.png")}
+              src={albertoImage}
               alt="آلبرتو، مشاور هوشمند اوج"
               fill
               sizes="(max-width: 768px) 100vw, 44vw"
-              className="object-cover object-[center_12%] drop-shadow-xl"
+              className="object-contain object-bottom drop-shadow-xl"
               priority
             />
           </div>
