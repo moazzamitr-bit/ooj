@@ -1,0 +1,28 @@
+name: Deploy to Vercel (full API + Supabase)
+
+on:
+  workflow_dispatch:
+
+# برای فعال‌سازی: در GitHub → Settings → Secrets → Actions این‌ها را اضافه کنید:
+# VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
+# SUPABASE_SERVICE_ROLE_KEY (اختیاری)
+
+env:
+  NEXT_PUBLIC_SUPABASE_URL: https://bnjvjrsagsrqnkvvjlvv.supabase.co
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJuanZqcnNhZ3NycW5rdnZqbHZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzNjYxMDgsImV4cCI6MjA5ODk0MjEwOH0.HoukvvwbgYqT8i1xg6b_mF-Ru3i15D45P8Q0DMytsCk
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: "--prod"
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

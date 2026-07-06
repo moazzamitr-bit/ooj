@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
   trailingSlash: isGithubPages ? true : undefined,
   env: {
     NEXT_PUBLIC_BASE_PATH: isGithubPages ? "/ooj" : "",
+    NEXT_PUBLIC_STATIC_EXPORT: isGithubPages ? "true" : "",
   },
   images: {
     unoptimized: true,

@@ -3,9 +3,17 @@ import { AUTH_KEY } from "@/lib/local-db";
 import type { AuthSession } from "@/lib/utils/auth";
 import type { Student, UserRole } from "@/types";
 
+const useClientSupabase =
+  isSupabaseConfigured && process.env.NEXT_PUBLIC_STATIC_EXPORT === "true";
+
 export async function sendOtp(phone: string): Promise<{ success: boolean; message: string }> {
   if (!/^09\d{9}$/.test(phone)) {
     return { success: false, message: "شماره موبایل معتبر نیست." };
+  }
+
+  if (useClientSupabase) {
+    const { sendOtpViaSupabaseClient } = await import("@/lib/services/supabase-auth.client");
+    return sendOtpViaSupabaseClient(phone);
   }
 
   if (isSupabaseConfigured) {
@@ -26,6 +34,11 @@ export async function verifyOtp(
   otp: string,
   role: UserRole = "student"
 ): Promise<{ success: boolean; session?: AuthSession; student?: Student; message: string }> {
+  if (useClientSupabase) {
+    const { verifyOtpViaSupabaseClient } = await import("@/lib/services/supabase-auth.client");
+    return verifyOtpViaSupabaseClient(phone, otp, role);
+  }
+
   if (isSupabaseConfigured) {
     const res = await fetch("/api/auth/verify-otp", {
       method: "POST",
