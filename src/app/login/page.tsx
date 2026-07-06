@@ -40,7 +40,7 @@ export default function LoginPage() {
     if (result.success) {
       if (role === "admin") router.push("/admin");
       else if (role === "parent") router.push("/parent/dashboard");
-      else router.push("/student/profile");
+      else router.push("/student");
     }
   };
 

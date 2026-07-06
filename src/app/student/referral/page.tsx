@@ -45,7 +45,7 @@ export default function StudentReferralPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <AppHeader authLabel="داشبورد" authHref="/student/profile" />
+      <AppHeader authLabel="داشبورد" authHref="/student" />
 
       <main className="mx-auto max-w-[900px] px-6 py-10">
         <div className="text-center">
