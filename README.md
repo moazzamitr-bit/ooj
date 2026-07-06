@@ -1,0 +1,91 @@
+# اوج (Owj)
+
+پلتفرم هوشمند کنکور برای دانش‌آموزان و والدین — با مشاور AI آلبرتو.
+
+## Tech Stack
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Recharts
+- Supabase (اختیاری — با fallback محلی)
+- Zustand
+
+## Routes
+
+| Route | Description |
+|-------|-------------|
+| `/` | صفحه فرود والدین |
+| `/login` | ورود با OTP |
+| `/invite/[code]` | لندینگ دعوت |
+| `/parent/register` | ثبت‌نام فرزند |
+| `/parent/success` | تأیید ثبت‌نام |
+| `/parent/dashboard` | گزارش روزانه والد |
+| `/student/onboarding` | معرفی دانش‌آموز |
+| `/student/quiz` | تست ۲ دقیقه‌ای |
+| `/student/reward` | جایزه اولین شانس |
+| `/student/referral` | دعوت دوستان |
+| `/student/profile` | داشبورد دانش‌آموز |
+| `/admin` | پنل مدیریت |
+
+## API Routes
+
+| Route | Description |
+|-------|-------------|
+| `/api/auth/send-otp` | ارسال کد تأیید |
+| `/api/auth/verify-otp` | تأیید OTP و ورود |
+| `/api/quiz/submit` | ثبت پاسخ‌های تست |
+| `/api/parent/register` | ثبت‌نام فرزند |
+| `/api/referral/invite` | ثبت دعوت |
+| `/api/chat/alberto` | چت با آلبرتو |
+
+## Local Development
+
+```bash
+npm install
+npm run dev
+```
+
+باز کنید: [http://localhost:3000](http://localhost:3000)
+
+## احراز هویت (حالت توسعه)
+
+- صفحه ورود: `/login`
+- کد OTP: `123456`
+- شماره نمونه: `09121234567`
+
+## ذخیره‌سازی داده
+
+**بدون Supabase:** داده‌ها در `localStorage` (کلید `owj_local_db_v1`) ذخیره می‌شوند — تست، دعوت، پیشرفت فصل‌ها و گزارش والدین واقعاً persist می‌شوند.
+
+**با Supabase:** فایل `src/lib/supabase/schema.sql` را در SQL Editor اجرا کنید و متغیرهای `.env.local` را پر کنید.
+
+## Environment Variables
+
+```bash
+cp .env.example .env.local
+```
+
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+OPENAI_API_KEY=          # اختیاری — برای پاسخ هوشمند آلبرتو
+```
+
+## قابلیت‌های فعال
+
+- ورود OTP (محلی + API)
+- تست کنکوری با ثبت پاسخ و امتیازدهی
+- پیشرفت فصل‌ها بعد از تست
+- دعوت دوستان با شماره موبایل
+- ثبت‌نام والدین
+- گزارش روزانه والد بر اساس جلسات مطالعه
+- چت آلبرتو (fallback هوشمند + OpenAI اختیاری)
+- پنل ادمین با داده واقعی
+- نقشه قبولی استان‌ها
+
+## GitHub Pages
+
+با `GITHUB_PAGES=true` خروجی static است — API routes کار نمی‌کنند. برای production کامل از Vercel یا سرور Node استفاده کنید.
