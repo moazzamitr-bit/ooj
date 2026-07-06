@@ -1,7 +1,7 @@
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { AUTH_KEY } from "@/lib/local-db";
 import type { AuthSession } from "@/lib/utils/auth";
-import type { UserRole } from "@/types";
+import type { Student, UserRole } from "@/types";
 
 export async function sendOtp(phone: string): Promise<{ success: boolean; message: string }> {
   if (!/^09\d{9}$/.test(phone)) {
@@ -25,7 +25,7 @@ export async function verifyOtp(
   phone: string,
   otp: string,
   role: UserRole = "student"
-): Promise<{ success: boolean; session?: AuthSession; message: string }> {
+): Promise<{ success: boolean; session?: AuthSession; student?: Student; message: string }> {
   if (isSupabaseConfigured) {
     const res = await fetch("/api/auth/verify-otp", {
       method: "POST",
@@ -35,6 +35,10 @@ export async function verifyOtp(
     const data = await res.json();
     if (data.success && data.session) {
       localStorage.setItem(AUTH_KEY, JSON.stringify(data.session));
+      if (data.student) {
+        const { upsertLocalStudent } = await import("@/lib/local-db");
+        upsertLocalStudent(data.student);
+      }
     }
     return data;
   }

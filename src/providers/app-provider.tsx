@@ -108,7 +108,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const result = await verifyOtp(phone, otp, role);
       if (result.success && result.session) {
         setSession(result.session);
-        const s = getCurrentStudent(result.session.user.id);
+        const s = result.student ?? getCurrentStudent(result.session.user.id);
         setStudent(s);
         setSubjectProgress(getStudentSubjectProgress(s.id));
       }

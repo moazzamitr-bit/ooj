@@ -170,6 +170,21 @@ export function updateLocalStudent(studentId: string, patch: Partial<Student>) {
   saveLocalDb(db);
 }
 
+/** بعد از ورود با Supabase، پروفایل را در localStorage هم نگه می‌دارد تا UI کار کند */
+export function upsertLocalStudent(student: Student) {
+  const db = loadLocalDb();
+  const index = db.students.findIndex((s) => s.user_id === student.user_id || s.id === student.id);
+  if (index >= 0) {
+    db.students[index] = { ...db.students[index], ...student };
+  } else {
+    db.students.push(student);
+    if (!db.chapter_progress[student.id]) db.chapter_progress[student.id] = {};
+    if (db.wallet_balance[student.id] === undefined) db.wallet_balance[student.id] = 0;
+    if (db.quiz_completed[student.id] === undefined) db.quiz_completed[student.id] = false;
+  }
+  saveLocalDb(db);
+}
+
 export function getSubjectProgress(studentId: string): Record<string, number> {
   const db = loadLocalDb();
   const student = db.students.find((s) => s.id === studentId);
