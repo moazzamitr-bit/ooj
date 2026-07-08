@@ -9,6 +9,7 @@ export interface StudyChapterNode {
   id: string;
   title: string;
   topics: StudyTopicNode[];
+  progressPercent: number;
 }
 
 type GradeKey = "year1" | "year2" | "year3";
@@ -20,15 +21,30 @@ function topics(subjectId: string, chapterId: string, titles: string[]): StudyTo
   }));
 }
 
+function mockChapterProgress(subjectId: string, grade: GradeKey, index: number): number {
+  const gradeOffset = grade === "year1" ? 0 : grade === "year2" ? 7 : 14;
+  const hash =
+    subjectId.split("").reduce((sum, ch) => sum + ch.charCodeAt(0), 0) +
+    index * 17 +
+    gradeOffset;
+  return Math.min(92, 22 + (hash % 68));
+}
+
 function chapter(
   subjectId: string,
   grade: GradeKey,
   index: number,
   title: string,
-  topicTitles: string[]
+  topicTitles: string[],
+  progressPercent?: number
 ): StudyChapterNode {
   const id = `${subjectId}_${grade}_ch${index}`;
-  return { id, title, topics: topics(subjectId, id, topicTitles) };
+  return {
+    id,
+    title,
+    topics: topics(subjectId, id, topicTitles),
+    progressPercent: progressPercent ?? mockChapterProgress(subjectId, grade, index),
+  };
 }
 
 const BIO_CURRICULUM: Record<GradeKey, StudyChapterNode[]> = {
@@ -537,6 +553,7 @@ export function getChaptersForSection(
     subject[grade].map((ch) => ({
       ...ch,
       id: `${ch.id}_${prefix}`,
+      progressPercent: Math.max(15, ch.progressPercent - 6),
     }))
   );
 }

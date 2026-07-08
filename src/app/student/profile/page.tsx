@@ -16,7 +16,7 @@ import { profileSubjectOrder } from "@/lib/data/profile-mock-data";
 import { useApp } from "@/providers/app-provider";
 
 export default function StudentProfilePage() {
-  const { subjects, subjectProgress } = useApp();
+  const { subjects } = useApp();
   const [selection, setSelection] = useState<{
     subjectId: string;
     section: SubjectTestSection;
@@ -51,7 +51,6 @@ export default function StudentProfilePage() {
                 <SubjectCard
                   key={subject.id}
                   subject={subject}
-                  progress={subjectProgress[subject.id] ?? 0}
                   isActive={selection?.subjectId === subject.id}
                   activeSection={
                     selection?.subjectId === subject.id ? selection.section : null

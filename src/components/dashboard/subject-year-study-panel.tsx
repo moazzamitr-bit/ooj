@@ -4,7 +4,8 @@ import { useState } from "react";
 import { BookOpen, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import type { SubjectTestSection } from "@/components/dashboard/subject-card";
-import { toPersianDigits } from "@/lib/utils/persian";
+import { toPersianDigits, formatPercent } from "@/lib/utils/persian";
+import { Progress } from "@/components/ui/progress";
 import {
   getYearStudyStructure,
   TEST_DIFFICULTIES,
@@ -71,9 +72,14 @@ export function SubjectYearStudyPanel({
                   )}
                   aria-hidden
                 />
-                <span className="flex-1 text-base font-extrabold text-primary-deep md:text-lg">
-                  {toPersianDigits(chapter.title)}
-                </span>
+                <div className="flex min-w-0 flex-1 items-center justify-end gap-3">
+                  <span className="shrink-0 text-sm font-extrabold text-primary tabular-nums md:text-base">
+                    {formatPercent(chapter.progressPercent)}
+                  </span>
+                  <span className="truncate text-base font-extrabold text-primary-deep md:text-lg">
+                    {toPersianDigits(chapter.title)}
+                  </span>
+                </div>
                 <span
                   className={cn(
                     "rounded-full px-2.5 py-1 text-xs font-semibold",
@@ -92,6 +98,15 @@ export function SubjectYearStudyPanel({
               >
                 <div className="overflow-hidden">
                   <div className="border-t border-slate-100/80 px-3 pb-4 pt-3 md:px-4">
+                    <div className="mb-4 px-1">
+                      <p className="mb-1.5 text-xs text-slate-500">درصد پیشرفت مطالعه</p>
+                      <Progress
+                        value={chapter.progressPercent}
+                        barClassName="bg-gradient-to-l from-primary to-electric-blue"
+                        trackClassName="bg-slate-100"
+                        height="sm"
+                      />
+                    </div>
                     <div className="overflow-x-auto pb-1">
                       <div className="flex min-w-max gap-3">
                         {chapter.topics.map((topic) => (

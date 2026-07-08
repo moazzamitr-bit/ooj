@@ -1,9 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils/cn";
-import { formatPercent } from "@/lib/utils/persian";
 import { SubjectIcon } from "@/components/dashboard/subject-icon";
-import { Progress } from "@/components/ui/progress";
 import type { Subject } from "@/types";
 
 export type SubjectTestSection =
@@ -20,7 +18,6 @@ const subjectThemes: Record<
     iconWrap: string;
     icon: string;
     name: string;
-    progress: string;
     footer: string;
     cellActive: string;
     cellIdle: string;
@@ -32,7 +29,6 @@ const subjectThemes: Record<
     iconWrap: "bg-gradient-to-br from-emerald-100 to-emerald-50 shadow-[0_4px_14px_rgb(16_185_129_0.12)]",
     icon: "text-emerald-600",
     name: "text-emerald-900",
-    progress: "text-emerald-600",
     footer: "bg-emerald-50/40",
     cellActive: "bg-emerald-500 text-white shadow-[0_2px_8px_rgb(16_185_129_0.25)]",
     cellIdle: "text-emerald-900/80 hover:bg-emerald-100/60",
@@ -43,7 +39,6 @@ const subjectThemes: Record<
     iconWrap: "bg-gradient-to-br from-sky-100 to-blue-50 shadow-[0_4px_14px_rgb(47_128_255_0.12)]",
     icon: "text-sky-600",
     name: "text-sky-900",
-    progress: "text-sky-600",
     footer: "bg-sky-50/40",
     cellActive: "bg-sky-500 text-white shadow-[0_2px_8px_rgb(47_128_255_0.25)]",
     cellIdle: "text-sky-900/80 hover:bg-sky-100/60",
@@ -54,7 +49,6 @@ const subjectThemes: Record<
     iconWrap: "bg-gradient-to-br from-violet-100 to-violet-50 shadow-[0_4px_14px_rgb(139_92_246_0.12)]",
     icon: "text-violet-600",
     name: "text-violet-900",
-    progress: "text-violet-600",
     footer: "bg-violet-50/40",
     cellActive: "bg-violet-500 text-white shadow-[0_2px_8px_rgb(139_92_246_0.25)]",
     cellIdle: "text-violet-900/80 hover:bg-violet-100/60",
@@ -65,7 +59,6 @@ const subjectThemes: Record<
     iconWrap: "bg-gradient-to-br from-indigo-100 to-indigo-50 shadow-[0_4px_14px_rgb(99_102_241_0.12)]",
     icon: "text-indigo-600",
     name: "text-indigo-900",
-    progress: "text-indigo-600",
     footer: "bg-indigo-50/40",
     cellActive: "bg-indigo-500 text-white shadow-[0_2px_8px_rgb(99_102_241_0.25)]",
     cellIdle: "text-indigo-900/80 hover:bg-indigo-100/60",
@@ -75,7 +68,6 @@ const subjectThemes: Record<
 
 interface SubjectCardProps {
   subject: Subject;
-  progress?: number;
   isActive?: boolean;
   activeSection?: SubjectTestSection | null;
   onSectionClick?: (section: SubjectTestSection) => void;
@@ -116,7 +108,6 @@ function CellButton({
 
 export function SubjectCard({
   subject,
-  progress = 0,
   isActive,
   activeSection,
   onSectionClick,
@@ -130,11 +121,11 @@ export function SubjectCard({
         isActive && cn("shadow-[0_12px_40px_rgb(17_26_76_0.08)] ring-2", theme.ring)
       )}
     >
-      <div className={cn("relative flex flex-1 flex-col bg-gradient-to-b px-4 pb-4 pt-5", theme.card)}>
-        <div className="flex flex-1 flex-col items-center justify-center gap-2.5">
+      <div className={cn("flex items-center justify-center bg-gradient-to-b px-4 py-6", theme.card)}>
+        <div className="flex items-center gap-3">
           <div
             className={cn(
-              "flex h-12 w-12 items-center justify-center rounded-2xl md:h-[3.25rem] md:w-[3.25rem]",
+              "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl md:h-12 md:w-12",
               theme.iconWrap
             )}
           >
@@ -143,21 +134,6 @@ export function SubjectCard({
           <h3 className={cn("text-lg font-extrabold tracking-tight md:text-xl", theme.name)}>
             {subject.name}
           </h3>
-          <p className={cn("text-2xl font-extrabold tabular-nums", theme.progress)}>
-            {formatPercent(progress)}
-          </p>
-        </div>
-
-        <div className="mt-3 w-full">
-          <Progress
-            value={progress}
-            barClassName="bg-gradient-to-l from-primary to-electric-blue"
-            trackClassName="bg-white/80"
-            height="sm"
-          />
-          <p className="mt-1.5 text-center text-[10px] font-semibold tracking-wide text-slate-400">
-            درصد پیشرفت
-          </p>
         </div>
       </div>
 
