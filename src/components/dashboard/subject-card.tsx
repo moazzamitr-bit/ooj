@@ -13,26 +13,63 @@ export type SubjectTestSection =
   | "konkur_talfiyi"
   | "konkur_sarasari";
 
-const subjectThemes: Record<string, { border: string; activeCell: string; name: string }> = {
+const subjectThemes: Record<
+  string,
+  {
+    card: string;
+    iconWrap: string;
+    icon: string;
+    name: string;
+    progress: string;
+    footer: string;
+    cellActive: string;
+    cellIdle: string;
+    ring: string;
+  }
+> = {
   sub_bio: {
-    border: "border-emerald-200",
-    activeCell: "bg-emerald-50 text-emerald-700",
-    name: "text-emerald-800",
+    card: "from-emerald-50/70 via-white to-white",
+    iconWrap: "bg-gradient-to-br from-emerald-100 to-emerald-50 shadow-[0_4px_14px_rgb(16_185_129_0.12)]",
+    icon: "text-emerald-600",
+    name: "text-emerald-900",
+    progress: "text-emerald-600",
+    footer: "bg-emerald-50/40",
+    cellActive: "bg-emerald-500 text-white shadow-[0_2px_8px_rgb(16_185_129_0.25)]",
+    cellIdle: "text-emerald-900/80 hover:bg-emerald-100/60",
+    ring: "ring-emerald-300/50",
   },
   sub_chem: {
-    border: "border-blue-200",
-    activeCell: "bg-blue-50 text-blue-700",
-    name: "text-blue-800",
+    card: "from-sky-50/70 via-white to-white",
+    iconWrap: "bg-gradient-to-br from-sky-100 to-blue-50 shadow-[0_4px_14px_rgb(47_128_255_0.12)]",
+    icon: "text-sky-600",
+    name: "text-sky-900",
+    progress: "text-sky-600",
+    footer: "bg-sky-50/40",
+    cellActive: "bg-sky-500 text-white shadow-[0_2px_8px_rgb(47_128_255_0.25)]",
+    cellIdle: "text-sky-900/80 hover:bg-sky-100/60",
+    ring: "ring-sky-300/50",
   },
   sub_physics: {
-    border: "border-violet-200",
-    activeCell: "bg-violet-50 text-violet-700",
-    name: "text-violet-800",
+    card: "from-violet-50/70 via-white to-white",
+    iconWrap: "bg-gradient-to-br from-violet-100 to-violet-50 shadow-[0_4px_14px_rgb(139_92_246_0.12)]",
+    icon: "text-violet-600",
+    name: "text-violet-900",
+    progress: "text-violet-600",
+    footer: "bg-violet-50/40",
+    cellActive: "bg-violet-500 text-white shadow-[0_2px_8px_rgb(139_92_246_0.25)]",
+    cellIdle: "text-violet-900/80 hover:bg-violet-100/60",
+    ring: "ring-violet-300/50",
   },
   sub_math: {
-    border: "border-indigo-200",
-    activeCell: "bg-indigo-50 text-indigo-800",
+    card: "from-indigo-50/70 via-white to-white",
+    iconWrap: "bg-gradient-to-br from-indigo-100 to-indigo-50 shadow-[0_4px_14px_rgb(99_102_241_0.12)]",
+    icon: "text-indigo-600",
     name: "text-indigo-900",
+    progress: "text-indigo-600",
+    footer: "bg-indigo-50/40",
+    cellActive: "bg-indigo-500 text-white shadow-[0_2px_8px_rgb(99_102_241_0.25)]",
+    cellIdle: "text-indigo-900/80 hover:bg-indigo-100/60",
+    ring: "ring-indigo-300/50",
   },
 };
 
@@ -48,12 +85,14 @@ function CellButton({
   label,
   section,
   isActive,
+  theme,
   onClick,
   className,
 }: {
   label: string;
   section: SubjectTestSection;
   isActive: boolean;
+  theme: (typeof subjectThemes)[string];
   onClick?: (section: SubjectTestSection) => void;
   className?: string;
 }) {
@@ -65,8 +104,8 @@ function CellButton({
         onClick?.(section);
       }}
       className={cn(
-        "flex min-h-[44px] w-full items-center justify-center border-slate-200 px-1 text-center text-xs font-bold leading-5 text-primary-deep transition hover:bg-slate-50 md:text-sm",
-        isActive && "bg-lavender-soft text-primary ring-1 ring-inset ring-primary/25",
+        "flex min-h-[42px] w-full items-center justify-center rounded-lg px-1 text-center text-[11px] font-bold leading-5 transition-all duration-200 md:min-h-[44px] md:text-xs",
+        isActive ? theme.cellActive : theme.cellIdle,
         className
       )}
     >
@@ -87,77 +126,85 @@ export function SubjectCard({
   return (
     <div
       className={cn(
-        "flex h-full min-h-[240px] w-full flex-col overflow-hidden rounded-2xl border-2 bg-white text-right shadow-[0_4px_20px_rgb(17_26_76_0.04)] transition-all md:min-h-[280px]",
-        theme.border,
-        isActive ? "ring-2 ring-primary/35 shadow-md" : "hover:shadow-md"
+        "group flex h-full w-full flex-col overflow-hidden rounded-[1.35rem] border border-slate-100/90 bg-white text-right shadow-[0_4px_24px_rgb(17_26_76_0.05)] transition-all duration-300",
+        isActive && cn("shadow-[0_12px_40px_rgb(17_26_76_0.08)] ring-2", theme.ring)
       )}
     >
-      {/* نام درس — فضای بالایی */}
-      <div className="flex flex-1 flex-col items-center justify-center gap-2 px-4 py-5 md:py-6">
-        <div
-          className={cn(
-            "flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 md:h-14 md:w-14",
-            theme.activeCell
-          )}
-        >
-          <SubjectIcon subjectId={subject.id} />
+      <div className={cn("relative flex flex-1 flex-col bg-gradient-to-b px-4 pb-4 pt-5", theme.card)}>
+        <div className="flex flex-1 flex-col items-center justify-center gap-2.5">
+          <div
+            className={cn(
+              "flex h-12 w-12 items-center justify-center rounded-2xl md:h-[3.25rem] md:w-[3.25rem]",
+              theme.iconWrap
+            )}
+          >
+            <SubjectIcon subjectId={subject.id} iconClassName={theme.icon} />
+          </div>
+          <h3 className={cn("text-lg font-extrabold tracking-tight md:text-xl", theme.name)}>
+            {subject.name}
+          </h3>
+          <p className={cn("text-2xl font-extrabold tabular-nums", theme.progress)}>
+            {formatPercent(progress)}
+          </p>
         </div>
-        <h3 className={cn("text-xl font-extrabold md:text-2xl", theme.name)}>{subject.name}</h3>
-        <p className="text-2xl font-extrabold text-primary">{formatPercent(progress)}</p>
-        <div className="w-full px-2">
+
+        <div className="mt-3 w-full">
           <Progress
             value={progress}
             barClassName="bg-gradient-to-l from-primary to-electric-blue"
-            trackClassName="bg-slate-100"
+            trackClassName="bg-white/80"
             height="sm"
           />
-          <p className="mt-1 text-center text-[11px] font-semibold text-slate-400">درصد پیشرفت</p>
+          <p className="mt-1.5 text-center text-[10px] font-semibold tracking-wide text-slate-400">
+            درصد پیشرفت
+          </p>
         </div>
       </div>
 
-      {/* جدول پایین: اول | دوم | سوم | کنکور */}
-      <div className="grid grid-cols-4 border-t-2 border-slate-200">
-        <CellButton
-          label="اول"
-          section="year1"
-          isActive={activeSection === "year1"}
-          onClick={onSectionClick}
-          className="border-l border-slate-200"
-        />
-        <CellButton
-          label="دوم"
-          section="year2"
-          isActive={activeSection === "year2"}
-          onClick={onSectionClick}
-          className="border-l border-slate-200"
-        />
-        <CellButton
-          label="سوم"
-          section="year3"
-          isActive={activeSection === "year3"}
-          onClick={onSectionClick}
-          className="border-l border-slate-200"
-        />
+      <div className={cn("border-t border-white/60 px-2.5 py-2.5", theme.footer)}>
+        <div className="grid grid-cols-4 gap-1.5">
+          <CellButton
+            label="اول"
+            section="year1"
+            isActive={activeSection === "year1"}
+            theme={theme}
+            onClick={onSectionClick}
+          />
+          <CellButton
+            label="دوم"
+            section="year2"
+            isActive={activeSection === "year2"}
+            theme={theme}
+            onClick={onSectionClick}
+          />
+          <CellButton
+            label="سوم"
+            section="year3"
+            isActive={activeSection === "year3"}
+            theme={theme}
+            onClick={onSectionClick}
+          />
 
-        {/* ستون کنکور */}
-        <div className="flex min-h-[88px] flex-col">
-          <div className="flex min-h-[44px] items-center justify-center border-b border-slate-200 text-xs font-bold text-primary-deep md:text-sm">
-            کنکور
-          </div>
-          <div className="grid flex-1 grid-cols-2">
-            <CellButton
-              label="تالیفی"
-              section="konkur_talfiyi"
-              isActive={activeSection === "konkur_talfiyi"}
-              onClick={onSectionClick}
-              className="border-l border-slate-200"
-            />
-            <CellButton
-              label="سراسری"
-              section="konkur_sarasari"
-              isActive={activeSection === "konkur_sarasari"}
-              onClick={onSectionClick}
-            />
+          <div className="flex min-h-[88px] flex-col gap-1">
+            <div className="flex min-h-[38px] items-center justify-center rounded-lg bg-white/50 text-[10px] font-bold text-slate-500 md:text-[11px]">
+              کنکور
+            </div>
+            <div className="grid flex-1 grid-cols-2 gap-1">
+              <CellButton
+                label="تالیفی"
+                section="konkur_talfiyi"
+                isActive={activeSection === "konkur_talfiyi"}
+                theme={theme}
+                onClick={onSectionClick}
+              />
+              <CellButton
+                label="سراسری"
+                section="konkur_sarasari"
+                isActive={activeSection === "konkur_sarasari"}
+                theme={theme}
+                onClick={onSectionClick}
+              />
+            </div>
           </div>
         </div>
       </div>

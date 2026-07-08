@@ -63,11 +63,13 @@ export default function StudentProfilePage() {
           </div>
 
           {activeSubject && selection && (
-            <SubjectYearStudyPanel
-              subjectId={activeSubject.id}
-              subjectName={activeSubject.name}
-              section={selection.section}
-            />
+            <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+              <SubjectYearStudyPanel
+                subjectId={activeSubject.id}
+                subjectName={activeSubject.name}
+                section={selection.section}
+              />
+            </div>
           )}
         </section>
 
