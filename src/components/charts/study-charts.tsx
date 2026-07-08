@@ -33,11 +33,7 @@ function ChartCard({ title, insight, icon, showRocket, children }: ChartCardProp
       <div className="flex items-center justify-center gap-4 px-5 pt-3 text-[10px] text-slate-500">
         <span className="flex items-center gap-1.5">
           <span className="h-2 w-2 bg-primary" />
-          زمان مطالعه (دقیقه)
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="h-2 w-2 bg-electric-blue" />
-          تعداد تست
+          زمان مطالعه (ساعت)
         </span>
       </div>
 
@@ -52,7 +48,7 @@ function ChartCard({ title, insight, icon, showRocket, children }: ChartCardProp
   );
 }
 
-const chartColors = { study: "#6D4DFF", test: "#2F80FF" };
+const chartColors = { study: "#6D4DFF" };
 const tooltipStyle = { borderRadius: 12, border: "1px solid #f1f5f9", fontSize: 12 };
 
 interface StudyBarChartProps {
@@ -61,26 +57,29 @@ interface StudyBarChartProps {
 }
 
 function StudyBarChart({ data, xKey }: StudyBarChartProps) {
+  const dataWithHours = data.map((d) => {
+    const studyMinutes = typeof d.studyMinutes === "number" ? d.studyMinutes : 0;
+    return { ...d, studyHours: studyMinutes / 60 };
+  });
+
+  const maxHours = Math.max(...dataWithHours.map((d) => (typeof d.studyHours === "number" ? d.studyHours : 0)), 1);
+  const niceMax = Math.ceil(maxHours);
+  const step = niceMax <= 6 ? 1 : niceMax <= 12 ? 2 : 5;
+  const ticks = Array.from({ length: Math.floor(niceMax / step) + 1 }, (_, i) => i * step);
+
   return (
     <ResponsiveContainer width="100%" height={200}>
-      <BarChart data={data} margin={{ top: 4, right: 8, left: -16, bottom: 0 }} barGap={2} barCategoryGap="18%">
+      <BarChart data={dataWithHours} margin={{ top: 4, right: 8, left: -16, bottom: 0 }} barGap={2} barCategoryGap="18%">
         <CartesianGrid strokeDasharray="4 4" stroke="#f1f5f9" vertical={false} />
         <XAxis dataKey={xKey} tick={{ fontSize: 9, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
-        <YAxis domain={[0, 150]} ticks={[0, 50, 100, 150]} tick={{ fontSize: 9, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
+        <YAxis domain={[0, niceMax]} ticks={ticks} tick={{ fontSize: 9, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
         <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "rgba(109, 77, 255, 0.06)" }} />
         <Bar
-          dataKey="studyMinutes"
-          name="زمان مطالعه (دقیقه)"
+          dataKey="studyHours"
+          name="زمان مطالعه (ساعت)"
           fill={chartColors.study}
           radius={0}
-          maxBarSize={14}
-        />
-        <Bar
-          dataKey="testCount"
-          name="تعداد تست"
-          fill={chartColors.test}
-          radius={0}
-          maxBarSize={14}
+          maxBarSize={16}
         />
       </BarChart>
     </ResponsiveContainer>
@@ -94,33 +93,34 @@ export function StudyCharts() {
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
       <ChartCard
-        title="نمودار روزانه میزان درس خواندن"
-        insight="بیشترین تمرکزت در عصر و شب است، سعی کن از این زمان‌ها بهتر استفاده کنی."
+        title="نمودار روزانه (مجموع ساعت مطالعه)"
+        insight="هر روز که پیش می‌ری، تاثیرش تو نمودار هم دیده میشه."
         icon="clock"
       >
-        <StudyBarChart data={daily} xKey="time" />
+        <StudyBarChart data={daily} xKey="day" />
+      </ChartCard>
+
+      <ChartCard
+        title="نمودار هفتگی"
+        insight="روند هفته‌ به‌ هفته رو ادامه بده."
+        icon="calendar"
+        showRocket={false}
+      >
+        <StudyBarChart data={weekly} xKey="week" />
       </ChartCard>
 
       <ChartCard
         title="نمودار ماهانه"
-        insight="پیشرفت عالیه! فقط همین‌جوری ادامه بده نتایجت شگفت‌انگیز میشه."
+        insight="پیشرفت عالیه—ماه بعد هم همین مسیر رو برو."
         icon="calendar"
         showRocket
       >
-        <StudyBarChart data={monthly} xKey="week" />
+        <StudyBarChart data={monthly} xKey="month" />
       </ChartCard>
 
       <ChartCard
-        title="نمودار هفتگی میزان خواندن"
-        insight="در ۵ روز گذشته روندت رو به بالا بوده، به همین فرمون ادامه بده!"
-        icon="calendar"
-      >
-        <StudyBarChart data={weekly} xKey="day" />
-      </ChartCard>
-
-      <ChartCard
-        title="نمودار روزانه میزان مطالعه هر درس"
-        insight="تعادل خوبی در میان دروس برقرار کرده‌ای، عالیه!"
+        title="نمودار دروس"
+        insight="تعادل بین درس‌ها رو حفظ کن تا نتیجه‌ها شگفت‌انگیز بشه."
         icon="clock"
       >
         <StudyBarChart data={radar} xKey="subject" />

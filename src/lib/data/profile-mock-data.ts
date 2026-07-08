@@ -7,7 +7,8 @@ export const profileSubjectProgress: Record<string, number> = {
   sub_chem: 70,
 };
 
-export const profileSubjectOrder = ["sub_math", "sub_bio", "sub_physics", "sub_chem"] as const;
+// نمایش از راست به چپ: زیست - شیمی - فیزیک - ریاضی
+export const profileSubjectOrder = ["sub_bio", "sub_chem", "sub_physics", "sub_math"] as const;
 
 export const profileStudentDisplay = {
   full_name: "آزاد احمدی",
@@ -34,38 +35,40 @@ export const chemSubchaptersMockup = [
   { id: "sc_m6", title: "ترسمت ۶: مرور و تست", icon: "clipboard" },
 ];
 
+// نمودار روزانه: مجموع زمان مطالعه در هر روز از هفته
 export const dailyTimeChartData = [
-  { time: "صبح زود", studyMinutes: 40, testCount: 12 },
-  { time: "صبح", studyMinutes: 85, testCount: 28 },
-  { time: "ظهر", studyMinutes: 60, testCount: 18 },
-  { time: "عصر", studyMinutes: 120, testCount: 45 },
-  { time: "شب", studyMinutes: 135, testCount: 52 },
-  { time: "نیمه‌شب", studyMinutes: 30, testCount: 8 },
+  { day: "شنبه", studyMinutes: 420, testCount: 0 },
+  { day: "یکشنبه", studyMinutes: 480, testCount: 0 },
+  { day: "دوشنبه", studyMinutes: 390, testCount: 0 },
+  { day: "سه‌شنبه", studyMinutes: 540, testCount: 0 },
+  { day: "چهارشنبه", studyMinutes: 510, testCount: 0 },
+  { day: "پنجشنبه", studyMinutes: 450, testCount: 0 },
+  { day: "جمعه", studyMinutes: 300, testCount: 0 },
 ];
 
+// نمودار هفتگی
 export const weeklyReadingChartData = [
-  { day: "شنبه", studyMinutes: 90, testCount: 25 },
-  { day: "یکشنبه", studyMinutes: 110, testCount: 32 },
-  { day: "دوشنبه", studyMinutes: 75, testCount: 20 },
-  { day: "سه‌شنبه", studyMinutes: 130, testCount: 48 },
-  { day: "چهارشنبه", studyMinutes: 105, testCount: 35 },
-  { day: "پنجشنبه", studyMinutes: 95, testCount: 28 },
-  { day: "جمعه", studyMinutes: 60, testCount: 15 },
+  { week: "هفته ۱", studyMinutes: 2700, testCount: 0 },
+  { week: "هفته ۲", studyMinutes: 3000, testCount: 0 },
+  { week: "هفته ۳", studyMinutes: 2850, testCount: 0 },
+  { week: "هفته ۴", studyMinutes: 3200, testCount: 0 },
+  { week: "هفته ۵", studyMinutes: 3100, testCount: 0 },
 ];
 
+// نمودار ماهانه
 export const monthlyChartData = [
-  { week: "هفته ۱", studyMinutes: 80, testCount: 22 },
-  { week: "هفته ۲", studyMinutes: 100, testCount: 30 },
-  { week: "هفته ۳", studyMinutes: 95, testCount: 28 },
-  { week: "هفته ۴", studyMinutes: 125, testCount: 42 },
-  { week: "هفته ۵", studyMinutes: 110, testCount: 35 },
+  { month: "مهر", studyMinutes: 5200, testCount: 0 },
+  { month: "آبان", studyMinutes: 4800, testCount: 0 },
+  { month: "آذر", studyMinutes: 5100, testCount: 0 },
+  { month: "دی", studyMinutes: 5500, testCount: 0 },
 ];
 
+// نمودار دروس (مطالعه هر درس)
 export const subjectDailyRadarData = [
-  { subject: "شیمی", studyMinutes: 90, testCount: 55 },
-  { subject: "فیزیک", studyMinutes: 70, testCount: 40 },
-  { subject: "زیست", studyMinutes: 110, testCount: 65 },
-  { subject: "ریاضی", studyMinutes: 80, testCount: 48 },
+  { subject: "زیست", studyMinutes: 450, testCount: 0 },
+  { subject: "شیمی", studyMinutes: 420, testCount: 0 },
+  { subject: "فیزیک", studyMinutes: 390, testCount: 0 },
+  { subject: "ریاضی", studyMinutes: 360, testCount: 0 },
 ];
 
 export const hamadanAdmissionRanksDolati = [
