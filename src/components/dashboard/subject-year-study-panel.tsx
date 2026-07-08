@@ -63,7 +63,7 @@ export function SubjectYearStudyPanel({
               <button
                 type="button"
                 onClick={() => setOpenChapterId(isOpen ? null : chapter.id)}
-                className="flex w-full items-center gap-3 px-4 py-3.5 text-right md:px-5"
+                className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-3.5 text-right md:px-5"
               >
                 <ChevronDown
                   className={cn(
@@ -72,17 +72,17 @@ export function SubjectYearStudyPanel({
                   )}
                   aria-hidden
                 />
-                <div className="flex min-w-0 flex-1 items-center justify-end gap-3">
-                  <span className="shrink-0 text-sm font-extrabold text-primary tabular-nums md:text-base">
-                    {formatPercent(chapter.progressPercent)}
-                  </span>
-                  <span className="truncate text-base font-extrabold text-primary-deep md:text-lg">
+                <div className="min-w-0 text-right">
+                  <span className="text-base font-extrabold text-primary-deep md:text-lg">
                     {toPersianDigits(chapter.title)}
+                  </span>
+                  <span className="me-3 text-sm font-extrabold text-primary tabular-nums md:text-base">
+                    {formatPercent(chapter.progressPercent)}
                   </span>
                 </div>
                 <span
                   className={cn(
-                    "rounded-full px-2.5 py-1 text-xs font-semibold",
+                    "shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold",
                     isOpen ? "bg-primary/10 text-primary" : "bg-slate-100 text-slate-500"
                   )}
                 >
@@ -98,7 +98,7 @@ export function SubjectYearStudyPanel({
               >
                 <div className="overflow-hidden">
                   <div className="border-t border-slate-100/80 px-3 pb-4 pt-3 md:px-4">
-                    <div className="mb-4 px-1">
+                    <div className="mb-4 px-1 text-right">
                       <p className="mb-1.5 text-xs text-slate-500">درصد پیشرفت مطالعه</p>
                       <Progress
                         value={chapter.progressPercent}
@@ -108,7 +108,7 @@ export function SubjectYearStudyPanel({
                       />
                     </div>
                     <div className="overflow-x-auto pb-1">
-                      <div className="flex min-w-max gap-3">
+                      <div className="flex min-w-max justify-end gap-3">
                         {chapter.topics.map((topic) => (
                           <div
                             key={topic.id}

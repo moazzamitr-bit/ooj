@@ -165,7 +165,7 @@ export function SubjectCard({
             <div className="flex min-h-[38px] items-center justify-center rounded-lg bg-white/50 text-[10px] font-bold text-slate-500 md:text-[11px]">
               کنکور
             </div>
-            <div className="grid flex-1 grid-cols-2 gap-1">
+            <div className="grid flex-1 grid-cols-2 divide-x divide-white/80">
               <CellButton
                 label="تالیفی"
                 section="konkur_talfiyi"
