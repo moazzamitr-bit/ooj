@@ -1,63 +1,152 @@
 "use client";
 
 import { cn } from "@/lib/utils/cn";
-import { Progress } from "@/components/ui/progress";
 import { SubjectIcon } from "@/components/dashboard/subject-icon";
-import { formatPercent } from "@/lib/utils/persian";
 import type { Subject } from "@/types";
 
-const subjectThemes: Record<string, { iconBg: string; bar: string; track: string }> = {
-  sub_chem: { iconBg: "bg-[#2F80FF]/10 text-[#2F80FF]", bar: "from-[#2F80FF] to-[#5B9DFF]", track: "bg-blue-50" },
-  sub_physics: { iconBg: "bg-[#6D4DFF]/10 text-[#6D4DFF]", bar: "from-[#6D4DFF] to-[#9B7BFF]", track: "bg-violet-50" },
-  sub_bio: { iconBg: "bg-[#20C997]/10 text-[#20C997]", bar: "from-[#20C997] to-[#4DD4AC]", track: "bg-emerald-50" },
-  sub_math: { iconBg: "bg-[#111A4C]/10 text-[#111A4C]", bar: "from-[#111A4C] to-[#3D4A8C]", track: "bg-indigo-50" },
+export type SubjectTestSection =
+  | "year1"
+  | "year2"
+  | "year3"
+  | "konkur_talfiyi"
+  | "konkur_sarasari";
+
+const subjectThemes: Record<string, { border: string; activeCell: string; name: string }> = {
+  sub_bio: {
+    border: "border-emerald-200",
+    activeCell: "bg-emerald-50 text-emerald-700",
+    name: "text-emerald-800",
+  },
+  sub_chem: {
+    border: "border-blue-200",
+    activeCell: "bg-blue-50 text-blue-700",
+    name: "text-blue-800",
+  },
+  sub_physics: {
+    border: "border-violet-200",
+    activeCell: "bg-violet-50 text-violet-700",
+    name: "text-violet-800",
+  },
+  sub_math: {
+    border: "border-indigo-200",
+    activeCell: "bg-indigo-50 text-indigo-800",
+    name: "text-indigo-900",
+  },
 };
 
 interface SubjectCardProps {
   subject: Subject;
-  progress: number;
   isActive?: boolean;
-  onClick?: () => void;
+  activeSection?: SubjectTestSection | null;
+  onSectionClick?: (section: SubjectTestSection) => void;
 }
 
-export function SubjectCard({ subject, progress, isActive, onClick }: SubjectCardProps) {
-  const theme = subjectThemes[subject.id] ?? subjectThemes.sub_chem;
-
+function CellButton({
+  label,
+  section,
+  isActive,
+  onClick,
+  className,
+}: {
+  label: string;
+  section: SubjectTestSection;
+  isActive: boolean;
+  onClick?: (section: SubjectTestSection) => void;
+  className?: string;
+}) {
   return (
     <button
       type="button"
-      onClick={onClick}
-      aria-pressed={isActive}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick?.(section);
+      }}
       className={cn(
-        "w-full rounded-2xl border bg-white p-5 text-right shadow-[0_4px_20px_rgb(17_26_76_0.04)] transition-all",
-        isActive ? "border-[#2F80FF] ring-1 ring-[#2F80FF]/30" : "border-slate-100 hover:border-violet-100"
+        "flex min-h-[44px] w-full items-center justify-center border-slate-200 px-1 text-center text-xs font-bold leading-5 text-primary-deep transition hover:bg-slate-50 md:text-sm",
+        isActive && "bg-lavender-soft text-primary ring-1 ring-inset ring-primary/25",
+        className
       )}
     >
-      <div className="flex items-center justify-between gap-3">
+      {label}
+    </button>
+  );
+}
+
+export function SubjectCard({
+  subject,
+  isActive,
+  activeSection,
+  onSectionClick,
+}: SubjectCardProps) {
+  const theme = subjectThemes[subject.id] ?? subjectThemes.sub_chem;
+
+  return (
+    <div
+      className={cn(
+        "flex h-full min-h-[240px] w-full flex-col overflow-hidden rounded-2xl border-2 bg-white text-right shadow-[0_4px_20px_rgb(17_26_76_0.04)] transition-all md:min-h-[280px]",
+        theme.border,
+        isActive ? "ring-2 ring-primary/35 shadow-md" : "hover:shadow-md"
+      )}
+    >
+      {/* نام درس — فضای بالایی */}
+      <div className="flex flex-1 flex-col items-center justify-center gap-3 px-4 py-6 md:py-8">
         <div
           className={cn(
-            "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl",
-            theme.iconBg
+            "flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 md:h-14 md:w-14",
+            theme.activeCell
           )}
         >
           <SubjectIcon subjectId={subject.id} />
         </div>
-        <h3 className="flex-1 text-base font-bold text-primary-deep">{subject.name}</h3>
+        <h3 className={cn("text-xl font-extrabold md:text-2xl", theme.name)}>{subject.name}</h3>
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-2">
-        <span className="tabular-nums text-sm font-bold text-primary">{formatPercent(progress)}</span>
-        <span className="text-xs text-slate-400">درصد پیشرفت</span>
-      </div>
-
-      <div className="mt-2">
-        <Progress
-          value={progress}
-          barClassName={cn("bg-gradient-to-l", theme.bar)}
-          trackClassName={theme.track}
-          height="sm"
+      {/* جدول پایین: اول | دوم | سوم | کنکور */}
+      <div className="grid grid-cols-4 border-t-2 border-slate-200">
+        <CellButton
+          label="اول"
+          section="year1"
+          isActive={activeSection === "year1"}
+          onClick={onSectionClick}
+          className="border-l border-slate-200"
         />
+        <CellButton
+          label="دوم"
+          section="year2"
+          isActive={activeSection === "year2"}
+          onClick={onSectionClick}
+          className="border-l border-slate-200"
+        />
+        <CellButton
+          label="سوم"
+          section="year3"
+          isActive={activeSection === "year3"}
+          onClick={onSectionClick}
+          className="border-l border-slate-200"
+        />
+
+        {/* ستون کنکور */}
+        <div className="flex min-h-[88px] flex-col">
+          <div className="flex min-h-[44px] items-center justify-center border-b border-slate-200 text-xs font-bold text-primary-deep md:text-sm">
+            کنکور
+          </div>
+          <div className="grid flex-1 grid-cols-2">
+            <CellButton
+              label="تالیفی"
+              section="konkur_talfiyi"
+              isActive={activeSection === "konkur_talfiyi"}
+              onClick={onSectionClick}
+              className="border-l border-slate-200"
+            />
+            <CellButton
+              label="سراسری"
+              section="konkur_sarasari"
+              isActive={activeSection === "konkur_sarasari"}
+              onClick={onSectionClick}
+            />
+          </div>
+        </div>
       </div>
-    </button>
+    </div>
   );
 }

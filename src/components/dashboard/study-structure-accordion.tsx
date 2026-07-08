@@ -10,9 +10,16 @@ import { Progress } from "@/components/ui/progress";
 interface StudyStructureAccordionProps {
   subjectName: string;
   subjectId: string;
+  activeGroupId?: string;
+  onGroupChange?: (groupId: string) => void;
 }
 
-export function StudyStructureAccordion({ subjectName, subjectId }: StudyStructureAccordionProps) {
+export function StudyStructureAccordion({
+  subjectName,
+  subjectId,
+  activeGroupId: controlledGroupId,
+  onGroupChange,
+}: StudyStructureAccordionProps) {
   const { getChaptersForSubject } = useApp();
 
   const chapters = useMemo(() => {
@@ -35,7 +42,15 @@ export function StudyStructureAccordion({ subjectName, subjectId }: StudyStructu
     []
   );
 
-  const [activeGroupId, setActiveGroupId] = useState(yearTestGroups[0]?.id ?? "year1");
+  const [internalGroupId, setInternalGroupId] = useState(yearTestGroups[0]?.id ?? "year1");
+  const activeGroupId = controlledGroupId ?? internalGroupId;
+
+  const handleGroupChange = (groupId: string) => {
+    if (controlledGroupId === undefined) {
+      setInternalGroupId(groupId);
+    }
+    onGroupChange?.(groupId);
+  };
 
   const activeGroupIndex = Math.max(
     0,
@@ -78,7 +93,7 @@ export function StudyStructureAccordion({ subjectName, subjectId }: StudyStructu
                 <button
                   key={group.id}
                   type="button"
-                  onClick={() => setActiveGroupId(group.id)}
+                  onClick={() => handleGroupChange(group.id)}
                   className={cn(
                     "flex w-full items-center justify-between gap-3 rounded-xl px-3 py-3 text-right transition",
                     isActive ? "bg-lavender-soft" : "hover:bg-slate-50"
