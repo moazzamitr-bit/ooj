@@ -1,50 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { MessageCircle, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import albertoImage from "@/assets/images/alberto.png";
 import { getAlbertBullets } from "@/lib/data/profile-mock-data";
 import { AlbertoChatModal } from "@/components/dashboard/alberto-chat-modal";
 import { useApp } from "@/providers/app-provider";
 
-const ALBERTO_DRIVE_ID = "15YzNFQGeO4YNTpeDg0ZXxOgR394waVRv";
-const ALBERTO_DRIVE_PREVIEW = `https://drive.google.com/file/d/${ALBERTO_DRIVE_ID}/preview`;
-const ALBERTO_DRIVE_STREAM = `https://drive.google.com/uc?export=download&id=${ALBERTO_DRIVE_ID}`;
-
 interface AlbertoCardProps {
   className?: string;
   compact?: boolean;
-}
-
-function AlbertoMedia() {
-  const [useIframe, setUseIframe] = useState(false);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-  const localSrc = `${basePath}/videos/alberto.mp4`;
-
-  if (useIframe) {
-    return (
-      <iframe
-        src={ALBERTO_DRIVE_PREVIEW}
-        title="آلبرتو، مشاور هوشمند اوج"
-        className="absolute top-1/2 left-1/2 h-[135%] w-[135%] -translate-x-1/2 -translate-y-1/2 border-0"
-        allow="autoplay; fullscreen; encrypted-media"
-      />
-    );
-  }
-
-  return (
-    <video
-      autoPlay
-      loop
-      muted
-      playsInline
-      className="h-full w-full object-cover object-[center_12%]"
-      onError={() => setUseIframe(true)}
-    >
-      <source src={localSrc} type="video/mp4" />
-      <source src={ALBERTO_DRIVE_STREAM} type="video/mp4" />
-    </video>
-  );
 }
 
 export function AlbertoCard({ className, compact }: AlbertoCardProps) {
@@ -96,8 +63,15 @@ export function AlbertoCard({ className, compact }: AlbertoCardProps) {
             </button>
           </div>
 
-          <div className="relative order-first h-64 w-full shrink-0 overflow-hidden bg-[#EDE8FF] md:order-none md:h-full md:min-h-0 md:w-[44%]">
-            <AlbertoMedia />
+          <div className="relative order-first h-64 w-full shrink-0 overflow-hidden md:order-none md:h-full md:min-h-0 md:w-[44%]">
+            <Image
+              src={albertoImage}
+              alt="آلبرتو، مشاور هوشمند اوج"
+              fill
+              sizes="(max-width: 768px) 100vw, 44vw"
+              className="object-cover object-[center_12%] drop-shadow-xl"
+              priority
+            />
           </div>
         </div>
       </div>
