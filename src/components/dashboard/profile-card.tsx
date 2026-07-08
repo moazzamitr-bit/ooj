@@ -1,8 +1,9 @@
 "use client";
 
-import { User } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/lib/utils/cn";
 import { formatPersianNumber } from "@/lib/utils/persian";
+import studentAvatar from "@/assets/images/student-avatar.png";
 import { useApp } from "@/providers/app-provider";
 
 interface ProfileCardProps {
@@ -16,8 +17,15 @@ export function ProfileCard({ className }: ProfileCardProps) {
     <div className={cn("flex shrink-0 flex-col", className)}>
       <div className="flex items-center gap-4">
         <div className="relative shrink-0">
-          <div className="flex h-[100px] w-[100px] items-center justify-center overflow-hidden rounded-full border-[3px] border-white bg-gradient-to-br from-sky-100 via-blue-50 to-violet-100 shadow-[0_8px_24px_rgb(47_128_255_0.15)] ring-1 ring-slate-100">
-            <User className="h-14 w-14 text-slate-400/80" strokeWidth={1.2} aria-hidden />
+          <div className="relative h-[100px] w-[100px] overflow-hidden rounded-full border-[3px] border-white bg-slate-100 shadow-[0_8px_24px_rgb(47_128_255_0.15)] ring-1 ring-slate-100">
+            <Image
+              src={student.avatar_url ?? studentAvatar}
+              alt={`عکس پروفایل ${student.full_name}`}
+              fill
+              className="object-cover object-[center_20%]"
+              sizes="100px"
+              priority
+            />
           </div>
         </div>
 
