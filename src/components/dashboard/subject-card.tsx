@@ -1,7 +1,9 @@
 "use client";
 
 import { cn } from "@/lib/utils/cn";
+import { formatPercent } from "@/lib/utils/persian";
 import { SubjectIcon } from "@/components/dashboard/subject-icon";
+import { Progress } from "@/components/ui/progress";
 import type { Subject } from "@/types";
 
 export type SubjectTestSection =
@@ -36,6 +38,7 @@ const subjectThemes: Record<string, { border: string; activeCell: string; name: 
 
 interface SubjectCardProps {
   subject: Subject;
+  progress?: number;
   isActive?: boolean;
   activeSection?: SubjectTestSection | null;
   onSectionClick?: (section: SubjectTestSection) => void;
@@ -74,6 +77,7 @@ function CellButton({
 
 export function SubjectCard({
   subject,
+  progress = 0,
   isActive,
   activeSection,
   onSectionClick,
@@ -89,7 +93,7 @@ export function SubjectCard({
       )}
     >
       {/* نام درس — فضای بالایی */}
-      <div className="flex flex-1 flex-col items-center justify-center gap-3 px-4 py-6 md:py-8">
+      <div className="flex flex-1 flex-col items-center justify-center gap-2 px-4 py-5 md:py-6">
         <div
           className={cn(
             "flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 md:h-14 md:w-14",
@@ -99,6 +103,16 @@ export function SubjectCard({
           <SubjectIcon subjectId={subject.id} />
         </div>
         <h3 className={cn("text-xl font-extrabold md:text-2xl", theme.name)}>{subject.name}</h3>
+        <p className="text-2xl font-extrabold text-primary">{formatPercent(progress)}</p>
+        <div className="w-full px-2">
+          <Progress
+            value={progress}
+            barClassName="bg-gradient-to-l from-primary to-electric-blue"
+            trackClassName="bg-slate-100"
+            height="sm"
+          />
+          <p className="mt-1 text-center text-[11px] font-semibold text-slate-400">درصد پیشرفت</p>
+        </div>
       </div>
 
       {/* جدول پایین: اول | دوم | سوم | کنکور */}

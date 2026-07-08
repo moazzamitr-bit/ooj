@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils/cn";
 import type { SubjectTestSection } from "@/components/dashboard/subject-card";
+import { toPersianDigits } from "@/lib/utils/persian";
 import {
   getYearStudyStructure,
   TEST_DIFFICULTIES,
@@ -98,7 +99,7 @@ export function SubjectYearStudyPanel({
                 )}
               >
                 <span className="text-sm font-extrabold leading-6 text-primary-deep md:text-base">
-                  {chapter.title}
+                  {toPersianDigits(chapter.title)}
                 </span>
               </button>
             </div>
