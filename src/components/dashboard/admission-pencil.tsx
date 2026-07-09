@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, GraduationCap } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { provinceMaxRankRows } from "@/lib/data/province-max-ranks";
 
 interface AdmissionPencilProps {
@@ -40,28 +40,7 @@ function PencilTip() {
 
 export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps) {
   return (
-    <div className="relative flex w-full items-start justify-center">
-      <div className="absolute end-[calc(50%+92px)] top-6 hidden w-[100px] text-right sm:block">
-        <BookOpen className="ms-auto h-6 w-6 text-primary" strokeWidth={1.75} aria-hidden />
-        <h3 className="mt-2 text-xs font-extrabold leading-5 text-primary-deep">
-          حداکثر رتبه
-          <br />
-          قبولی در استان‌ها
-        </h3>
-        <div className="mt-3 rounded-xl border border-primary/15 bg-white/90 p-2 shadow-sm">
-          <div className="mb-1.5 flex justify-center">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10">
-              <GraduationCap className="h-4 w-4 text-primary" aria-hidden />
-            </span>
-          </div>
-          <p className="text-center text-[9px] leading-4 text-slate-600">
-            بالاترین رتبه قبولی
-            <br />
-            (سهمیه منطقه) هر استان
-          </p>
-        </div>
-      </div>
-
+    <div className="flex w-full items-start justify-center">
       <div
         className="flex flex-col items-center"
         style={{ width: PENCIL_W }}
