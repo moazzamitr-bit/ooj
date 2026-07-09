@@ -37,15 +37,15 @@ function barWidth(kind: ChartBarKind = "default") {
 
 function getPadding(labelMode: LabelMode) {
   if (labelMode === "monthly") {
-    return { top: 10, right: 74, bottom: 52, left: 12 };
+    return { top: 6, right: 48, bottom: 44, left: 6 };
   }
   if (labelMode === "angled") {
-    return { top: 10, right: 62, bottom: 72, left: 12 };
+    return { top: 6, right: 40, bottom: 58, left: 6 };
   }
   if (labelMode === "compact") {
-    return { top: 10, right: 64, bottom: 58, left: 12 };
+    return { top: 6, right: 42, bottom: 48, left: 6 };
   }
-  return { top: 10, right: 56, bottom: 52, left: 12 };
+  return { top: 6, right: 36, bottom: 42, left: 6 };
 }
 
 function Bar3D({
@@ -103,8 +103,8 @@ export function SketchBarChart({
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const width = 320;
-  const height = labelMode === "monthly" || labelMode === "angled" ? 248 : 236;
+  const width = 356;
+  const height = labelMode === "monthly" || labelMode === "angled" ? 236 : 222;
   const padding = getPadding(labelMode);
   const plotWidth = width - padding.left - padding.right;
   const plotHeight = height - padding.top - padding.bottom;
@@ -166,7 +166,7 @@ export function SketchBarChart({
                 x={width - padding.right + 8}
                 y={y + 3}
                 textAnchor="start"
-                className="fill-slate-700 text-[10px] font-medium"
+                className="fill-slate-700 text-[9px] font-medium"
               >
                 {tick}
               </text>
@@ -194,12 +194,12 @@ export function SketchBarChart({
           const labelY =
             baseline +
             (labelMode === "monthly"
-              ? 18
+              ? 15
               : labelMode === "compact"
-                ? 18
+                ? 16
                 : labelMode === "angled"
-                  ? 22
-                  : 16);
+                  ? 18
+                  : 14);
 
           return (
             <g key={`${bar.label}-${index}`}>
@@ -235,10 +235,10 @@ export function SketchBarChart({
                     labelMode === "monthly"
                       ? undefined
                       : labelMode === "angled"
-                        ? `rotate(-48, ${slotCenter}, ${labelY})`
+                        ? `rotate(-38, ${slotCenter}, ${labelY})`
                         : undefined
                   }
-                  className="pointer-events-none fill-slate-700 text-[9.5px] font-medium leading-[1.2]"
+                  className="pointer-events-none fill-slate-700 text-[8.5px] font-medium leading-[1.2]"
                 >
                   {labelLines.map((line, lineIndex) => (
                     <tspan key={lineIndex} x={slotCenter} dy={lineIndex === 0 ? 0 : 9}>
