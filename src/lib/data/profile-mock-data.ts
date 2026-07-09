@@ -78,13 +78,13 @@ export const weeklyHoursChartData: ProfileChartBar[] = [
 /** نمودار روزانه - ساعت (مقیاس ۰ تا ۱۲) */
 export const dailyHoursChartData: ProfileChartBar[] = [
   { label: "مجموع", value: 11, kind: "total" },
-  { label: "ش", value: 1 },
-  { label: "ی", value: 4 },
-  { label: "د", value: 6 },
-  { label: "س", value: 2 },
-  { label: "چ", value: 1.5 },
-  { label: "پ", value: 1 },
-  { label: "ج", value: 2 },
+  { label: "شنبه", value: 1 },
+  { label: "یکشنبه", value: 4 },
+  { label: "دوشنبه", value: 6 },
+  { label: "سه‌شنبه", value: 2 },
+  { label: "چهارشنبه", value: 1.5 },
+  { label: "پنجشنبه", value: 1 },
+  { label: "جمعه", value: 2 },
   { label: "", value: 0.5, kind: "surplus" },
 ];
 

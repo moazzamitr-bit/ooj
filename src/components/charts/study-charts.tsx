@@ -1,7 +1,6 @@
 "use client";
 
 import { SketchBarChart } from "@/components/charts/sketch-bar-chart";
-import { weeklyChartFootnote } from "@/lib/data/profile-mock-data";
 import { useApp } from "@/providers/app-provider";
 
 interface ChartPanelProps {
@@ -11,8 +10,10 @@ interface ChartPanelProps {
 
 function ChartPanel({ title, children }: ChartPanelProps) {
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-slate-200 bg-[#FAFCFF] p-3 shadow-sm">
-      <h3 className="mb-2 text-center text-xs font-bold text-slate-800">{title}</h3>
+    <article className="flex h-full flex-col rounded-3xl border border-slate-200/80 bg-gradient-to-b from-white to-slate-50 p-4 shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
+      <h3 className="mb-3 text-center text-sm font-extrabold tracking-tight text-slate-800">
+        {title}
+      </h3>
       <div className="flex-1">{children}</div>
     </article>
   );
@@ -23,10 +24,10 @@ export function StudyCharts() {
   const { subjects, monthly, weekly, daily } = chartData;
 
   return (
-    <div className="space-y-3">
+    <div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4" dir="rtl">
         <ChartPanel title="روزانه - ساعت">
-          <SketchBarChart data={daily} yMax={12} yStep={1} />
+          <SketchBarChart data={daily} yMax={12} yStep={1} labelMode="angled" />
         </ChartPanel>
 
         <ChartPanel title="هفتگی - ساعت">
@@ -41,8 +42,6 @@ export function StudyCharts() {
           <SketchBarChart data={subjects} yMax={350} yStep={50} />
         </ChartPanel>
       </div>
-
-      <p className="text-[10px] leading-5 text-slate-500 xl:text-right">{weeklyChartFootnote}</p>
     </div>
   );
 }
