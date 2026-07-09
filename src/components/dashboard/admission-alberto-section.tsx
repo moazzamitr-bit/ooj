@@ -3,22 +3,13 @@
 import { useMemo, useState } from "react";
 import { BookOpen, Info, MapPin } from "lucide-react";
 import { SegmentedControl } from "@/components/ui/segmented-control";
+import { AdmissionPencil } from "@/components/dashboard/admission-pencil";
 import { AlbertoCard } from "@/components/dashboard/alberto-card";
-import {
-  IRAN_MAP_VIEWBOX,
-  iranProvinces,
-  provinceAdmissionIntensity,
-} from "@/lib/data/iran-provinces";
-import { getProvinceAdmissionRanks } from "@/lib/services/admission.service";
+import { iranProvinces } from "@/lib/data/iran-provinces";
+import { getProvinceMaxAcceptanceRank } from "@/lib/data/province-max-ranks";
+import { getProvinceMedicalRanks } from "@/lib/services/admission.service";
 import { useApp } from "@/providers/app-provider";
 import type { UniversityType } from "@/types";
-
-function getProvinceFill(code: string, selectedCode: string) {
-  if (code === selectedCode) return "#6D4DFF";
-  const intensity = provinceAdmissionIntensity[code] ?? 0.3;
-  const opacity = 0.2 + intensity * 0.5;
-  return `rgba(109, 77, 255, ${opacity.toFixed(2)})`;
-}
 
 export function AdmissionAlbertoSection() {
   const { student } = useApp();
@@ -31,9 +22,11 @@ export function AdmissionAlbertoSection() {
   );
 
   const rankRows = useMemo(
-    () => getProvinceAdmissionRanks(selectedProvince.name_fa, universityType),
-    [selectedProvince.name_fa, universityType]
+    () => getProvinceMedicalRanks(selectedProvince.name_fa, selectedProvince.code, universityType),
+    [selectedProvince.name_fa, selectedProvince.code, universityType]
   );
+
+  const provinceMaxRank = getProvinceMaxAcceptanceRank(selectedProvince.code);
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:items-stretch">
@@ -52,14 +45,22 @@ export function AdmissionAlbertoSection() {
         <div className="grid flex-1 lg:grid-cols-2">
           <div className="flex flex-col border-l border-slate-100 p-5 lg:p-6">
             <div className="mb-4 rounded-xl bg-lavender-soft px-3 py-2.5">
-              <p className="text-[11px] text-slate-500">خدمات شهر انتخاب‌شده</p>
+              <p className="text-[11px] text-slate-500">استان انتخاب‌شده</p>
               <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-primary-deep">
                 <MapPin className="h-4 w-4 text-primary" aria-hidden />
                 {selectedProvince.name_fa} | {student.city}
               </p>
+              <p className="mt-2 text-xs text-slate-500">
+                حداکثر رتبه قبولی استان:{" "}
+                <span className="font-bold text-primary tabular-nums">
+                  {provinceMaxRank.toLocaleString("fa-IR")}
+                </span>
+              </p>
             </div>
 
-            <p className="mb-3 text-xs font-bold text-slate-500">حداقل مورد قبول</p>
+            <p className="mb-3 text-xs font-bold text-slate-500">
+              حداکثر رتبه قبولی رشته‌های پزشکی
+            </p>
 
             <ul className="flex-1 space-y-0">
               {rankRows.map((row) => (
@@ -81,42 +82,10 @@ export function AdmissionAlbertoSection() {
             </p>
           </div>
 
-          <div className="flex flex-col items-center justify-center bg-slate-50/40 p-5 lg:p-6">
-            <div className="relative w-full max-w-[240px]">
-              <svg
-                viewBox={IRAN_MAP_VIEWBOX}
-                className="mx-auto h-auto w-full max-h-[220px]"
-                role="img"
-                aria-label="نقشه استان‌های ایران"
-              >
-                {iranProvinces.map((province) => {
-                  const isSelected = province.code === selectedCode;
-                  return (
-                    <path
-                      key={province.code}
-                      d={province.path}
-                      fill={getProvinceFill(province.code, selectedCode)}
-                      stroke={isSelected ? "#4C35D9" : "#D8CCFF"}
-                      strokeWidth={isSelected ? 2 : 0.75}
-                      className="cursor-pointer transition-all duration-200 hover:brightness-95"
-                      onClick={() => setSelectedCode(province.code)}
-                      aria-label={province.name_fa}
-                    />
-                  );
-                })}
-              </svg>
+          <div className="flex flex-col items-center justify-center bg-gradient-to-b from-[#F7F4FF] to-[#EEF4FF] p-5 lg:p-6">
+            <AdmissionPencil selectedCode={selectedCode} onSelect={setSelectedCode} />
 
-              <div className="pointer-events-none absolute left-[52%] top-[46%] -translate-x-1/2">
-                <div className="flex flex-col items-center">
-                  <MapPin className="h-5 w-5 fill-primary text-primary drop-shadow" aria-hidden />
-                  <div className="mt-1 rounded-lg bg-primary-deep px-2.5 py-1 text-[10px] font-medium text-white shadow-md">
-                    {selectedProvince.name_fa} | {student.city}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4 w-full max-w-[240px] space-y-3">
+            <div className="mt-4 w-full max-w-[280px]">
               <div className="flex justify-center">
                 <SegmentedControl
                   options={[
@@ -126,12 +95,6 @@ export function AdmissionAlbertoSection() {
                   value={universityType}
                   onChange={setUniversityType}
                 />
-              </div>
-
-              <div className="flex items-center gap-2 text-[10px] text-slate-500">
-                <span>کمتر قبول</span>
-                <div className="h-2 flex-1 rounded-full bg-gradient-to-l from-violet-200 to-primary" />
-                <span>بیشتر قبول</span>
               </div>
             </div>
           </div>
