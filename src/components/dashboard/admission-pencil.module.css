@@ -16,7 +16,7 @@
   --shadow: rgba(63, 54, 120, 0.18);
 
   width: 100%;
-  max-width: 320px;
+  max-width: 160px;
   filter: drop-shadow(0 40px 60px -30px var(--shadow));
 }
 
@@ -251,10 +251,10 @@
 .lead {
   position: absolute;
   left: 50%;
-  bottom: 0;
+  bottom: -10px;
   transform: translateX(-50%);
-  width: 40px;
-  height: 50px;
+  width: 36px;
+  height: 58px;
   background: linear-gradient(180deg, var(--lead-1), var(--lead-2));
   clip-path: polygon(0 0, 100% 0, 50% 100%);
 }
