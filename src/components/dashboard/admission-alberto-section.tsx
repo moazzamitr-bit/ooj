@@ -85,7 +85,7 @@ export function AdmissionAlbertoSection() {
           <div className="flex min-h-[480px] flex-col items-center justify-start overflow-hidden bg-gradient-to-b from-[#F7F4FF] to-[#EEF4FF] px-3 py-4 lg:min-h-[520px] lg:px-4 lg:py-5">
             <AdmissionPencil selectedCode={selectedCode} onSelect={setSelectedCode} />
 
-            <div className="mt-3 w-full max-w-[200px]">
+            <div className="mt-3 w-full max-w-[320px]">
               <div className="flex justify-center">
                 <SegmentedControl
                   options={[
