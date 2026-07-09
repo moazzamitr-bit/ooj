@@ -35,41 +35,91 @@ export const chemSubchaptersMockup = [
   { id: "sc_m6", title: "ترسمت ۶: مرور و تست", icon: "clipboard" },
 ];
 
-// نمودار روزانه: مجموع زمان مطالعه در هر روز از هفته
-export const dailyTimeChartData = [
-  { day: "شنبه", studyMinutes: 420, testCount: 0 },
-  { day: "یکشنبه", studyMinutes: 480, testCount: 0 },
-  { day: "دوشنبه", studyMinutes: 390, testCount: 0 },
-  { day: "سه‌شنبه", studyMinutes: 540, testCount: 0 },
-  { day: "چهارشنبه", studyMinutes: 510, testCount: 0 },
-  { day: "پنجشنبه", studyMinutes: 450, testCount: 0 },
-  { day: "جمعه", studyMinutes: 300, testCount: 0 },
+export type ChartBarKind = "default" | "total" | "surplus";
+
+export interface ProfileChartBar {
+  label: string;
+  value: number;
+  kind?: ChartBarKind;
+}
+
+/** نمودار دروس - ساعت (مقیاس ۰ تا ۳۵۰) */
+export const subjectHoursChartData: ProfileChartBar[] = [
+  { label: "ریاضی", value: 275 },
+  { label: "فیزیک", value: 225 },
+  { label: "شیمی", value: 175 },
+  { label: "زیست", value: 250 },
 ];
 
-// نمودار هفتگی
-export const weeklyReadingChartData = [
-  { week: "هفته ۱", studyMinutes: 2700, testCount: 0 },
-  { week: "هفته ۲", studyMinutes: 3000, testCount: 0 },
-  { week: "هفته ۳", studyMinutes: 2850, testCount: 0 },
-  { week: "هفته ۴", studyMinutes: 3200, testCount: 0 },
-  { week: "هفته ۵", studyMinutes: 3100, testCount: 0 },
+/** نمودار ماهانه - ساعت (مقیاس ۰ تا ۵۰) */
+export const monthlyHoursChartData: ProfileChartBar[] = [
+  { label: "مهر", value: 42 },
+  { label: "آبان", value: 28 },
+  { label: "آذر", value: 16 },
+  { label: "دی", value: 12 },
+  { label: "بهمن", value: 5 },
+  { label: "اسفند", value: 4 },
+  { label: "فروردین", value: 18 },
+  { label: "اردیبهشت", value: 18 },
+  { label: "خرداد", value: 40 },
 ];
 
-// نمودار ماهانه
-export const monthlyChartData = [
-  { month: "مهر", studyMinutes: 5200, testCount: 0 },
-  { month: "آبان", studyMinutes: 4800, testCount: 0 },
-  { month: "آذر", studyMinutes: 5100, testCount: 0 },
-  { month: "دی", studyMinutes: 5500, testCount: 0 },
+/** نمودار هفتگی - ساعت (مقیاس ۰ تا ۵۰) — ستون‌های کوتاه اول/آخر = مازاد هفته */
+export const weeklyHoursChartData: ProfileChartBar[] = [
+  { label: "", value: 2, kind: "surplus" },
+  { label: "۷ روز\nاول", value: 43 },
+  { label: "۷ روز\nدوم", value: 13 },
+  { label: "۷ روز\nسوم", value: 8 },
+  { label: "۷ روز\nچهارم", value: 15 },
+  { label: "۲ روز\nآخر", value: 9 },
+  { label: "", value: 1, kind: "surplus" },
 ];
 
-// نمودار دروس (مطالعه هر درس)
-export const subjectDailyRadarData = [
-  { subject: "زیست", studyMinutes: 450, testCount: 0 },
-  { subject: "شیمی", studyMinutes: 420, testCount: 0 },
-  { subject: "فیزیک", studyMinutes: 390, testCount: 0 },
-  { subject: "ریاضی", studyMinutes: 360, testCount: 0 },
+/** نمودار روزانه - ساعت (مقیاس ۰ تا ۱۲) */
+export const dailyHoursChartData: ProfileChartBar[] = [
+  { label: "مجموع", value: 11, kind: "total" },
+  { label: "ش", value: 1 },
+  { label: "ی", value: 4 },
+  { label: "د", value: 6 },
+  { label: "س", value: 2 },
+  { label: "چ", value: 1.5 },
+  { label: "پ", value: 1 },
+  { label: "ج", value: 2 },
+  { label: "", value: 0.5, kind: "surplus" },
 ];
+
+export const weeklyChartFootnote =
+  "در ستون کوچک اول و آخر مربوط به مازاد هفته است. مثلا اگر انتهای ماه از پنجشنبه شروع می‌شود، روزهای پنجشنبه و جمعه در این ستون کوتاه قرار می‌گیرد یا اگر یکی دو روز از آخر ماه زیاد آمد در آخرین ستون کوتاه قرار می‌گیرد.";
+
+/** @deprecated use dailyHoursChartData */
+export const dailyTimeChartData = dailyHoursChartData.map((bar) => ({
+  day: bar.label,
+  studyMinutes: bar.value * 60,
+  testCount: 0,
+}));
+
+/** @deprecated use weeklyHoursChartData */
+export const weeklyReadingChartData = weeklyHoursChartData
+  .filter((bar) => bar.kind !== "surplus")
+  .map((bar) => ({
+    week: bar.label.replace(/\n/g, " "),
+    studyMinutes: bar.value * 60,
+    testCount: 0,
+  }));
+
+/** @deprecated use monthlyHoursChartData */
+export const monthlyChartData = monthlyHoursChartData.map((bar) => ({
+  month: bar.label,
+  studyMinutes: bar.value * 60,
+  testCount: 0,
+}));
+
+/** @deprecated use subjectHoursChartData */
+export const subjectDailyRadarData = subjectHoursChartData.map((bar) => ({
+  subject: bar.label,
+  studyMinutes: bar.value * 60,
+  testCount: 0,
+}));
 
 export const hamadanAdmissionRanksDolati = [
   { major: "پزشکی", rank: 2350 },

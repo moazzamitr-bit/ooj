@@ -11,10 +11,11 @@ import {
 } from "react";
 import { mockStudent, mockSubjects } from "@/lib/data/mock-data";
 import {
-  dailyTimeChartData,
-  monthlyChartData,
-  subjectDailyRadarData,
-  weeklyReadingChartData,
+  dailyHoursChartData,
+  monthlyHoursChartData,
+  subjectHoursChartData,
+  weeklyHoursChartData,
+  type ProfileChartBar,
 } from "@/lib/data/profile-mock-data";
 import { loadLocalDb } from "@/lib/local-db";
 import {
@@ -49,10 +50,10 @@ interface AppContextValue {
   logout: () => void;
   getChaptersForSubject: (subjectId: string) => ReturnType<typeof getStudentChapters>;
   chartData: {
-    daily: typeof dailyTimeChartData;
-    weekly: typeof weeklyReadingChartData;
-    monthly: typeof monthlyChartData;
-    radar: typeof subjectDailyRadarData;
+    daily: ProfileChartBar[];
+    weekly: ProfileChartBar[];
+    monthly: ProfileChartBar[];
+    subjects: ProfileChartBar[];
   };
 }
 
@@ -84,20 +85,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const sessions = db.study_sessions.filter((s) => s.student_id === student.id);
     if (sessions.length === 0) {
       return {
-        daily: dailyTimeChartData,
-        weekly: weeklyReadingChartData,
-        monthly: monthlyChartData,
-        radar: subjectDailyRadarData,
+        daily: dailyHoursChartData,
+        weekly: weeklyHoursChartData,
+        monthly: monthlyHoursChartData,
+        subjects: subjectHoursChartData,
       };
     }
+    const daily = [...dailyHoursChartData];
     const last = sessions[sessions.length - 1];
-    const daily = [...dailyTimeChartData];
-    daily[4] = { ...daily[4], studyMinutes: last.duration_minutes, testCount: last.test_count };
+    const lastDayIndex = daily.findIndex((bar) => bar.kind !== "total" && bar.kind !== "surplus");
+    if (lastDayIndex >= 0) {
+      daily[lastDayIndex] = {
+        ...daily[lastDayIndex],
+        value: Math.round((last.duration_minutes / 60) * 10) / 10,
+      };
+    }
     return {
       daily,
-      weekly: weeklyReadingChartData,
-      monthly: monthlyChartData,
-      radar: subjectDailyRadarData,
+      weekly: weeklyHoursChartData,
+      monthly: monthlyHoursChartData,
+      subjects: subjectHoursChartData,
     };
   }, [student.id, tick]);
 
