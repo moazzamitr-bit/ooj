@@ -45,7 +45,7 @@ export default function StudentProfilePage() {
       <main className="mx-auto max-w-[1600px] space-y-8 px-6 py-8 md:px-8">
         <section className="space-y-6">
           <div className="flex flex-col gap-6 xl:flex-row xl:items-stretch">
-            <ProfileCard className="xl:pt-2" />
+            <ProfileCard />
             <div className="grid flex-1 grid-cols-2 gap-4 lg:grid-cols-4">
               {orderedSubjects.map((subject) => (
                 <SubjectCard
