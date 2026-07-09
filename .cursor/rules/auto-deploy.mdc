@@ -1,0 +1,22 @@
+---
+description: Auto-deploy to GitHub Pages after every code change
+alwaysApply: true
+---
+
+# Auto-deploy after changes
+
+After completing any code change in this repo, deploy it live without waiting for the user to ask.
+
+## Workflow
+
+1. Verify the change builds (`npm run build` or `npm run build:pages` when relevant).
+2. Commit only the files changed for the task with a concise message.
+3. Push to `main` (GitHub Pages deploys from `main` via `.github/workflows/deploy-pages.yml`).
+4. Wait for the `Deploy to GitHub Pages` workflow to finish successfully.
+5. Tell the user the live URL to check (usually `https://moazzamitr-bit.github.io/ooj/...`).
+
+## Notes
+
+- Do not ask the user to deploy manually unless push or CI fails.
+- Mention hard refresh (`Cmd+Shift+R`) if they may see a cached page.
+- Use `/Users/moazzami/.local/bin/gh` if `gh` is not on PATH.
