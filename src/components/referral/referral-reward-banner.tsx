@@ -2,10 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
 import { Crown, ShieldCheck, UserPlus, Wallet } from "lucide-react";
 
-import giftBoxImage from "@/assets/images/referral-gift-box.png";
+import campaignBg from "@/assets/images/referral-campaign-bg.png";
 
 const infoRows = [
   {
@@ -49,7 +48,7 @@ function InfoRow({
   icon: typeof UserPlus;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-2xl border border-white/80 bg-white/95 px-4 py-3 shadow-[0_6px_20px_rgba(109,77,255,0.08)]">
+    <div className="flex items-center justify-between gap-3 rounded-2xl border border-white/85 bg-white/95 px-4 py-3 shadow-[0_6px_20px_rgba(109,77,255,0.1)] backdrop-blur-sm">
       <p className="flex-1 text-right text-sm font-semibold leading-7 text-slate-700 md:text-[15px]">
         {text}
       </p>
@@ -61,20 +60,23 @@ function InfoRow({
 }
 
 export function ReferralRewardBanner() {
-  const reduceMotion = useReducedMotion();
-
   return (
-    <section className="relative overflow-hidden rounded-[1.75rem] border border-violet-100/70 bg-gradient-to-b from-[#F3EEFF] via-[#ECE6FF] to-[#E4F0FF] shadow-[0_12px_40px_rgba(109,77,255,0.14)]">
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(109,77,255,0.12),transparent_45%),radial-gradient(circle_at_80%_70%,rgba(47,128,255,0.1),transparent_40%)]"
-        aria-hidden
+    <section className="relative min-h-[420px] overflow-hidden rounded-[1.75rem] border border-violet-100/70 shadow-[0_12px_40px_rgba(109,77,255,0.14)] md:min-h-[460px]">
+      <Image
+        src={campaignBg}
+        alt=""
+        fill
+        priority
+        className="object-cover object-center"
+        sizes="(max-width: 768px) 100vw, 1200px"
       />
+
       <div
-        className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(circle,rgba(255,255,255,0.9)_1px,transparent_1px)] [background-size:24px_24px]"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-l from-[#F3EEFF]/95 via-[#F3EEFF]/45 to-transparent md:from-[#F3EEFF]/88 md:via-[#F3EEFF]/25 md:to-transparent"
         aria-hidden
       />
 
-      <div className="relative px-5 py-6 md:px-8 md:py-8">
+      <div className="relative z-10 flex h-full flex-col px-5 py-6 md:px-8 md:py-8">
         <div className="mb-5 flex flex-col items-center text-center">
           <div className="mb-2 flex items-center gap-2">
             <span className="text-lg text-primary" aria-hidden>
@@ -103,8 +105,8 @@ export function ReferralRewardBanner() {
           </p>
         </div>
 
-        <div className="grid items-center gap-6 md:grid-cols-2 md:gap-8">
-          <div className="flex flex-col gap-3 md:order-1">
+        <div className="grid flex-1 items-end gap-6 md:grid-cols-2 md:gap-8">
+          <div className="flex flex-col gap-3 md:max-w-md md:justify-self-end">
             {infoRows.map((row) => (
               <InfoRow key={row.id} text={row.text} icon={row.icon} />
             ))}
@@ -120,22 +122,7 @@ export function ReferralRewardBanner() {
             </Link>
           </div>
 
-          <div className="relative flex min-h-[220px] items-center justify-center md:order-2 md:min-h-[280px]">
-            <motion.div
-              animate={reduceMotion ? undefined : { y: [0, -10, 0] }}
-              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-              className="relative z-10 w-full max-w-[320px]"
-            >
-              <Image
-                src={giftBoxImage}
-                alt="جعبه هدیه با اسکناس"
-                width={640}
-                height={640}
-                className="h-auto w-full object-contain drop-shadow-[0_20px_40px_rgba(109,77,255,0.25)]"
-                priority
-              />
-            </motion.div>
-          </div>
+          <div className="hidden md:block" aria-hidden />
         </div>
       </div>
     </section>
