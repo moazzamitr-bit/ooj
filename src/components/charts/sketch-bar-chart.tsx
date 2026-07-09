@@ -1,18 +1,29 @@
 "use client";
 
+import { useRef, useState } from "react";
 import type { ChartBarKind, ProfileChartBar } from "@/lib/data/profile-mock-data";
+
+type LabelMode = "default" | "compact" | "monthly";
 
 interface SketchBarChartProps {
   data: ProfileChartBar[];
   yMax: number;
   yStep: number;
-  compactLabels?: boolean;
+  labelMode?: LabelMode;
+}
+
+interface TooltipState {
+  value: number;
+  label: string;
+  x: number;
+  y: number;
 }
 
 const BAR_COLORS = {
   front: "#2563EB",
   top: "#60A5FA",
   side: "#1D4ED8",
+  hover: "#1E40AF",
 };
 
 const DEPTH_X = 5;
@@ -24,16 +35,28 @@ function barWidth(kind: ChartBarKind = "default") {
   return 20;
 }
 
+function getPadding(labelMode: LabelMode) {
+  if (labelMode === "monthly") {
+    return { top: 10, right: 48, bottom: 58, left: 8 };
+  }
+  if (labelMode === "compact") {
+    return { top: 10, right: 38, bottom: 46, left: 8 };
+  }
+  return { top: 10, right: 38, bottom: 38, left: 8 };
+}
+
 function Bar3D({
   x,
   baseline,
   height,
   width,
+  hovered,
 }: {
   x: number;
   baseline: number;
   height: number;
   width: number;
+  hovered: boolean;
 }) {
   if (height <= 0) return null;
 
@@ -42,6 +65,7 @@ function Bar3D({
   const sideRight = right + DEPTH_X;
   const topEdge = top - DEPTH_Y;
   const baseDepth = baseline - DEPTH_Y;
+  const front = hovered ? BAR_COLORS.hover : BAR_COLORS.front;
 
   return (
     <g>
@@ -53,7 +77,7 @@ function Bar3D({
         points={`${x},${top} ${x + DEPTH_X},${topEdge} ${sideRight},${topEdge} ${right},${top}`}
         fill={BAR_COLORS.top}
       />
-      <rect x={x} y={top} width={width} height={height} fill={BAR_COLORS.front} />
+      <rect x={x} y={top} width={width} height={height} fill={front} />
     </g>
   );
 }
@@ -62,104 +86,168 @@ function splitLabel(label: string) {
   return label.split("\n");
 }
 
+function formatTooltipLabel(label: string) {
+  return label.replace(/\n/g, " ").trim();
+}
+
 export function SketchBarChart({
   data,
   yMax,
   yStep,
-  compactLabels = false,
+  labelMode = "default",
 }: SketchBarChartProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [tooltip, setTooltip] = useState<TooltipState | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   const width = 280;
-  const height = 210;
-  const padding = { top: 10, right: 34, bottom: compactLabels ? 46 : 38, left: 8 };
+  const height = labelMode === "monthly" ? 220 : 210;
+  const padding = getPadding(labelMode);
   const plotWidth = width - padding.left - padding.right;
   const plotHeight = height - padding.top - padding.bottom;
   const baseline = padding.top + plotHeight;
   const ticks = Array.from({ length: Math.floor(yMax / yStep) + 1 }, (_, i) => i * yStep);
   const slotWidth = plotWidth / data.length;
 
-  return (
-    <svg
-      viewBox={`0 0 ${width} ${height}`}
-      className="h-auto w-full"
-      role="img"
-      aria-hidden
-    >
-      {Array.from({ length: Math.floor(plotHeight / 12) + 1 }, (_, i) => {
-        const y = padding.top + i * 12;
-        return (
-          <line
-            key={`paper-${i}`}
-            x1={padding.left}
-            y1={y}
-            x2={width - padding.right}
-            y2={y}
-            stroke="#E2E8F0"
-            strokeWidth={0.5}
-          />
-        );
-      })}
+  const showTooltip = (bar: ProfileChartBar, event: React.MouseEvent<SVGRectElement>) => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
 
-      {ticks.map((tick) => {
-        const y = baseline - (tick / yMax) * plotHeight;
-        return (
-          <g key={tick}>
+    setTooltip({
+      value: bar.value,
+      label: formatTooltipLabel(bar.label),
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
+    });
+  };
+
+  return (
+    <div ref={containerRef} className="relative" onMouseLeave={() => {
+      setTooltip(null);
+      setHoveredIndex(null);
+    }}>
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        className="h-auto w-full"
+        role="img"
+        aria-label="نمودار مطالعه"
+      >
+        {Array.from({ length: Math.floor(plotHeight / 12) + 1 }, (_, i) => {
+          const y = padding.top + i * 12;
+          return (
             <line
+              key={`paper-${i}`}
               x1={padding.left}
               y1={y}
               x2={width - padding.right}
               y2={y}
-              stroke="#CBD5E1"
-              strokeWidth={0.75}
+              stroke="#E2E8F0"
+              strokeWidth={0.5}
             />
-            <text
-              x={width - padding.right + 6}
-              y={y + 3}
-              textAnchor="start"
-              className="fill-slate-500 text-[8px]"
-            >
-              {tick}
-            </text>
-          </g>
-        );
-      })}
+          );
+        })}
 
-      <line
-        x1={padding.left}
-        y1={baseline}
-        x2={width - padding.right}
-        y2={baseline}
-        stroke="#94A3B8"
-        strokeWidth={1}
-      />
-
-      {data.map((bar, index) => {
-        const kind = bar.kind ?? "default";
-        const barW = barWidth(kind);
-        const slotCenter = padding.left + slotWidth * index + slotWidth / 2;
-        const barX = slotCenter - barW / 2;
-        const barHeight = Math.max((bar.value / yMax) * plotHeight, kind === "surplus" ? 3 : 0);
-        const labelLines = splitLabel(bar.label);
-
-        return (
-          <g key={`${bar.label}-${index}`}>
-            <Bar3D x={barX} baseline={baseline} height={barHeight} width={barW} />
-            {bar.label ? (
+        {ticks.map((tick) => {
+          const y = baseline - (tick / yMax) * plotHeight;
+          return (
+            <g key={tick}>
+              <line
+                x1={padding.left}
+                y1={y}
+                x2={width - padding.right}
+                y2={y}
+                stroke="#CBD5E1"
+                strokeWidth={0.75}
+              />
               <text
-                x={slotCenter}
-                y={baseline + (compactLabels ? 14 : 12)}
-                textAnchor="middle"
-                className="fill-slate-600 text-[7px] leading-[1.15]"
+                x={width - padding.right + 8}
+                y={y + 3}
+                textAnchor="start"
+                className="fill-slate-500 text-[8px]"
               >
-                {labelLines.map((line, lineIndex) => (
-                  <tspan key={lineIndex} x={slotCenter} dy={lineIndex === 0 ? 0 : 9}>
-                    {line}
-                  </tspan>
-                ))}
+                {tick}
               </text>
-            ) : null}
-          </g>
-        );
-      })}
-    </svg>
+            </g>
+          );
+        })}
+
+        <line
+          x1={padding.left}
+          y1={baseline}
+          x2={width - padding.right}
+          y2={baseline}
+          stroke="#94A3B8"
+          strokeWidth={1}
+        />
+
+        {data.map((bar, index) => {
+          const kind = bar.kind ?? "default";
+          const barW = barWidth(kind);
+          const slotCenter = padding.left + slotWidth * index + slotWidth / 2;
+          const barX = slotCenter - barW / 2;
+          const barHeight = Math.max((bar.value / yMax) * plotHeight, kind === "surplus" ? 3 : 0);
+          const labelLines = splitLabel(bar.label);
+          const isHovered = hoveredIndex === index;
+          const labelY = baseline + (labelMode === "monthly" ? 10 : labelMode === "compact" ? 14 : 12);
+
+          return (
+            <g key={`${bar.label}-${index}`}>
+              <Bar3D
+                x={barX}
+                baseline={baseline}
+                height={barHeight}
+                width={barW}
+                hovered={isHovered}
+              />
+              <rect
+                x={barX - 2}
+                y={baseline - barHeight - DEPTH_Y}
+                width={barW + DEPTH_X + 4}
+                height={barHeight + DEPTH_Y + 4}
+                fill="transparent"
+                className="cursor-pointer"
+                onMouseEnter={(event) => {
+                  setHoveredIndex(index);
+                  showTooltip(bar, event);
+                }}
+                onMouseMove={(event) => {
+                  setHoveredIndex(index);
+                  showTooltip(bar, event);
+                }}
+              />
+              {bar.label ? (
+                <text
+                  x={slotCenter}
+                  y={labelY}
+                  textAnchor={labelMode === "monthly" ? "end" : "middle"}
+                  transform={
+                    labelMode === "monthly"
+                      ? `rotate(-38, ${slotCenter}, ${labelY})`
+                      : undefined
+                  }
+                  className="fill-slate-600 text-[7px] leading-[1.15] pointer-events-none"
+                >
+                  {labelLines.map((line, lineIndex) => (
+                    <tspan key={lineIndex} x={slotCenter} dy={lineIndex === 0 ? 0 : 9}>
+                      {line}
+                    </tspan>
+                  ))}
+                </text>
+              ) : null}
+            </g>
+          );
+        })}
+      </svg>
+
+      {tooltip ? (
+        <div
+          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full rounded-md bg-slate-800 px-2.5 py-1 text-[10px] font-medium text-white shadow-lg"
+          style={{ left: tooltip.x, top: tooltip.y - 10 }}
+        >
+          {tooltip.label ? `${tooltip.label}: ` : null}
+          {tooltip.value}
+        </div>
+      ) : null}
+    </div>
   );
 }

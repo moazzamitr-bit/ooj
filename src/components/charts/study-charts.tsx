@@ -24,21 +24,21 @@ export function StudyCharts() {
 
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <ChartPanel title="دروس - ساعت">
-          <SketchBarChart data={subjects} yMax={350} yStep={50} />
-        </ChartPanel>
-
-        <ChartPanel title="ماهانه - ساعت">
-          <SketchBarChart data={monthly} yMax={50} yStep={5} compactLabels />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4" dir="rtl">
+        <ChartPanel title="روزانه - ساعت">
+          <SketchBarChart data={daily} yMax={12} yStep={1} />
         </ChartPanel>
 
         <ChartPanel title="هفتگی - ساعت">
-          <SketchBarChart data={weekly} yMax={50} yStep={5} compactLabels />
+          <SketchBarChart data={weekly} yMax={50} yStep={5} labelMode="compact" />
         </ChartPanel>
 
-        <ChartPanel title="روزانه - ساعت">
-          <SketchBarChart data={daily} yMax={12} yStep={1} />
+        <ChartPanel title="ماهانه - ساعت">
+          <SketchBarChart data={monthly} yMax={50} yStep={5} labelMode="monthly" />
+        </ChartPanel>
+
+        <ChartPanel title="دروس - ساعت">
+          <SketchBarChart data={subjects} yMax={350} yStep={50} />
         </ChartPanel>
       </div>
 
