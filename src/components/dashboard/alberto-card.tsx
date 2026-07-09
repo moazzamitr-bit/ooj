@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { MessageCircle, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
-import albertoImage from "@/assets/images/alberto.png";
 import { getAlbertBullets } from "@/lib/data/profile-mock-data";
 import { AlbertoChatModal } from "@/components/dashboard/alberto-chat-modal";
 import { useApp } from "@/providers/app-provider";
+
+const albertoVideoSrc = `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/videos/alberto-idle-loop.mp4`;
 
 interface AlbertoCardProps {
   className?: string;
@@ -64,13 +64,15 @@ export function AlbertoCard({ className, compact }: AlbertoCardProps) {
           </div>
 
           <div className="relative order-first h-64 w-full shrink-0 overflow-hidden md:order-none md:h-full md:min-h-0 md:w-[44%]">
-            <Image
-              src={albertoImage}
-              alt="آلبرتو، مشاور هوشمند اوج"
-              fill
-              sizes="(max-width: 768px) 100vw, 44vw"
-              className="object-cover object-[center_12%] drop-shadow-xl"
-              priority
+            <video
+              src={albertoVideoSrc}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 h-full w-full scale-[1.45] object-cover object-[center_28%]"
+              aria-label="آلبرتو، مشاور هوشمند اوج"
             />
           </div>
         </div>
