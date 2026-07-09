@@ -3,13 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  Crown,
-  Headphones,
-  ShieldCheck,
-  UserPlus,
-  Wallet,
-} from "lucide-react";
+import { Crown, ShieldCheck, UserPlus, Wallet } from "lucide-react";
 
 import giftBoxImage from "@/assets/images/referral-gift-box.png";
 
@@ -45,12 +39,6 @@ const infoRows = [
     ),
     icon: ShieldCheck,
   },
-] as const;
-
-const trustItems = [
-  { label: "پشتیبانی ۲۴ ساعته", icon: Headphones },
-  { label: "کاملاً معتبر و تضمینی", icon: ShieldCheck },
-  { label: "واریز فوری و بدون کارمزد", icon: ShieldCheck },
 ] as const;
 
 function InfoRow({
@@ -148,21 +136,6 @@ export function ReferralRewardBanner() {
               />
             </motion.div>
           </div>
-        </div>
-
-        <div className="mt-6 grid grid-cols-1 divide-y divide-violet-200/60 rounded-2xl border border-white/60 bg-white/45 px-4 py-3 backdrop-blur-sm sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:divide-x-reverse">
-          {trustItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={item.label}
-                className="flex items-center justify-center gap-2 px-2 py-2 text-center sm:py-1"
-              >
-                <Icon className="h-4 w-4 shrink-0 text-primary" strokeWidth={2} aria-hidden />
-                <span className="text-xs font-semibold text-slate-600 md:text-[13px]">{item.label}</span>
-              </div>
-            );
-          })}
         </div>
       </div>
     </section>
