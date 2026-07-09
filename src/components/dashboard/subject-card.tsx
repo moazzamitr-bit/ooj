@@ -137,14 +137,15 @@ export function SubjectCard({
         </div>
       </div>
 
-      <div className={cn("border-t border-white/60 px-2.5 py-2.5", theme.footer)}>
-        <div className="grid grid-cols-4 gap-1.5">
+      <div className={cn("border-t border-white/60 px-3 py-3", theme.footer)}>
+        <div className="flex items-stretch divide-x divide-slate-200/80">
           <CellButton
             label="اول"
             section="year1"
             isActive={activeSection === "year1"}
             theme={theme}
             onClick={onSectionClick}
+            className="flex-1 px-2"
           />
           <CellButton
             label="دوم"
@@ -152,6 +153,7 @@ export function SubjectCard({
             isActive={activeSection === "year2"}
             theme={theme}
             onClick={onSectionClick}
+            className="flex-1 px-2"
           />
           <CellButton
             label="سوم"
@@ -159,19 +161,21 @@ export function SubjectCard({
             isActive={activeSection === "year3"}
             theme={theme}
             onClick={onSectionClick}
+            className="flex-1 px-2"
           />
 
-          <div className="flex min-h-[88px] flex-col gap-1">
-            <div className="flex min-h-[38px] items-center justify-center rounded-lg bg-white/50 text-[10px] font-bold text-slate-500 md:text-[11px]">
+          <div className="flex min-w-[104px] flex-[1.15] flex-col gap-2 px-2">
+            <div className="flex min-h-[36px] items-center justify-center rounded-lg bg-white/70 px-2 text-[10px] font-bold text-slate-500 md:text-[11px]">
               کنکور
             </div>
-            <div className="grid flex-1 grid-cols-2 divide-x divide-white/80">
+            <div className="grid grid-cols-2 gap-2 divide-x divide-slate-200/80 border-t border-slate-200/70 pt-2">
               <CellButton
                 label="تالیفی"
                 section="konkur_talfiyi"
                 isActive={activeSection === "konkur_talfiyi"}
                 theme={theme}
                 onClick={onSectionClick}
+                className="px-1"
               />
               <CellButton
                 label="سراسری"
@@ -179,6 +183,7 @@ export function SubjectCard({
                 isActive={activeSection === "konkur_sarasari"}
                 theme={theme}
                 onClick={onSectionClick}
+                className="px-1"
               />
             </div>
           </div>
