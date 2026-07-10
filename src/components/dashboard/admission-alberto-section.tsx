@@ -8,9 +8,11 @@ import { AlbertoCard } from "@/components/dashboard/alberto-card";
 import { iranProvinces } from "@/lib/data/iran-provinces";
 import { getProvinceMaxAcceptanceRank } from "@/lib/data/province-max-ranks";
 import { getProvinceMedicalRanks } from "@/lib/services/admission.service";
+import { useApp } from "@/providers/app-provider";
 import type { UniversityType } from "@/types";
 
 export function AdmissionAlbertoSection() {
+  const { student } = useApp();
   const [universityType, setUniversityType] = useState<UniversityType>("دولتی");
   const [selectedCode, setSelectedCode] = useState("Ham");
 
@@ -63,10 +65,10 @@ export function AdmissionAlbertoSection() {
               <p className="text-[11px] text-slate-500">استان انتخاب‌شده</p>
               <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-primary-deep">
                 <MapPin className="h-4 w-4 text-primary" aria-hidden />
-                {selectedProvince.name_fa}
+                {selectedProvince.name_fa} | {student.city}
               </p>
               <p className="mt-2 text-xs text-slate-500">
-                حداقل رتبه قبولی استان:{" "}
+                حداکثر رتبه قبولی استان:{" "}
                 <span className="font-bold text-primary tabular-nums">
                   {provinceMaxRank.toLocaleString("fa-IR")}
                 </span>
@@ -74,7 +76,7 @@ export function AdmissionAlbertoSection() {
             </div>
 
             <p className="mb-3 text-xs font-bold text-slate-500">
-              حداقل رتبه قبولی رشته‌های پزشکی
+              حداکثر رتبه قبولی رشته‌های پزشکی
             </p>
 
             <ul className="flex-1 space-y-0">
