@@ -188,7 +188,10 @@ export function SketchBarChart({
           const barW = barWidth(kind);
           const slotCenter = padding.left + slotWidth * index + slotWidth / 2;
           const barX = slotCenter - barW / 2;
-          const barHeight = Math.max((bar.value / yMax) * plotHeight, kind === "surplus" ? 3 : 0);
+          const barHeight = Math.max(
+            (bar.value / yMax) * plotHeight,
+            bar.value >= 1 ? (kind === "surplus" ? 4 : 5) : 0
+          );
           const labelLines = splitLabel(bar.label);
           const isHovered = hoveredIndex === index;
           const labelY =

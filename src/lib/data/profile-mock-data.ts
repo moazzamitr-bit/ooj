@@ -75,18 +75,18 @@ export const weeklyHoursChartData: ProfileChartBar[] = [
   { label: "", value: 1, kind: "surplus" },
 ];
 
-/** نمودار روزانه - ساعت (مقیاس ۰ تا ۱۲) — ۱۰ ستون: مجموع + ۲ مازاد ابتدا + ۷ روز */
+/** نمودار روزانه - ساعت (چپ→راست): مجموع، مازاد ابتدا، ۷ روز، مازاد آخر */
 export const dailyHoursChartData: ProfileChartBar[] = [
   { label: "مجموع", value: 10, kind: "total" },
-  { label: "", value: 1, kind: "surplus" },
-  { label: "", value: 0.5, kind: "surplus" },
+  { label: "", value: 2, kind: "surplus" },
   { label: "شنبه", value: 1 },
   { label: "یکشنبه", value: 4 },
   { label: "دوشنبه", value: 6 },
   { label: "سه‌شنبه", value: 2 },
-  { label: "چهارشنبه", value: 1.5 },
+  { label: "چهارشنبه", value: 2 },
   { label: "پنجشنبه", value: 1 },
-  { label: "جمعه", value: 2 },
+  { label: "جمعه", value: 3 },
+  { label: "", value: 1, kind: "surplus" },
 ];
 
 export const weeklyChartFootnote =
