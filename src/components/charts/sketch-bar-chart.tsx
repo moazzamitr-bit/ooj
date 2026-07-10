@@ -103,7 +103,7 @@ export function SketchBarChart({
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const width = 356;
+  const width = data.length >= 10 ? 380 : 356;
   const height = labelMode === "monthly" || labelMode === "angled" ? 236 : 222;
   const padding = getPadding(labelMode);
   const plotWidth = width - padding.left - padding.right;

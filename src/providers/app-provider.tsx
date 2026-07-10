@@ -93,7 +93,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
     const daily = [...dailyHoursChartData];
     const last = sessions[sessions.length - 1];
-    const lastDayIndex = daily.findIndex((bar) => bar.kind !== "total" && bar.kind !== "surplus");
+    const lastDayIndex = daily.findLastIndex(
+      (bar) => bar.kind !== "total" && bar.kind !== "surplus"
+    );
     if (lastDayIndex >= 0) {
       daily[lastDayIndex] = {
         ...daily[lastDayIndex],
