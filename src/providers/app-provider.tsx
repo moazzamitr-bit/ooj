@@ -80,35 +80,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const profile = useMemo(() => getStudentProfile(student), [student]);
 
-  const chartData = useMemo(() => {
-    const db = loadLocalDb();
-    const sessions = db.study_sessions.filter((s) => s.student_id === student.id);
-    if (sessions.length === 0) {
-      return {
-        daily: dailyHoursChartData,
-        weekly: weeklyHoursChartData,
-        monthly: monthlyHoursChartData,
-        subjects: subjectHoursChartData,
-      };
-    }
-    const daily = [...dailyHoursChartData];
-    const last = sessions[sessions.length - 1];
-    const lastDayIndex = daily.findLastIndex(
-      (bar) => bar.kind !== "total" && bar.kind !== "surplus"
-    );
-    if (lastDayIndex >= 0) {
-      daily[lastDayIndex] = {
-        ...daily[lastDayIndex],
-        value: Math.round((last.duration_minutes / 60) * 10) / 10,
-      };
-    }
-    return {
-      daily,
+  const chartData = useMemo(
+    () => ({
+      daily: dailyHoursChartData,
       weekly: weeklyHoursChartData,
       monthly: monthlyHoursChartData,
       subjects: subjectHoursChartData,
-    };
-  }, [student.id, tick]);
+    }),
+    [tick]
+  );
 
   const loginSendOtp = useCallback(async (phone: string) => sendOtp(phone), []);
 
