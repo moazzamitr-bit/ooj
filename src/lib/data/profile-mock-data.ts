@@ -85,7 +85,7 @@ export const dailyHoursChartData: ProfileChartBar[] = [
   { label: "سه‌شنبه", value: 2 },
   { label: "چهارشنبه", value: 2 },
   { label: "پنجشنبه", value: 1 },
-  { label: "جمعه", value: 3 },
+  { label: "جمعه", value: 2 },
   { label: "", value: 1, kind: "surplus" },
 ];
 
