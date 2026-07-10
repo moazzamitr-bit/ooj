@@ -33,7 +33,9 @@ export function StudyCharts() {
         </ChartPanel>
 
         <ChartPanel title="هفتگی - ساعت">
-          <SketchBarChart data={weekly} yMax={50} yStep={5} labelMode="compact" />
+          <div dir="ltr">
+            <SketchBarChart data={weekly} yMax={90} yStep={10} labelMode="compact" />
+          </div>
         </ChartPanel>
 
         <ChartPanel title="ماهانه - ساعت">
