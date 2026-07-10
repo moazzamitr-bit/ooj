@@ -37,15 +37,15 @@ function barWidth(kind: ChartBarKind = "default") {
 
 function getPadding(labelMode: LabelMode) {
   if (labelMode === "monthly") {
-    return { top: 6, right: 48, bottom: 44, left: 6 };
+    return { top: 6, right: 8, bottom: 44, left: 28 };
   }
   if (labelMode === "angled") {
-    return { top: 6, right: 40, bottom: 58, left: 6 };
+    return { top: 6, right: 8, bottom: 58, left: 28 };
   }
   if (labelMode === "compact") {
-    return { top: 6, right: 42, bottom: 48, left: 6 };
+    return { top: 6, right: 8, bottom: 48, left: 28 };
   }
-  return { top: 6, right: 36, bottom: 42, left: 6 };
+  return { top: 6, right: 8, bottom: 42, left: 28 };
 }
 
 function Bar3D({
@@ -163,9 +163,9 @@ export function SketchBarChart({
                 strokeWidth={0.75}
               />
               <text
-                x={width - padding.right + 8}
+                x={padding.left - 6}
                 y={y + 3}
-                textAnchor="start"
+                textAnchor="end"
                 className="fill-slate-700 text-[9px] font-medium"
               >
                 {tick}
