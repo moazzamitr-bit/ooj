@@ -71,7 +71,7 @@ export function AlbertoCard({ className, compact }: AlbertoCardProps) {
               muted
               playsInline
               preload="auto"
-              className="absolute inset-0 h-full w-full scale-100 object-cover object-[center_30%]"
+              className="absolute inset-0 h-full w-full scale-[0.88] object-cover object-[center_28%]"
               aria-label="آلبرتو، مشاور هوشمند اوج"
             />
           </div>
