@@ -43,7 +43,24 @@ export function AdmissionAlbertoSection() {
         </div>
 
         <div className="grid flex-1 lg:grid-cols-2">
-          <div className="flex flex-col border-l border-slate-100 p-5 lg:p-6">
+          <div className="order-2 flex min-h-[480px] flex-col items-center justify-start overflow-hidden bg-gradient-to-b from-[#F7F4FF] to-[#EEF4FF] px-3 py-4 lg:order-1 lg:min-h-[520px] lg:px-4 lg:py-5">
+            <AdmissionPencil selectedCode={selectedCode} onSelect={setSelectedCode} />
+
+            <div className="mt-3 w-full max-w-[320px]">
+              <div className="flex justify-center">
+                <SegmentedControl
+                  options={[
+                    { value: "آزاد" as UniversityType, label: "آزاد" },
+                    { value: "دولتی" as UniversityType, label: "دولتی" },
+                  ]}
+                  value={universityType}
+                  onChange={setUniversityType}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="order-1 flex flex-col border-r border-slate-100 p-5 lg:order-2 lg:p-6">
             <div className="mb-4 rounded-xl bg-lavender-soft px-3 py-2.5">
               <p className="text-[11px] text-slate-500">استان انتخاب‌شده</p>
               <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-primary-deep">
@@ -80,23 +97,6 @@ export function AdmissionAlbertoSection() {
               <Info className="h-3.5 w-3.5 shrink-0" aria-hidden />
               اعداد بر اساس کارنامه‌های سال قبل می‌باشد
             </p>
-          </div>
-
-          <div className="flex min-h-[480px] flex-col items-center justify-start overflow-hidden bg-gradient-to-b from-[#F7F4FF] to-[#EEF4FF] px-3 py-4 lg:min-h-[520px] lg:px-4 lg:py-5">
-            <AdmissionPencil selectedCode={selectedCode} onSelect={setSelectedCode} />
-
-            <div className="mt-3 w-full max-w-[320px]">
-              <div className="flex justify-center">
-                <SegmentedControl
-                  options={[
-                    { value: "آزاد" as UniversityType, label: "آزاد" },
-                    { value: "دولتی" as UniversityType, label: "دولتی" },
-                  ]}
-                  value={universityType}
-                  onChange={setUniversityType}
-                />
-              </div>
-            </div>
           </div>
         </div>
       </div>
