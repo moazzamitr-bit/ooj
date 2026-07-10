@@ -64,14 +64,15 @@ export const monthlyHoursChartData: ProfileChartBar[] = [
   { label: "خرداد", value: 40 },
 ];
 
-/** نمودار هفتگی - ساعت — ستون اول چپ: مجموع */
+/** نمودار هفتگی - ساعت (مقیاس ۰ تا ۵۰) — ستون‌های کوتاه اول/آخر = مازاد هفته */
 export const weeklyHoursChartData: ProfileChartBar[] = [
-  { label: "مجموع", value: 88, kind: "total" },
+  { label: "", value: 2, kind: "surplus" },
   { label: "۷ روز\nاول", value: 43 },
   { label: "۷ روز\nدوم", value: 13 },
   { label: "۷ روز\nسوم", value: 8 },
   { label: "۷ روز\nچهارم", value: 15 },
   { label: "۲ روز\nآخر", value: 9 },
+  { label: "", value: 1, kind: "surplus" },
 ];
 
 /** نمودار روزانه - ساعت (چپ→راست): مجموع، مازاد ابتدا، ۷ روز، مازاد آخر */

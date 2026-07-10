@@ -25,7 +25,7 @@ function BookEmblemIcon() {
 export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps) {
   return (
     <div className="flex w-full justify-center">
-      <div className={styles.pencil} role="group" aria-label="مداد حداقل رتبه قبولی استان‌ها">
+      <div className={styles.pencil} role="group" aria-label="مداد حداکثر رتبه قبولی استان‌ها">
         <div className={`${styles.eraser} ${styles.curv}`} aria-hidden />
 
         <div className={styles.ferrule} aria-hidden>
@@ -39,7 +39,7 @@ export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps
             <thead>
               <tr>
                 <th className={styles.hName}>استان</th>
-                <th className={styles.hRank}>حداقل رتبه قبولی</th>
+                <th className={styles.hRank}>حداکثر رتبه قبولی</th>
               </tr>
             </thead>
             <tbody>
