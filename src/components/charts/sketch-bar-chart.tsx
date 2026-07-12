@@ -29,12 +29,14 @@ const BAR_COLORS = {
   hover: "#1E40AF",
 };
 
-const DEPTH_X = 5;
-const DEPTH_Y = 4;
+const DEPTH_X = 7;
+const DEPTH_Y = 5;
+const HEIGHT_SCALE = 1.2;
 
-function barWidth(kind: ChartBarKind = "default") {
+function barWidth(kind: ChartBarKind = "default", dataLength = 0) {
   if (kind === "total") return 28;
   if (kind === "surplus") return 9;
+  if (dataLength >= 13) return 14;
   return 20;
 }
 
@@ -72,9 +74,15 @@ function Bar3D({
   const topEdge = top - DEPTH_Y;
   const baseDepth = baseline - DEPTH_Y;
   const front = hovered ? BAR_COLORS.hover : BAR_COLORS.front;
+  const leftShade = hovered ? "#1E3A8A" : "#1E40AF";
 
   return (
     <g>
+      <polygon
+        points={`${x},${top} ${x},${baseline} ${x + 2},${baseline - 1} ${x + 2},${top - 1}`}
+        fill={leftShade}
+        opacity={0.55}
+      />
       <polygon
         points={`${right},${top} ${sideRight},${topEdge} ${sideRight},${baseDepth} ${right},${baseline}`}
         fill={BAR_COLORS.side}
@@ -108,8 +116,10 @@ export function SketchBarChart({
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const width = data.length >= 10 ? 380 : 356;
-  const height = labelMode === "monthly" || labelMode === "angled" ? 236 : 222;
+  const width =
+    data.length >= 13 ? 440 : data.length >= 10 ? 380 : 356;
+  const baseHeight = labelMode === "monthly" || labelMode === "angled" ? 236 : 222;
+  const height = Math.round(baseHeight * HEIGHT_SCALE);
   const padding = getPadding(labelMode);
   const plotWidth = width - padding.left - padding.right;
   const plotHeight = height - padding.top - padding.bottom;
@@ -190,12 +200,12 @@ export function SketchBarChart({
 
         {data.map((bar, index) => {
           const kind = bar.kind ?? "default";
-          const barW = barWidth(kind);
+          const barW = barWidth(kind, data.length);
           const slotCenter = padding.left + slotWidth * index + slotWidth / 2;
           const barX = slotCenter - barW / 2;
           const barHeight = Math.max(
             (bar.value / yMax) * plotHeight,
-            bar.value >= 1 ? (kind === "surplus" ? 4 : 5) : 0
+            bar.value > 0 ? (kind === "surplus" ? 4 : 5) : 0
           );
           const labelLines = splitLabel(bar.label);
           const isHovered = hoveredIndex === index;

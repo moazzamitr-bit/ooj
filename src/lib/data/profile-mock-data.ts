@@ -64,14 +64,21 @@ export const monthlyHoursChartData: ProfileChartBar[] = [
   { label: "خرداد", value: 40 },
 ];
 
-/** نمودار هفتگی - ساعت — ستون اول چپ: مجموع */
+/** نمودار هفتگی - ساعت (یک ترم ۱۳ هفته‌ای، بدون ستون مجموع — مقیاس ۰ تا ۹) */
 export const weeklyHoursChartData: ProfileChartBar[] = [
-  { label: "مجموع", value: 88, kind: "total" },
-  { label: "۷ روز\nاول", value: 43 },
-  { label: "۷ روز\nدوم", value: 13 },
-  { label: "۷ روز\nسوم", value: 8 },
-  { label: "۷ روز\nچهارم", value: 15 },
-  { label: "۲ روز\nآخر", value: 9 },
+  { label: "هفته\n۱", value: 4.5 },
+  { label: "هفته\n۲", value: 5 },
+  { label: "هفته\n۳", value: 6.5 },
+  { label: "هفته\n۴", value: 7 },
+  { label: "هفته\n۵", value: 5.5 },
+  { label: "هفته\n۶", value: 8 },
+  { label: "هفته\n۷", value: 6 },
+  { label: "هفته\n۸", value: 7.5 },
+  { label: "هفته\n۹", value: 5 },
+  { label: "هفته\n۱۰", value: 6.5 },
+  { label: "هفته\n۱۱", value: 7 },
+  { label: "هفته\n۱۲", value: 8.5 },
+  { label: "هفته\n۱۳", value: 6 },
 ];
 
 /** نمودار روزانه - دقیقه (چپ→راست): مجموع، مازاد ابتدا، ۷ روز، مازاد آخر — مقیاس ۰ تا ۱۸۰ */
