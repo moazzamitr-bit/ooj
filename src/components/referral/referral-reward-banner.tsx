@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Crown, Leaf, Shield, UserPlus, Wallet } from "lucide-react";
+import { UserPlus, Wallet } from "lucide-react";
 import giftBackground from "@/assets/images/gift-background.png";
 import rial100 from "@/assets/images/rial-100.png";
 import rial500 from "@/assets/images/rial-500.png";
 import styles from "@/components/referral/referral-reward-banner.module.css";
 
-const steps = [
+const primarySteps = [
   {
     text: "هر دوستی که با دعوت تو عضو بشه",
     icon: UserPlus,
@@ -16,11 +16,9 @@ const steps = [
     text: "۱,۰۰۰,۰۰۰ تومان فوری به حسابت واریز می‌شه!",
     icon: Wallet,
   },
-  {
-    text: "حداکثر ۲ دعوت موفق در هر هفته",
-    icon: Shield,
-  },
 ] as const;
+
+const weeklyInviteLimit = "حداکثر ۲ دعوت موفق در هر هفته";
 
 const fallingNotes: { src: string; className: string }[] = [
   { src: rial100.src, className: styles.note1 },
@@ -36,16 +34,6 @@ const fallingNotes: { src: string; className: string }[] = [
   { src: rial100.src, className: styles.note11 },
   { src: rial500.src, className: styles.note12 },
 ];
-
-function Laurel({ mirrored }: { mirrored?: boolean }) {
-  return (
-    <span className={`${styles.laurel} ${mirrored ? styles.laurelLeft : ""}`} aria-hidden>
-      <Leaf />
-      <Leaf />
-      <Leaf />
-    </span>
-  );
-}
 
 export function ReferralRewardBanner() {
   return (
@@ -68,13 +56,6 @@ export function ReferralRewardBanner() {
       </div>
 
       <div className={styles.copyStack}>
-        <div className={styles.campaignBadge}>
-          <Laurel />
-          <span className={styles.badgePill}>کمپین دعوت ویژه</span>
-          <Laurel mirrored />
-          <Crown className={styles.crown} size={22} aria-hidden />
-        </div>
-
         <h1 className={styles.title}>
           <span>۲,۰۰۰,۰۰۰</span>
           <span className={styles.titleUnit}>تومان</span>
@@ -82,7 +63,7 @@ export function ReferralRewardBanner() {
         <h2 className={styles.subtitle}>جایزه نقدی هفتگی!</h2>
 
         <div className={styles.featureRow} aria-label="مراحل کمپین دعوت">
-          {steps.map((step) => (
+          {primarySteps.map((step) => (
             <article className={styles.featureChip} key={step.text}>
               <span className={styles.chipIcon} aria-hidden>
                 <step.icon />
@@ -92,9 +73,11 @@ export function ReferralRewardBanner() {
           ))}
         </div>
 
+        <p className={styles.weeklyLimit}>{weeklyInviteLimit}</p>
+
         <Link href="/student/referral" className={styles.inviteButton}>
           <UserPlus aria-hidden />
-          <span>دوستانتو دعوت کن</span>
+          <span>کلیک برای دعوت دوستات</span>
         </Link>
       </div>
     </section>

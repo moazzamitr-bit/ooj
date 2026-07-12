@@ -208,7 +208,7 @@
 
 .copyStack {
   position: absolute;
-  inset: 20px 185px 13px 268px;
+  inset: 10px 185px 13px 268px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -323,9 +323,19 @@
   width: min(100%, 810px);
   margin-top: 18px;
   display: grid;
-  grid-template-columns: minmax(182px, 0.92fr) minmax(292px, 1.35fr) minmax(182px, 0.92fr);
+  grid-template-columns: minmax(220px, 1fr) minmax(320px, 1.35fr);
   gap: 12px;
   align-items: center;
+}
+
+.weeklyLimit {
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.5;
+  color: #3b3f63;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
 .featureChip {
@@ -445,8 +455,13 @@
 
   .featureRow {
     margin-top: 12px;
-    grid-template-columns: 0.9fr 1.36fr 0.9fr;
+    grid-template-columns: 1fr 1.35fr;
     gap: 7px;
+  }
+
+  .weeklyLimit {
+    margin-top: 8px;
+    font-size: 11px;
   }
 
   .featureChip {
@@ -544,6 +559,11 @@
     gap: 4px;
   }
 
+  .weeklyLimit {
+    margin-top: 5px;
+    font-size: 7px;
+  }
+
   .featureChip {
     min-height: 22px;
     padding: 3px 24px 3px 5px;
@@ -603,6 +623,11 @@
 
   .featureRow {
     gap: 3px;
+  }
+
+  .weeklyLimit {
+    margin-top: 4px;
+    font-size: 6px;
   }
 
   .featureChip {
