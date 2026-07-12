@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import type { ChartBarKind, ProfileChartBar } from "@/lib/data/profile-mock-data";
+import { toPersianDigits } from "@/lib/utils/persian";
 
 type LabelMode = "default" | "compact" | "monthly" | "angled";
 
@@ -10,6 +11,8 @@ interface SketchBarChartProps {
   yMax: number;
   yStep: number;
   labelMode?: LabelMode;
+  valueUnit?: string;
+  persianYAxis?: boolean;
 }
 
 interface TooltipState {
@@ -98,6 +101,8 @@ export function SketchBarChart({
   yMax,
   yStep,
   labelMode = "default",
+  valueUnit = "ساعت",
+  persianYAxis = false,
 }: SketchBarChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
@@ -168,7 +173,7 @@ export function SketchBarChart({
                 textAnchor="end"
                 className="fill-slate-700 text-[9px] font-medium"
               >
-                {tick}
+                {persianYAxis ? toPersianDigits(tick) : tick}
               </text>
             </g>
           );
@@ -261,7 +266,7 @@ export function SketchBarChart({
           style={{ left: tooltip.x, top: tooltip.y - 10 }}
         >
           {tooltip.label ? `${tooltip.label}: ` : null}
-          {tooltip.value} ساعت
+          {persianYAxis ? toPersianDigits(tooltip.value) : tooltip.value} {valueUnit}
         </div>
       ) : null}
     </div>

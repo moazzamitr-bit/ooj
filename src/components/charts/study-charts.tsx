@@ -26,9 +26,16 @@ export function StudyCharts() {
   return (
     <div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4" dir="rtl">
-        <ChartPanel title="روزانه - ساعت">
+        <ChartPanel title="روزانه - دقیقه">
           <div dir="ltr">
-            <SketchBarChart data={daily} yMax={12} yStep={1} labelMode="angled" />
+            <SketchBarChart
+              data={daily}
+              yMax={180}
+              yStep={20}
+              labelMode="angled"
+              valueUnit="دقیقه"
+              persianYAxis
+            />
           </div>
         </ChartPanel>
 

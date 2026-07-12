@@ -11,7 +11,7 @@ import {
 } from "react";
 import { mockStudent, mockSubjects } from "@/lib/data/mock-data";
 import {
-  dailyHoursChartData,
+  dailyMinutesChartData,
   monthlyHoursChartData,
   subjectHoursChartData,
   weeklyHoursChartData,
@@ -82,7 +82,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const chartData = useMemo(
     () => ({
-      daily: dailyHoursChartData,
+      daily: dailyMinutesChartData,
       weekly: weeklyHoursChartData,
       monthly: monthlyHoursChartData,
       subjects: subjectHoursChartData,

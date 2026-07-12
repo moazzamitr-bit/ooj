@@ -74,27 +74,30 @@ export const weeklyHoursChartData: ProfileChartBar[] = [
   { label: "۲ روز\nآخر", value: 9 },
 ];
 
-/** نمودار روزانه - ساعت (چپ→راست): مجموع، مازاد ابتدا، ۷ روز، مازاد آخر */
-export const dailyHoursChartData: ProfileChartBar[] = [
-  { label: "مجموع", value: 10, kind: "total" },
-  { label: "", value: 2, kind: "surplus" },
-  { label: "شنبه", value: 1 },
-  { label: "یکشنبه", value: 4 },
-  { label: "دوشنبه", value: 6 },
-  { label: "سه‌شنبه", value: 2 },
-  { label: "چهارشنبه", value: 2 },
-  { label: "پنجشنبه", value: 1 },
-  { label: "جمعه", value: 2 },
-  { label: "", value: 1, kind: "surplus" },
+/** نمودار روزانه - دقیقه (چپ→راست): مجموع، مازاد ابتدا، ۷ روز، مازاد آخر — مقیاس ۰ تا ۱۸۰ */
+export const dailyMinutesChartData: ProfileChartBar[] = [
+  { label: "مجموع", value: 160, kind: "total" },
+  { label: "", value: 20, kind: "surplus" },
+  { label: "شنبه", value: 20 },
+  { label: "یکشنبه", value: 80 },
+  { label: "دوشنبه", value: 120 },
+  { label: "سه‌شنبه", value: 40 },
+  { label: "چهارشنبه", value: 40 },
+  { label: "پنجشنبه", value: 20 },
+  { label: "جمعه", value: 40 },
+  { label: "", value: 20, kind: "surplus" },
 ];
+
+/** @deprecated use dailyMinutesChartData */
+export const dailyHoursChartData = dailyMinutesChartData;
 
 export const weeklyChartFootnote =
   "در ستون کوچک اول و آخر مربوط به مازاد هفته است. مثلا اگر انتهای ماه از پنجشنبه شروع می‌شود، روزهای پنجشنبه و جمعه در این ستون کوتاه قرار می‌گیرد یا اگر یکی دو روز از آخر ماه زیاد آمد در آخرین ستون کوتاه قرار می‌گیرد.";
 
-/** @deprecated use dailyHoursChartData */
-export const dailyTimeChartData = dailyHoursChartData.map((bar) => ({
+/** @deprecated use dailyMinutesChartData */
+export const dailyTimeChartData = dailyMinutesChartData.map((bar) => ({
   day: bar.label,
-  studyMinutes: bar.value * 60,
+  studyMinutes: bar.value,
   testCount: 0,
 }));
 
