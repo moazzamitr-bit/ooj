@@ -8,6 +8,7 @@ import { toPersianDigits, formatPercent } from "@/lib/utils/persian";
 import { Progress } from "@/components/ui/progress";
 import {
   getYearStudyStructure,
+  TALFIYI_TEST_DIFFICULTIES,
   TEST_DIFFICULTIES,
   type TestDifficulty,
 } from "@/lib/data/study-structure-data";
@@ -32,6 +33,12 @@ export function SubjectYearStudyPanel({
 }: SubjectYearStudyPanelProps) {
   const { title, chapters } = getYearStudyStructure(subjectId, subjectName, section);
   const [openChapterId, setOpenChapterId] = useState<string | null>(chapters[0]?.id ?? null);
+  const difficulties =
+    section === "konkur_talfiyi"
+      ? TALFIYI_TEST_DIFFICULTIES
+      : section === "konkur_sarasari"
+        ? TEST_DIFFICULTIES.filter((difficulty) => difficulty.id === "konkur")
+        : TEST_DIFFICULTIES;
 
   const handleTestClick = (chapterId: string, topicId: string, difficulty: TestDifficulty) => {
     console.log("test click", { chapterId, topicId, difficulty });
@@ -117,8 +124,13 @@ export function SubjectYearStudyPanel({
                             <div className="border-b border-slate-100 bg-slate-50/80 px-3 py-2.5 text-center text-xs font-extrabold leading-5 text-primary-deep">
                               {topic.title}
                             </div>
-                            <div className="grid grid-cols-2 gap-1.5 p-2">
-                              {TEST_DIFFICULTIES.map((difficulty) => (
+                            <div
+                              className={cn(
+                                "grid gap-1.5 p-2",
+                                difficulties.length === 3 ? "grid-cols-3" : "grid-cols-2"
+                              )}
+                            >
+                              {difficulties.map((difficulty) => (
                                 <button
                                   key={difficulty.id}
                                   type="button"

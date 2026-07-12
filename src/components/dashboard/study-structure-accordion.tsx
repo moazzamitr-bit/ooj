@@ -33,9 +33,9 @@ export function StudyStructureAccordion({
 
   const yearTestGroups = useMemo(
     () => [
-      { id: "year1", label: "اول" },
-      { id: "year2", label: "دوم" },
-      { id: "year3", label: "سوم" },
+      { id: "year1", label: "پایه ۱۰" },
+      { id: "year2", label: "پایه ۱۱" },
+      { id: "year3", label: "پایه ۱۲" },
       { id: "talfiyi", label: "کنکور تالیفی" },
       { id: "sarasari", label: "کنکور سراسری" },
     ],

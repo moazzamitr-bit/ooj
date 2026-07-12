@@ -11,10 +11,14 @@ export type TestDifficulty = "simple" | "medium" | "hard" | "konkur";
 
 export const TEST_DIFFICULTIES: { id: TestDifficulty; label: string }[] = [
   { id: "simple", label: "ساده" },
-  { id: "medium", label: "متوسط" },
+  { id: "medium", label: "معمولی" },
   { id: "hard", label: "سخت" },
   { id: "konkur", label: "کنکور" },
 ];
+
+export const TALFIYI_TEST_DIFFICULTIES = TEST_DIFFICULTIES.filter(
+  (difficulty) => difficulty.id !== "konkur"
+);
 
 export type { StudyChapterNode, StudyTopicNode };
 

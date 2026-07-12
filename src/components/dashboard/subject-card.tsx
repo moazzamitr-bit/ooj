@@ -73,6 +73,40 @@ interface SubjectCardProps {
   onSectionClick?: (section: SubjectTestSection) => void;
 }
 
+function GradeCellButton({
+  grade,
+  section,
+  isActive,
+  theme,
+  onClick,
+  className,
+}: {
+  grade: string;
+  section: SubjectTestSection;
+  isActive: boolean;
+  theme: (typeof subjectThemes)[string];
+  onClick?: (section: SubjectTestSection) => void;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick?.(section);
+      }}
+      className={cn(
+        "flex min-h-[42px] w-full flex-col items-center justify-center rounded-lg px-1 py-1 text-center transition-all duration-200 md:min-h-[44px]",
+        isActive ? theme.cellActive : theme.cellIdle,
+        className
+      )}
+    >
+      <span className="text-[9px] font-bold leading-4 md:text-[10px]">پایه</span>
+      <span className="text-[11px] font-extrabold leading-4 md:text-xs">{grade}</span>
+    </button>
+  );
+}
+
 function CellButton({
   label,
   section,
@@ -131,7 +165,7 @@ export function SubjectCard({
           >
             <SubjectIcon subjectId={subject.id} iconClassName={theme.icon} />
           </div>
-          <h3 className={cn("text-lg font-extrabold tracking-tight md:text-xl", theme.name)}>
+          <h3 className={cn("text-2xl font-bold tracking-tight md:text-3xl", theme.name)}>
             {subject.name}
           </h3>
         </div>
@@ -139,24 +173,24 @@ export function SubjectCard({
 
       <div className={cn("border-t border-white/60 px-3 py-3", theme.footer)}>
         <div className="flex items-stretch divide-x divide-slate-200/80">
-          <CellButton
-            label="اول"
+          <GradeCellButton
+            grade="۱۰"
             section="year1"
             isActive={activeSection === "year1"}
             theme={theme}
             onClick={onSectionClick}
             className="flex-1 px-2"
           />
-          <CellButton
-            label="دوم"
+          <GradeCellButton
+            grade="۱۱"
             section="year2"
             isActive={activeSection === "year2"}
             theme={theme}
             onClick={onSectionClick}
             className="flex-1 px-2"
           />
-          <CellButton
-            label="سوم"
+          <GradeCellButton
+            grade="۱۲"
             section="year3"
             isActive={activeSection === "year3"}
             theme={theme}

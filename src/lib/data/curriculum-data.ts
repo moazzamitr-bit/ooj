@@ -532,9 +532,9 @@ export const SUBJECT_FULL_NAMES: Record<string, string> = {
 };
 
 export const GRADE_LABELS: Record<GradeKey, string> = {
-  year1: "دهم",
-  year2: "یازدهم",
-  year3: "دوازدهم",
+  year1: "پایه ۱۰",
+  year2: "پایه ۱۱",
+  year3: "پایه ۱۲",
 };
 
 export function getChaptersForSection(
