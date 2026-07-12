@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronsUpDown } from "lucide-react";
 import { provinceMaxRankRows } from "@/lib/data/province-max-ranks";
 import styles from "./admission-pencil.module.css";
 
@@ -24,7 +25,7 @@ function BookEmblemIcon() {
 
 export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps) {
   return (
-    <div className="flex w-full justify-center">
+    <div className={styles.pencilWrap}>
       <div className={styles.pencil} role="group" aria-label="مداد حداقل رتبه قبولی استان‌ها">
         <div className={`${styles.eraser} ${styles.curv}`} aria-hidden />
 
@@ -38,8 +39,13 @@ export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps
           <table className={styles.table}>
             <thead>
               <tr>
-                <th className={styles.hName}>استان</th>
-                <th className={styles.hRank}>حداقل رتبه قبولی</th>
+                <th className={styles.hTitle} colSpan={2}>
+                  حداقل رتبه قبولی
+                </th>
+              </tr>
+              <tr>
+                <th className={styles.hName}>سراسری</th>
+                <th className={styles.hRank}>آزاد</th>
               </tr>
             </thead>
             <tbody>
@@ -73,6 +79,10 @@ export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps
           <div className={styles.paintLip} />
           <div className={styles.lead} />
         </div>
+      </div>
+
+      <div className={styles.scrollHint} aria-hidden>
+        <ChevronsUpDown className={styles.scrollIcon} />
       </div>
     </div>
   );

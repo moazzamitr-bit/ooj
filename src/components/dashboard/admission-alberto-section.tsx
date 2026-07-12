@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { BookOpen, Info, MapPin } from "lucide-react";
+import { BookOpen, Info } from "lucide-react";
 import { SegmentedControl } from "@/components/ui/segmented-control";
 import { AdmissionPencil } from "@/components/dashboard/admission-pencil";
 import { AlbertoCard } from "@/components/dashboard/alberto-card";
@@ -27,7 +27,7 @@ export function AdmissionAlbertoSection() {
   const provinceMaxRank = getProvinceMaxAcceptanceRank(selectedProvince.code);
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:items-stretch">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr_13fr] lg:items-stretch">
       <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_4px_20px_rgb(17_26_76_0.04)]">
         <div className="border-b border-slate-100 px-5 py-4 lg:px-6">
           <div className="flex items-start gap-3">
@@ -40,8 +40,8 @@ export function AdmissionAlbertoSection() {
           </div>
         </div>
 
-        <div className="grid flex-1 lg:grid-cols-2">
-          <div className="order-2 flex min-h-[480px] flex-col items-center justify-start overflow-hidden bg-gradient-to-b from-[#F7F4FF] to-[#EEF4FF] px-3 py-4 lg:order-1 lg:min-h-[520px] lg:px-4 lg:py-5">
+        <div className="grid flex-1 lg:grid-cols-[13fr_7fr]">
+          <div className="order-2 flex min-h-[480px] flex-col items-center justify-start overflow-hidden bg-gradient-to-b from-[#F7F4FF] to-[#EEF4FF] px-2 py-4 lg:order-1 lg:min-h-[520px] lg:px-3 lg:py-5">
             <AdmissionPencil selectedCode={selectedCode} onSelect={setSelectedCode} />
 
             <div className="mt-3 w-full max-w-[320px]">
@@ -58,20 +58,20 @@ export function AdmissionAlbertoSection() {
             </div>
           </div>
 
-          <div className="order-1 flex flex-col border-r border-slate-100 p-5 lg:order-2 lg:p-6">
-            <div className="mb-4 rounded-xl bg-lavender-soft px-3 py-2.5">
-              <p className="text-[11px] text-slate-500">استان انتخاب‌شده</p>
-              <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-primary-deep">
-                <MapPin className="h-4 w-4 text-primary" aria-hidden />
+          <div className="order-1 flex min-w-0 flex-col border-r border-slate-100 p-4 lg:order-2 lg:p-5">
+            <div className="mb-4 overflow-hidden rounded-xl bg-gradient-to-br from-[#2563eb] via-[#1d4ed8] to-[#1e40af] px-3 py-5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.22)]">
+              <p className="text-[10px] font-semibold text-blue-100/90">شهر انتخاب‌شده</p>
+              <p className="mt-2 text-2xl font-black leading-tight tracking-tight text-white drop-shadow-sm lg:text-3xl">
                 {selectedProvince.name_fa}
               </p>
-              <p className="mt-2 text-xs text-slate-500">
-                حداقل رتبه قبولی استان:{" "}
-                <span className="font-bold text-primary tabular-nums">
-                  {provinceMaxRank.toLocaleString("fa-IR")}
-                </span>
-              </p>
             </div>
+
+            <p className="mb-2 text-[11px] text-slate-500">
+              حداقل رتبه قبولی استان:{" "}
+              <span className="font-bold text-primary tabular-nums">
+                {provinceMaxRank.toLocaleString("fa-IR")}
+              </span>
+            </p>
 
             <p className="mb-3 text-xs font-bold text-slate-500">
               حداقل رتبه قبولی رشته‌های پزشکی
@@ -81,17 +81,17 @@ export function AdmissionAlbertoSection() {
               {rankRows.map((row) => (
                 <li
                   key={row.major}
-                  className="flex items-center justify-between border-t border-slate-50 py-3.5 first:border-t-0 first:pt-0"
+                  className="flex items-center justify-between gap-2 border-t border-slate-50 py-3 first:border-t-0 first:pt-0"
                 >
-                  <span className="font-medium text-primary-deep">{row.major}</span>
-                  <span className="tabular-nums text-sm font-bold text-primary">
+                  <span className="text-sm font-medium text-primary-deep">{row.major}</span>
+                  <span className="shrink-0 tabular-nums text-sm font-bold text-primary">
                     {row.rank.toLocaleString("fa-IR")} رتبه
                   </span>
                 </li>
               ))}
             </ul>
 
-            <p className="mt-4 flex items-center gap-1.5 text-[11px] text-slate-400">
+            <p className="mt-4 flex items-center gap-1.5 text-[10px] leading-5 text-slate-400">
               <Info className="h-3.5 w-3.5 shrink-0" aria-hidden />
               اعداد بر اساس کارنامه‌های سال قبل می‌باشد
             </p>
