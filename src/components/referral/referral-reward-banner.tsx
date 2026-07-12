@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { UserPlus, Wallet } from "lucide-react";
+import { Shield, UserPlus, Wallet } from "lucide-react";
 import giftBackground from "@/assets/images/gift-background.png";
 import rial100 from "@/assets/images/rial-100.png";
 import rial500 from "@/assets/images/rial-500.png";
@@ -71,9 +71,13 @@ export function ReferralRewardBanner() {
               <span>{step.text}</span>
             </article>
           ))}
+          <article className={`${styles.featureChip} ${styles.featureChipWide}`}>
+            <span className={styles.chipIcon} aria-hidden>
+              <Shield />
+            </span>
+            <span>{weeklyInviteLimit}</span>
+          </article>
         </div>
-
-        <p className={styles.weeklyLimit}>{weeklyInviteLimit}</p>
 
         <Link href="/student/referral" className={styles.inviteButton}>
           <UserPlus aria-hidden />

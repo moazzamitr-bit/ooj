@@ -212,6 +212,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   z-index: 4;
   isolation: isolate;
 }
@@ -326,16 +328,13 @@
   grid-template-columns: minmax(220px, 1fr) minmax(320px, 1.35fr);
   gap: 12px;
   align-items: center;
+  justify-items: center;
 }
 
-.weeklyLimit {
-  margin: 10px 0 0;
-  text-align: center;
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1.5;
-  color: #3b3f63;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.82);
+.featureChipWide {
+  grid-column: 1 / -1;
+  width: fit-content;
+  max-width: 100%;
 }
 
 .featureChip {
@@ -459,11 +458,6 @@
     gap: 7px;
   }
 
-  .weeklyLimit {
-    margin-top: 8px;
-    font-size: 11px;
-  }
-
   .featureChip {
     min-height: 35px;
     padding: 5px 43px 5px 10px;
@@ -559,11 +553,6 @@
     gap: 4px;
   }
 
-  .weeklyLimit {
-    margin-top: 5px;
-    font-size: 7px;
-  }
-
   .featureChip {
     min-height: 22px;
     padding: 3px 24px 3px 5px;
@@ -623,11 +612,6 @@
 
   .featureRow {
     gap: 3px;
-  }
-
-  .weeklyLimit {
-    margin-top: 4px;
-    font-size: 6px;
   }
 
   .featureChip {
