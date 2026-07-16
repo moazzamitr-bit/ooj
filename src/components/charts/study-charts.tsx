@@ -40,8 +40,14 @@ export function StudyCharts() {
         </ChartPanel>
 
         <ChartPanel title="هفتگی - ساعت">
-          <div dir="ltr">
-            <SketchBarChart data={weekly} yMax={9} yStep={1} labelMode="compact" />
+          <div dir="ltr" className="min-w-0">
+            <SketchBarChart
+              data={weekly}
+              yMax={9}
+              yStep={1}
+              labelMode="compact"
+              visibleBars={9}
+            />
           </div>
         </ChartPanel>
 

@@ -13,6 +13,8 @@ interface SketchBarChartProps {
   labelMode?: LabelMode;
   valueUnit?: string;
   persianYAxis?: boolean;
+  /** When set, only this many bars fit in view; the rest scroll horizontally. */
+  visibleBars?: number;
 }
 
 interface TooltipState {
@@ -33,12 +35,15 @@ const DEPTH_X = 7;
 const DEPTH_Y = 5;
 const HEIGHT_SCALE = 1.2;
 
-function barWidth(kind: ChartBarKind = "default", dataLength = 0) {
+function barWidth(kind: ChartBarKind = "default", dataLength = 0, scrollable = false) {
   if (kind === "total") return 28;
   if (kind === "surplus") return 9;
+  if (scrollable) return 20;
   if (dataLength >= 13) return 14;
   return 20;
 }
+
+const SCROLL_SLOT_WIDTH = 38;
 
 function getPadding(labelMode: LabelMode) {
   if (labelMode === "monthly") {
@@ -111,21 +116,29 @@ export function SketchBarChart({
   labelMode = "default",
   valueUnit = "ساعت",
   persianYAxis = false,
+  visibleBars,
 }: SketchBarChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const width =
-    data.length >= 13 ? 440 : data.length >= 10 ? 380 : 356;
+  const scrollable =
+    typeof visibleBars === "number" && visibleBars > 0 && data.length > visibleBars;
+  const padding = getPadding(labelMode);
+  const width = scrollable
+    ? padding.left + padding.right + data.length * SCROLL_SLOT_WIDTH + DEPTH_X
+    : data.length >= 13
+      ? 440
+      : data.length >= 10
+        ? 380
+        : 356;
   const baseHeight = labelMode === "monthly" || labelMode === "angled" ? 236 : 222;
   const height = Math.round(baseHeight * HEIGHT_SCALE);
-  const padding = getPadding(labelMode);
   const plotWidth = width - padding.left - padding.right;
   const plotHeight = height - padding.top - padding.bottom;
   const baseline = padding.top + plotHeight;
   const ticks = Array.from({ length: Math.floor(yMax / yStep) + 1 }, (_, i) => i * yStep);
-  const slotWidth = plotWidth / data.length;
+  const slotWidth = scrollable ? SCROLL_SLOT_WIDTH : plotWidth / data.length;
 
   const showTooltip = (bar: ProfileChartBar, event: React.MouseEvent<SVGRectElement>) => {
     const rect = containerRef.current?.getBoundingClientRect();
@@ -139,11 +152,23 @@ export function SketchBarChart({
     });
   };
 
-  return (
-    <div ref={containerRef} className="relative" onMouseLeave={() => {
-      setTooltip(null);
-      setHoveredIndex(null);
-    }}>
+  const chart = (
+    <div
+      ref={containerRef}
+      className="relative"
+      style={
+        scrollable && visibleBars
+          ? {
+              width: `${(data.length / visibleBars) * 100}%`,
+              minWidth: width,
+            }
+          : undefined
+      }
+      onMouseLeave={() => {
+        setTooltip(null);
+        setHoveredIndex(null);
+      }}
+    >
       <svg
         viewBox={`0 0 ${width} ${height}`}
         className="h-auto w-full"
@@ -200,7 +225,7 @@ export function SketchBarChart({
 
         {data.map((bar, index) => {
           const kind = bar.kind ?? "default";
-          const barW = barWidth(kind, data.length);
+          const barW = barWidth(kind, data.length, scrollable);
           const slotCenter = padding.left + slotWidth * index + slotWidth / 2;
           const barX = slotCenter - barW / 2;
           const barHeight = Math.max(
@@ -279,6 +304,14 @@ export function SketchBarChart({
           {persianYAxis ? toPersianDigits(tooltip.value) : tooltip.value} {valueUnit}
         </div>
       ) : null}
+    </div>
+  );
+
+  if (!scrollable) return chart;
+
+  return (
+    <div className="w-full overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:thin]">
+      {chart}
     </div>
   );
 }
