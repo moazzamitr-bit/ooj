@@ -32,7 +32,6 @@ const BAR_COLORS = {
 };
 
 const DEPTH_X = 7;
-const DEPTH_Y = 5;
 const HEIGHT_SCALE = 1.2;
 
 function barWidth(kind: ChartBarKind = "default", dataLength = 0, scrollable = false) {
@@ -76,27 +75,35 @@ function Bar3D({
   const top = baseline - height;
   const right = x + width;
   const sideRight = right + DEPTH_X;
-  const topEdge = top - DEPTH_Y;
-  const baseDepth = baseline - DEPTH_Y;
+  const capital = Math.min(6, Math.max(3, height * 0.08));
   const front = hovered ? BAR_COLORS.hover : BAR_COLORS.front;
   const leftShade = hovered ? "#1E3A8A" : "#1E40AF";
+  const capitalFill = hovered ? "#93C5FD" : BAR_COLORS.top;
 
   return (
     <g>
+      {/* soft side depth — flat column, no pointed tip */}
       <polygon
-        points={`${x},${top} ${x},${baseline} ${x + 2},${baseline - 1} ${x + 2},${top - 1}`}
-        fill={leftShade}
-        opacity={0.55}
-      />
-      <polygon
-        points={`${right},${top} ${sideRight},${topEdge} ${sideRight},${baseDepth} ${right},${baseline}`}
+        points={`${right},${top} ${sideRight},${top} ${sideRight},${baseline} ${right},${baseline}`}
         fill={BAR_COLORS.side}
       />
       <polygon
-        points={`${x},${top} ${x + DEPTH_X},${topEdge} ${sideRight},${topEdge} ${right},${top}`}
-        fill={BAR_COLORS.top}
+        points={`${x},${top} ${x},${baseline} ${x + 2},${baseline} ${x + 2},${top}`}
+        fill={leftShade}
+        opacity={0.45}
       />
-      <rect x={x} y={top} width={width} height={height} fill={front} />
+      <rect x={x} y={top} width={width} height={height} fill={front} rx={1.5} />
+      {/* flat capital like a university pillar */}
+      <rect x={x - 1.5} y={top} width={width + 3} height={capital} fill={capitalFill} rx={1} />
+      <rect
+        x={x - 1.5}
+        y={baseline - 2.5}
+        width={width + 3}
+        height={2.5}
+        fill={leftShade}
+        opacity={0.85}
+        rx={0.5}
+      />
     </g>
   );
 }
@@ -255,9 +262,9 @@ export function SketchBarChart({
               />
               <rect
                 x={barX - 2}
-                y={baseline - barHeight - DEPTH_Y}
+                y={baseline - barHeight - 2}
                 width={barW + DEPTH_X + 4}
-                height={barHeight + DEPTH_Y + 4}
+                height={barHeight + 8}
                 fill="transparent"
                 className="cursor-pointer"
                 onMouseEnter={(event) => {

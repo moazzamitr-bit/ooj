@@ -10,11 +10,13 @@ interface ChartPanelProps {
 
 function ChartPanel({ title, children }: ChartPanelProps) {
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-slate-200/80 bg-gradient-to-b from-white to-slate-50 p-[5px] shadow-[0_8px_20px_rgba(15,23,42,0.08)]">
+    <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-[#EEF1FA] p-[5px] shadow-[0_8px_20px_rgba(15,23,42,0.08)]">
       <h3 className="mb-1 text-center text-sm font-extrabold tracking-tight text-slate-800">
         {title}
       </h3>
-      <div className="flex-1">{children}</div>
+      <div className="flex min-h-0 flex-1 flex-col justify-end rounded-[14px] bg-[#EEF1FA]">
+        {children}
+      </div>
     </article>
   );
 }

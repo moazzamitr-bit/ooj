@@ -26,7 +26,7 @@ function BookEmblemIcon() {
 export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps) {
   return (
     <div className={styles.pencilWrap}>
-      <div className={styles.pencil} role="group" aria-label="مداد حداقل رتبه قبولی استان‌ها">
+      <div className={styles.pencil} role="group" aria-label="ستون حداقل رتبه قبولی استان‌ها">
         <div className={`${styles.eraser} ${styles.curv}`} aria-hidden />
 
         <div className={styles.ferrule} aria-hidden>
@@ -74,11 +74,7 @@ export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps
           </table>
         </div>
 
-        <div className={styles.tip} aria-hidden>
-          <div className={styles.wood} />
-          <div className={styles.paintLip} />
-          <div className={styles.lead} />
-        </div>
+        <div className={`${styles.columnBase} ${styles.curv}`} aria-hidden />
       </div>
 
       <div className={styles.scrollHint} aria-hidden>

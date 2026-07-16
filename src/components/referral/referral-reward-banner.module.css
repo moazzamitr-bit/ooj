@@ -324,15 +324,13 @@
 .featureRow {
   width: min(100%, 810px);
   margin-top: 18px;
-  display: grid;
-  grid-template-columns: minmax(220px, 1fr) minmax(320px, 1.35fr);
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-items: center;
+  gap: 12px;
 }
 
 .featureChipWide {
-  grid-column: 1 / -1;
   width: fit-content;
   max-width: 100%;
 }
@@ -344,7 +342,7 @@
   align-items: center;
   justify-content: center;
   gap: 11px;
-  padding: 6px 58px 6px 15px;
+  padding: 8px 58px 8px 18px;
   border-radius: 11px;
   border: 1px solid rgba(60, 44, 124, 0.1);
   background: rgba(255, 255, 255, 0.74);
@@ -354,8 +352,9 @@
   color: #171a36;
   font-size: 12.8px;
   font-weight: 800;
-  line-height: 1.4;
-  white-space: nowrap;
+  line-height: 1.45;
+  white-space: normal;
+  text-align: center;
 }
 
 .chipIcon {
@@ -454,7 +453,6 @@
 
   .featureRow {
     margin-top: 12px;
-    grid-template-columns: 1fr 1.35fr;
     gap: 7px;
   }
 

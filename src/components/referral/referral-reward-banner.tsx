@@ -1,22 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { Shield, UserPlus, Wallet } from "lucide-react";
+import { Shield, UserPlus } from "lucide-react";
 import giftBackground from "@/assets/images/gift-background.png";
 import rial100 from "@/assets/images/rial-100.png";
 import rial500 from "@/assets/images/rial-500.png";
 import styles from "@/components/referral/referral-reward-banner.module.css";
 
-const primarySteps = [
-  {
-    text: "هر دوستی که با دعوت تو عضو بشه",
-    icon: UserPlus,
-  },
-  {
-    text: "۱,۰۰۰,۰۰۰ تومان فوری به حسابت واریز می‌شه!",
-    icon: Wallet,
-  },
-] as const;
+const rewardCopy =
+  "هر دوستی که با دعوت تو عضو بشه ۱,۰۰۰,۰۰۰ تومان فوری به حسابت واریز می‌شه!";
 
 const weeklyInviteLimit = "حداکثر ۲ دعوت موفق در هر هفته";
 
@@ -63,14 +55,12 @@ export function ReferralRewardBanner() {
         <h2 className={styles.subtitle}>جایزه نقدی هفتگی!</h2>
 
         <div className={styles.featureRow} aria-label="مراحل کمپین دعوت">
-          {primarySteps.map((step) => (
-            <article className={styles.featureChip} key={step.text}>
-              <span className={styles.chipIcon} aria-hidden>
-                <step.icon />
-              </span>
-              <span>{step.text}</span>
-            </article>
-          ))}
+          <article className={`${styles.featureChip} ${styles.featureChipWide}`}>
+            <span className={styles.chipIcon} aria-hidden>
+              <UserPlus />
+            </span>
+            <span>{rewardCopy}</span>
+          </article>
           <article className={`${styles.featureChip} ${styles.featureChipWide}`}>
             <span className={styles.chipIcon} aria-hidden>
               <Shield />
