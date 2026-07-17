@@ -1,14 +1,21 @@
 /** داده‌های دقیق mockup صفحه پروفایل — بدون تغییر متن یا اعداد */
 
 export const profileSubjectProgress: Record<string, number> = {
-  sub_math: 65,
   sub_bio: 40,
-  sub_physics: 50,
+  sub_geo: 35,
   sub_chem: 70,
+  sub_physics: 50,
+  sub_math: 65,
 };
 
-// نمایش از راست به چپ: زیست - شیمی - فیزیک - ریاضی
-export const profileSubjectOrder = ["sub_bio", "sub_chem", "sub_physics", "sub_math"] as const;
+// نمایش از راست به چپ: زیست - زمین شناسی - شیمی - فیزیک - ریاضی
+export const profileSubjectOrder = [
+  "sub_bio",
+  "sub_geo",
+  "sub_chem",
+  "sub_physics",
+  "sub_math",
+] as const;
 
 export const profileStudentDisplay = {
   full_name: "آزاد احمدی",
@@ -35,21 +42,37 @@ export const chemSubchaptersMockup = [
   { id: "sc_m6", title: "ترسمت ۶: مرور و تست", icon: "clipboard" },
 ];
 
-export type ChartBarKind = "default" | "total" | "surplus";
+export type ChartBarKind = "default" | "total" | "surplus" | "grade";
 
 export interface ProfileChartBar {
   label: string;
   value: number;
   kind?: ChartBarKind;
+  /** Group label for clustered bars (e.g. subject name above grade trio). */
+  group?: string;
 }
 
-/** نمودار دروس - ساعت (مقیاس ۰ تا ۳۵۰) */
-export const subjectHoursChartData: ProfileChartBar[] = [
-  { label: "ریاضی", value: 275 },
-  { label: "فیزیک", value: 225 },
-  { label: "شیمی", value: 175 },
-  { label: "زیست", value: 250 },
+/** نمودار دروس - درصد تکمیل تست هر پایه (۰ تا ۱۰۰) */
+export const subjectGradeTestChartData: ProfileChartBar[] = [
+  { label: "۱۰", value: 72, kind: "grade", group: "زیست" },
+  { label: "۱۱", value: 48, kind: "grade", group: "زیست" },
+  { label: "۱۲", value: 35, kind: "grade", group: "زیست" },
+  { label: "۱۰", value: 55, kind: "grade", group: "زمین" },
+  { label: "۱۱", value: 40, kind: "grade", group: "زمین" },
+  { label: "۱۲", value: 28, kind: "grade", group: "زمین" },
+  { label: "۱۰", value: 80, kind: "grade", group: "شیمی" },
+  { label: "۱۱", value: 62, kind: "grade", group: "شیمی" },
+  { label: "۱۲", value: 44, kind: "grade", group: "شیمی" },
+  { label: "۱۰", value: 58, kind: "grade", group: "فیزیک" },
+  { label: "۱۱", value: 46, kind: "grade", group: "فیزیک" },
+  { label: "۱۲", value: 33, kind: "grade", group: "فیزیک" },
+  { label: "۱۰", value: 70, kind: "grade", group: "ریاضی" },
+  { label: "۱۱", value: 52, kind: "grade", group: "ریاضی" },
+  { label: "۱۲", value: 38, kind: "grade", group: "ریاضی" },
 ];
+
+/** @deprecated use subjectGradeTestChartData */
+export const subjectHoursChartData = subjectGradeTestChartData;
 
 /** نمودار ماهانه - ساعت (مقیاس ۰ تا ۵۰) */
 export const monthlyHoursChartData: ProfileChartBar[] = [
@@ -81,9 +104,11 @@ export const weeklyHoursChartData: ProfileChartBar[] = [
   { label: "هفته\n۱۳", value: 6 },
 ];
 
-/** نمودار روزانه - دقیقه (چپ→راست): مجموع، مازاد ابتدا، ۷ روز، مازاد آخر — مقیاس ۰ تا ۱۸۰ */
+/** نمودار روزانه - دقیقه: ۳ مجموع کوچک، مازاد ابتدا، ۷ روز، مازاد آخر — مقیاس ۰ تا ۱۸۰ */
 export const dailyMinutesChartData: ProfileChartBar[] = [
-  { label: "مجموع", value: 160, kind: "total" },
+  { label: "مطالعه", value: 160, kind: "total" },
+  { label: "تست", value: 110, kind: "total" },
+  { label: "مرور", value: 70, kind: "total" },
   { label: "", value: 20, kind: "surplus" },
   { label: "شنبه", value: 20 },
   { label: "یکشنبه", value: 80 },
@@ -124,12 +149,14 @@ export const monthlyChartData = monthlyHoursChartData.map((bar) => ({
   testCount: 0,
 }));
 
-/** @deprecated use subjectHoursChartData */
-export const subjectDailyRadarData = subjectHoursChartData.map((bar) => ({
-  subject: bar.label,
-  studyMinutes: bar.value * 60,
-  testCount: 0,
-}));
+/** @deprecated use subjectGradeTestChartData */
+export const subjectDailyRadarData = [
+  { subject: "ریاضی", studyMinutes: 275 * 60, testCount: 0 },
+  { subject: "فیزیک", studyMinutes: 225 * 60, testCount: 0 },
+  { subject: "شیمی", studyMinutes: 175 * 60, testCount: 0 },
+  { subject: "زیست", studyMinutes: 250 * 60, testCount: 0 },
+  { subject: "زمین شناسی", studyMinutes: 140 * 60, testCount: 0 },
+];
 
 export const hamadanAdmissionRanksDolati = [
   { major: "پزشکی", rank: 2350 },

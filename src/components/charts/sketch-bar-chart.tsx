@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import type { ChartBarKind, ProfileChartBar } from "@/lib/data/profile-mock-data";
 import { toPersianDigits } from "@/lib/utils/persian";
 
-type LabelMode = "default" | "compact" | "monthly" | "angled";
+type LabelMode = "default" | "compact" | "monthly" | "angled" | "grade";
 
 interface SketchBarChartProps {
   data: ProfileChartBar[];
@@ -33,16 +33,16 @@ const BAR_COLORS = {
 
 const DEPTH_X = 7;
 const HEIGHT_SCALE = 1.2;
+const SCROLL_SLOT_WIDTH = 38;
 
 function barWidth(kind: ChartBarKind = "default", dataLength = 0, scrollable = false) {
-  if (kind === "total") return 28;
+  if (kind === "total") return 12;
   if (kind === "surplus") return 9;
+  if (kind === "grade") return 10;
   if (scrollable) return 20;
   if (dataLength >= 13) return 14;
   return 20;
 }
-
-const SCROLL_SLOT_WIDTH = 38;
 
 function getPadding(labelMode: LabelMode) {
   if (labelMode === "monthly") {
@@ -53,6 +53,9 @@ function getPadding(labelMode: LabelMode) {
   }
   if (labelMode === "compact") {
     return { top: 6, right: 8, bottom: 48, left: 28 };
+  }
+  if (labelMode === "grade") {
+    return { top: 6, right: 8, bottom: 54, left: 28 };
   }
   return { top: 6, right: 8, bottom: 42, left: 28 };
 }
@@ -82,7 +85,6 @@ function Bar3D({
 
   return (
     <g>
-      {/* soft side depth — flat column, no pointed tip */}
       <polygon
         points={`${right},${top} ${sideRight},${top} ${sideRight},${baseline} ${right},${baseline}`}
         fill={BAR_COLORS.side}
@@ -93,7 +95,6 @@ function Bar3D({
         opacity={0.45}
       />
       <rect x={x} y={top} width={width} height={height} fill={front} rx={1.5} />
-      {/* flat capital like a university pillar */}
       <rect x={x - 1.5} y={top} width={width + 3} height={capital} fill={capitalFill} rx={1} />
       <rect
         x={x - 1.5}
@@ -112,8 +113,77 @@ function splitLabel(label: string) {
   return label.split("\n");
 }
 
-function formatTooltipLabel(label: string) {
-  return label.replace(/\n/g, " ").trim();
+function formatTooltipLabel(label: string, group?: string) {
+  const clean = label.replace(/\n/g, " ").trim();
+  if (group && clean) return `${group} پایه ${clean}`;
+  if (group) return group;
+  return clean;
+}
+
+function buildSlotCenters(
+  data: ProfileChartBar[],
+  paddingLeft: number,
+  plotWidth: number,
+  scrollable: boolean
+) {
+  if (scrollable) {
+    return data.map((_, index) => paddingLeft + SCROLL_SLOT_WIDTH * index + SCROLL_SLOT_WIDTH / 2);
+  }
+
+  const hasGroups = data.some((bar) => bar.group);
+  if (!hasGroups) {
+    const slotWidth = plotWidth / data.length;
+    return data.map((_, index) => paddingLeft + slotWidth * index + slotWidth / 2);
+  }
+
+  const groups: { name: string; indices: number[] }[] = [];
+  data.forEach((bar, index) => {
+    const name = bar.group ?? bar.label;
+    const last = groups[groups.length - 1];
+    if (last && last.name === name) {
+      last.indices.push(index);
+    } else {
+      groups.push({ name, indices: [index] });
+    }
+  });
+
+  const groupGap = 14;
+  const totalGaps = Math.max(0, groups.length - 1) * groupGap;
+  const totalBars = data.length;
+  const usable = Math.max(plotWidth - totalGaps, totalBars * 12);
+  const unit = usable / totalBars;
+
+  const centers: number[] = new Array(data.length);
+  let cursor = paddingLeft;
+
+  groups.forEach((group, groupIndex) => {
+    group.indices.forEach((barIndex) => {
+      centers[barIndex] = cursor + unit / 2;
+      cursor += unit;
+    });
+    if (groupIndex < groups.length - 1) cursor += groupGap;
+  });
+
+  return centers;
+}
+
+function getGroupRanges(data: ProfileChartBar[], centers: number[]) {
+  const ranges: { name: string; start: number; end: number; firstIndex: number }[] = [];
+  data.forEach((bar, index) => {
+    if (!bar.group) return;
+    const last = ranges[ranges.length - 1];
+    if (last && last.name === bar.group) {
+      last.end = centers[index];
+    } else {
+      ranges.push({
+        name: bar.group,
+        start: centers[index],
+        end: centers[index],
+        firstIndex: index,
+      });
+    }
+  });
+  return ranges;
 }
 
 export function SketchBarChart({
@@ -134,18 +204,21 @@ export function SketchBarChart({
   const padding = getPadding(labelMode);
   const width = scrollable
     ? padding.left + padding.right + data.length * SCROLL_SLOT_WIDTH + DEPTH_X
-    : data.length >= 13
+    : data.length >= 15
       ? 440
-      : data.length >= 10
-        ? 380
-        : 356;
-  const baseHeight = labelMode === "monthly" || labelMode === "angled" ? 236 : 222;
+      : data.length >= 12
+        ? 400
+        : data.length >= 10
+          ? 380
+          : 356;
+  const baseHeight = labelMode === "monthly" || labelMode === "angled" || labelMode === "grade" ? 236 : 222;
   const height = Math.round(baseHeight * HEIGHT_SCALE);
   const plotWidth = width - padding.left - padding.right;
   const plotHeight = height - padding.top - padding.bottom;
   const baseline = padding.top + plotHeight;
   const ticks = Array.from({ length: Math.floor(yMax / yStep) + 1 }, (_, i) => i * yStep);
-  const slotWidth = scrollable ? SCROLL_SLOT_WIDTH : plotWidth / data.length;
+  const centers = buildSlotCenters(data, padding.left, plotWidth, scrollable);
+  const groupRanges = labelMode === "grade" ? getGroupRanges(data, centers) : [];
 
   const showTooltip = (bar: ProfileChartBar, event: React.MouseEvent<SVGRectElement>) => {
     const rect = containerRef.current?.getBoundingClientRect();
@@ -153,7 +226,7 @@ export function SketchBarChart({
 
     setTooltip({
       value: bar.value,
-      label: formatTooltipLabel(bar.label),
+      label: formatTooltipLabel(bar.label, bar.group),
       x: event.clientX - rect.left,
       y: event.clientY - rect.top,
     });
@@ -233,7 +306,7 @@ export function SketchBarChart({
         {data.map((bar, index) => {
           const kind = bar.kind ?? "default";
           const barW = barWidth(kind, data.length, scrollable);
-          const slotCenter = padding.left + slotWidth * index + slotWidth / 2;
+          const slotCenter = centers[index];
           const barX = slotCenter - barW / 2;
           const barHeight = Math.max(
             (bar.value / yMax) * plotHeight,
@@ -249,10 +322,12 @@ export function SketchBarChart({
                 ? 16
                 : labelMode === "angled"
                   ? 18
-                  : 14);
+                  : labelMode === "grade"
+                    ? 14
+                    : 14);
 
           return (
-            <g key={`${bar.label}-${index}`}>
+            <g key={`${bar.group ?? ""}-${bar.label}-${index}`}>
               <Bar3D
                 x={barX}
                 baseline={baseline}
@@ -298,6 +373,21 @@ export function SketchBarChart({
                 </text>
               ) : null}
             </g>
+          );
+        })}
+
+        {groupRanges.map((group) => {
+          const mid = (group.start + group.end) / 2;
+          return (
+            <text
+              key={`group-${group.name}-${group.firstIndex}`}
+              x={mid}
+              y={baseline + 36}
+              textAnchor="middle"
+              className="pointer-events-none fill-slate-800 text-[10px] font-extrabold"
+            >
+              {group.name}
+            </text>
           );
         })}
       </svg>

@@ -13,7 +13,7 @@ import { mockStudent, mockSubjects } from "@/lib/data/mock-data";
 import {
   dailyMinutesChartData,
   monthlyHoursChartData,
-  subjectHoursChartData,
+  subjectGradeTestChartData,
   weeklyHoursChartData,
   type ProfileChartBar,
 } from "@/lib/data/profile-mock-data";
@@ -85,7 +85,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       daily: dailyMinutesChartData,
       weekly: weeklyHoursChartData,
       monthly: monthlyHoursChartData,
-      subjects: subjectHoursChartData,
+      subjects: subjectGradeTestChartData,
     }),
     [tick]
   );

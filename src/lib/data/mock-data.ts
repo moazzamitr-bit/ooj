@@ -31,10 +31,11 @@ export const mockStudent: Student = {
 };
 
 export const mockSubjects: Subject[] = [
-  { id: "sub_math", name: "ریاضی", field: "تجربی", grade: "دهم", icon: "📐", color: "#2F80FF" },
   { id: "sub_bio", name: "زیست", field: "تجربی", grade: "دهم", icon: "🧬", color: "#20C997" },
-  { id: "sub_physics", name: "فیزیک", field: "تجربی", grade: "دهم", icon: "⚡", color: "#6D4DFF" },
+  { id: "sub_geo", name: "زمین شناسی", field: "تجربی", grade: "دهم", icon: "🪨", color: "#B7791F" },
   { id: "sub_chem", name: "شیمی", field: "تجربی", grade: "دهم", icon: "⚗️", color: "#FF9F1C" },
+  { id: "sub_physics", name: "فیزیک", field: "تجربی", grade: "دهم", icon: "⚡", color: "#6D4DFF" },
+  { id: "sub_math", name: "ریاضی", field: "تجربی", grade: "دهم", icon: "📐", color: "#2F80FF" },
 ];
 
 export const mockChapters: Record<string, Chapter[]> = {
@@ -54,6 +55,11 @@ export const mockChapters: Record<string, Chapter[]> = {
     { id: "ch_bio_1", subject_id: "sub_bio", title: "فصل ۱: تنظیم عصبی", order_index: 1, test_progress_percent: 80, study_progress_percent: 75 },
     { id: "ch_bio_2", subject_id: "sub_bio", title: "فصل ۲: تنظیم شیمیایی", order_index: 2, test_progress_percent: 62, study_progress_percent: 58 },
     { id: "ch_bio_3", subject_id: "sub_bio", title: "فصل ۳: ایمنی", order_index: 3, test_progress_percent: 45, study_progress_percent: 40 },
+  ],
+  sub_geo: [
+    { id: "ch_geo_1", subject_id: "sub_geo", title: "فصل ۱: آفرینش کیهان و تکوین زمین", order_index: 1, test_progress_percent: 58, study_progress_percent: 54 },
+    { id: "ch_geo_2", subject_id: "sub_geo", title: "فصل ۲: منابع معدنی و ذخایر انرژی", order_index: 2, test_progress_percent: 42, study_progress_percent: 38 },
+    { id: "ch_geo_3", subject_id: "sub_geo", title: "فصل ۳: پویایی پوسته زمین", order_index: 3, test_progress_percent: 31, study_progress_percent: 28 },
   ],
   sub_math: [
     { id: "ch_math_1", subject_id: "sub_math", title: "فصل ۱: مجموعه‌ها", order_index: 1, test_progress_percent: 70, study_progress_percent: 66 },

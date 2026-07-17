@@ -2,6 +2,7 @@ import {
   FlaskConical,
   Atom,
   Dna,
+  Mountain,
   Sigma,
   type LucideIcon,
 } from "lucide-react";
@@ -11,6 +12,7 @@ const subjectIconMap: Record<string, LucideIcon> = {
   sub_chem: FlaskConical,
   sub_physics: Atom,
   sub_bio: Dna,
+  sub_geo: Mountain,
   sub_math: Sigma,
 };
 

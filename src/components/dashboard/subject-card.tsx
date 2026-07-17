@@ -34,6 +34,16 @@ const subjectThemes: Record<
     cellIdle: "text-emerald-900/80 hover:bg-emerald-100/60",
     ring: "ring-emerald-300/50",
   },
+  sub_geo: {
+    card: "from-amber-50/70 via-white to-white",
+    iconWrap: "bg-gradient-to-br from-amber-100 to-orange-50 shadow-[0_4px_14px_rgb(180_83_9_0.12)]",
+    icon: "text-amber-700",
+    name: "text-amber-950",
+    footer: "bg-amber-50/40",
+    cellActive: "bg-amber-600 text-white shadow-[0_2px_8px_rgb(180_83_9_0.25)]",
+    cellIdle: "text-amber-950/80 hover:bg-amber-100/60",
+    ring: "ring-amber-300/50",
+  },
   sub_chem: {
     card: "from-sky-50/70 via-white to-white",
     iconWrap: "bg-gradient-to-br from-sky-100 to-blue-50 shadow-[0_4px_14px_rgb(47_128_255_0.12)]",

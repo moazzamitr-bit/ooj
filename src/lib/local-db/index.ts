@@ -59,6 +59,15 @@ function uid(prefix: string) {
   return `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
+function mergeSubjects(existing: Subject[] | undefined, defaults: Subject[]): Subject[] {
+  if (!existing?.length) return defaults;
+  const byId = new Map(existing.map((subject) => [subject.id, subject]));
+  for (const subject of defaults) {
+    if (!byId.has(subject.id)) byId.set(subject.id, subject);
+  }
+  return defaults.map((subject) => byId.get(subject.id) ?? subject);
+}
+
 function defaultDb(): LocalDatabase {
   const studentId = mockStudent.id;
   const chapters: Record<string, Chapter[]> = { ...mockChapters };
@@ -119,7 +128,7 @@ export function loadLocalDb(): LocalDatabase {
       ...parsed,
       users: parsed.users?.length ? parsed.users : defaults.users,
       students: parsed.students?.length ? parsed.students : defaults.students,
-      subjects: parsed.subjects?.length ? parsed.subjects : defaults.subjects,
+      subjects: mergeSubjects(parsed.subjects, defaults.subjects),
       chapters: { ...defaults.chapters, ...parsed.chapters },
       subchapters: { ...defaults.subchapters, ...parsed.subchapters },
       questions: parsed.questions?.length ? parsed.questions : defaults.questions,

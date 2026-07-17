@@ -517,8 +517,67 @@ const MATH_CURRICULUM: Record<GradeKey, StudyChapterNode[]> = {
   ],
 };
 
+const GEO_CURRICULUM: Record<GradeKey, StudyChapterNode[]> = {
+  year1: [
+    chapter("sub_geo", "year1", 1, "فصل ۱: آفرینش کیهان و تکوین زمین", [
+      "منشأ کیهان",
+      "تشکیل منظومه شمسی",
+      "ساختمان درونی زمین",
+      "پوسته، گوشته و هسته",
+    ]),
+    chapter("sub_geo", "year1", 2, "فصل ۲: منابع معدنی و ذخایر انرژی", [
+      "مواد معدنی",
+      "ذخایر انرژی",
+      "نفت و گاز",
+      "زغال‌سنگ",
+    ]),
+    chapter("sub_geo", "year1", 3, "فصل ۳: منابع آب و خاک", [
+      "چرخه آب",
+      "آب‌های زیرزمینی",
+      "خاک‌ها",
+      "فرسایش خاک",
+    ]),
+  ],
+  year2: [
+    chapter("sub_geo", "year2", 1, "فصل ۱: پویایی پوسته زمین", [
+      "صفحات زمین‌ساختی",
+      "زلزله",
+      "آتشفشان",
+      "چین‌خوردگی و گسل",
+    ]),
+    chapter("sub_geo", "year2", 2, "فصل ۲: زمین‌شناسی ایران", [
+      "واحدهای زمین‌شناسی ایران",
+      "کوه‌زایی‌ها",
+      "منابع طبیعی ایران",
+    ]),
+    chapter("sub_geo", "year2", 3, "فصل ۳: آب‌وهوا و اقلیم", [
+      "عوامل اقلیمی",
+      "اقلیم ایران",
+      "تغییرات اقلیمی",
+    ]),
+  ],
+  year3: [
+    chapter("sub_geo", "year3", 1, "فصل ۱: پویایی زمین و انسان", [
+      "مخاطرات زمین‌شناختی",
+      "مدیریت بحران",
+      "پایداری محیط",
+    ]),
+    chapter("sub_geo", "year3", 2, "فصل ۲: زمین‌شناسی اقتصادی", [
+      "اکتشاف مواد معدنی",
+      "استخراج",
+      "توسعه پایدار",
+    ]),
+    chapter("sub_geo", "year3", 3, "فصل ۳: کاربردهای زمین‌شناسی", [
+      "نقشه‌های زمین‌شناسی",
+      "مهندسی زمین",
+      "محیط زیست",
+    ]),
+  ],
+};
+
 export const CURRICULUM: Record<string, Record<GradeKey, StudyChapterNode[]>> = {
   sub_bio: BIO_CURRICULUM,
+  sub_geo: GEO_CURRICULUM,
   sub_chem: CHEM_CURRICULUM,
   sub_physics: PHYSICS_CURRICULUM,
   sub_math: MATH_CURRICULUM,
@@ -526,6 +585,7 @@ export const CURRICULUM: Record<string, Record<GradeKey, StudyChapterNode[]>> = 
 
 export const SUBJECT_FULL_NAMES: Record<string, string> = {
   sub_bio: "زیست‌شناسی",
+  sub_geo: "زمین‌شناسی",
   sub_chem: "شیمی",
   sub_physics: "فیزیک",
   sub_math: "ریاضی",
