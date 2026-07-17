@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight, MoveHorizontal } from "lucide-react";
 import type { ChartBarKind, ProfileChartBar } from "@/lib/data/profile-mock-data";
 import { toPersianDigits } from "@/lib/utils/persian";
 
@@ -15,6 +16,7 @@ interface SketchBarChartProps {
   persianYAxis?: boolean;
   /** When set, only this many bars fit in view; the rest scroll horizontally. */
   visibleBars?: number;
+  showScrollControls?: boolean;
 }
 
 interface TooltipState {
@@ -194,10 +196,17 @@ export function SketchBarChart({
   valueUnit = "ساعت",
   persianYAxis = false,
   visibleBars,
+  showScrollControls = false,
 }: SketchBarChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollViewportRef = useRef<HTMLDivElement>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [scrollState, setScrollState] = useState({
+    canGoBack: false,
+    canGoForward: true,
+    startIndex: 0,
+  });
 
   const scrollable =
     typeof visibleBars === "number" && visibleBars > 0 && data.length > visibleBars;
@@ -219,6 +228,39 @@ export function SketchBarChart({
   const ticks = Array.from({ length: Math.floor(yMax / yStep) + 1 }, (_, i) => i * yStep);
   const centers = buildSlotCenters(data, padding.left, plotWidth, scrollable);
   const groupRanges = labelMode === "grade" ? getGroupRanges(data, centers) : [];
+
+  const updateScrollState = () => {
+    const viewport = scrollViewportRef.current;
+    if (!viewport || !visibleBars) return;
+
+    const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+    const ratio = maxScroll > 0 ? viewport.scrollLeft / maxScroll : 0;
+    const hiddenBars = Math.max(0, data.length - visibleBars);
+    setScrollState({
+      canGoBack: viewport.scrollLeft > 2,
+      canGoForward: viewport.scrollLeft < maxScroll - 2,
+      startIndex: Math.round(ratio * hiddenBars),
+    });
+  };
+
+  useEffect(() => {
+    if (!scrollable) return;
+    const frame = requestAnimationFrame(updateScrollState);
+    window.addEventListener("resize", updateScrollState);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("resize", updateScrollState);
+    };
+  }, [scrollable, data.length, visibleBars]);
+
+  const scrollChart = (direction: "back" | "forward") => {
+    const viewport = scrollViewportRef.current;
+    if (!viewport) return;
+    viewport.scrollBy({
+      left: direction === "forward" ? viewport.clientWidth * 0.72 : -viewport.clientWidth * 0.72,
+      behavior: "smooth",
+    });
+  };
 
   const showTooltip = (bar: ProfileChartBar, event: React.MouseEvent<SVGRectElement>) => {
     const rect = containerRef.current?.getBoundingClientRect();
@@ -406,9 +448,57 @@ export function SketchBarChart({
 
   if (!scrollable) return chart;
 
+  const visibleEnd = Math.min(
+    data.length,
+    scrollState.startIndex + (visibleBars ?? data.length)
+  );
+
   return (
-    <div className="w-full overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:thin]">
-      {chart}
+    <div className="w-full">
+      <div
+        ref={scrollViewportRef}
+        onScroll={updateScrollState}
+        className="w-full overflow-x-auto overscroll-x-contain pb-1 [scrollbar-color:#94a3b8_transparent] [scrollbar-width:thin]"
+      >
+        {chart}
+      </div>
+
+      {showScrollControls ? (
+        <div className="mx-2 mt-1.5 flex items-center justify-between gap-2 rounded-xl border border-slate-200/80 bg-white/75 p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]" dir="rtl">
+          <button
+            type="button"
+            onClick={() => scrollChart("back")}
+            disabled={!scrollState.canGoBack}
+            className="inline-flex min-h-9 items-center gap-1 rounded-lg px-2.5 text-[11px] font-bold text-slate-700 transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-35"
+            aria-label="نمایش هفته‌های قبلی"
+          >
+            <ChevronLeft className="h-4 w-4" aria-hidden />
+            قبلی
+          </button>
+
+          <div className="flex min-w-0 flex-col items-center text-center">
+            <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-slate-500">
+              <MoveHorizontal className="h-3.5 w-3.5 text-primary" aria-hidden />
+              بازهٔ نمایش
+            </span>
+            <span className="mt-0.5 text-[11px] font-extrabold tabular-nums text-slate-800">
+              هفته‌های {toPersianDigits(scrollState.startIndex + 1)} تا{" "}
+              {toPersianDigits(visibleEnd)}
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => scrollChart("forward")}
+            disabled={!scrollState.canGoForward}
+            className="inline-flex min-h-9 items-center gap-1 rounded-lg px-2.5 text-[11px] font-bold text-slate-700 transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-35"
+            aria-label="نمایش هفته‌های بعدی"
+          >
+            بعدی
+            <ChevronRight className="h-4 w-4" aria-hidden />
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

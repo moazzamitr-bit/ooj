@@ -1,45 +1,29 @@
 "use client";
 
-import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { SketchBarChart } from "@/components/charts/sketch-bar-chart";
 import { useApp } from "@/providers/app-provider";
 
 interface ChartPanelProps {
   title: string;
   children: React.ReactNode;
-  footer?: React.ReactNode;
+  unit: string;
 }
 
-function ChartPanel({ title, children, footer }: ChartPanelProps) {
+function ChartPanel({ title, unit, children }: ChartPanelProps) {
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-[#EEF1FA] p-[5px] shadow-[0_8px_20px_rgba(15,23,42,0.08)]">
-      <h3 className="mb-1 text-center text-sm font-extrabold tracking-tight text-slate-800">
-        {title}
-      </h3>
-      <div className="flex min-h-0 flex-1 flex-col justify-end rounded-[14px] bg-[#EEF1FA]">
+    <article className="flex h-full flex-col overflow-hidden rounded-[20px] border border-slate-200/80 bg-gradient-to-b from-[#F4F6FC] to-[#E9EDF8] p-2 shadow-[0_10px_26px_rgba(30,41,59,0.09)]">
+      <header className="mb-1.5 flex min-h-9 items-center justify-between gap-2 px-2">
+        <span className="rounded-full border border-white/90 bg-white/75 px-2 py-1 text-[10px] font-bold text-slate-500 shadow-sm">
+          {unit}
+        </span>
+        <h3 className="text-right text-[13px] font-extrabold leading-5 tracking-tight text-slate-800">
+          {title}
+        </h3>
+      </header>
+      <div className="flex min-h-0 flex-1 flex-col justify-end overflow-hidden rounded-2xl border border-white/80 bg-white/30">
         {children}
       </div>
-      {footer}
     </article>
-  );
-}
-
-function WeeklyScrollHint() {
-  return (
-    <div
-      className="mt-1 flex items-center justify-center gap-3 px-2 pb-1 text-[11px] font-bold text-slate-500"
-      aria-label="برای دیدن بقیه هفته‌ها نمودار را به چپ و راست بکشید"
-    >
-      <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2 py-0.5 shadow-sm">
-        <ChevronsLeft className="h-3.5 w-3.5 text-primary" aria-hidden />
-        <span>کوچک</span>
-      </span>
-      <span className="text-[10px] font-semibold text-slate-400">چپ و راست بکشید</span>
-      <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2 py-0.5 shadow-sm">
-        <span>بزرگ</span>
-        <ChevronsRight className="h-3.5 w-3.5 text-primary" aria-hidden />
-      </span>
-    </div>
   );
 }
 
@@ -50,7 +34,7 @@ export function StudyCharts() {
   return (
     <div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4" dir="rtl">
-        <ChartPanel title="مقایسه روزهای هفته – دقیقه">
+        <ChartPanel title="مقایسه روزهای هفته" unit="دقیقه">
           <div dir="ltr">
             <SketchBarChart
               data={daily}
@@ -63,7 +47,7 @@ export function StudyCharts() {
           </div>
         </ChartPanel>
 
-        <ChartPanel title="مقایسه هفته‌ها – ساعت" footer={<WeeklyScrollHint />}>
+        <ChartPanel title="مقایسه هفته‌ها" unit="ساعت">
           <div dir="ltr" className="min-w-0">
             <SketchBarChart
               data={weekly}
@@ -71,15 +55,23 @@ export function StudyCharts() {
               yStep={1}
               labelMode="compact"
               visibleBars={9}
+              showScrollControls
+              persianYAxis
             />
           </div>
         </ChartPanel>
 
-        <ChartPanel title="مقایسه ماه‌ها – ساعت">
-          <SketchBarChart data={monthly} yMax={50} yStep={5} labelMode="monthly" />
+        <ChartPanel title="مقایسه ماه‌ها" unit="ساعت">
+          <SketchBarChart
+            data={monthly}
+            yMax={50}
+            yStep={5}
+            labelMode="monthly"
+            persianYAxis
+          />
         </ChartPanel>
 
-        <ChartPanel title="دروس – ساعت">
+        <ChartPanel title="پیشرفت تست دروس" unit="درصد">
           <div dir="ltr">
             <SketchBarChart
               data={subjects}
