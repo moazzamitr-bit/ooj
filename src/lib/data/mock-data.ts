@@ -32,7 +32,7 @@ export const mockStudent: Student = {
 
 export const mockSubjects: Subject[] = [
   { id: "sub_bio", name: "زیست", field: "تجربی", grade: "دهم", icon: "🧬", color: "#20C997" },
-  { id: "sub_geo", name: "زمین شناسی", field: "تجربی", grade: "دهم", icon: "🪨", color: "#B7791F" },
+  { id: "sub_geo", name: "زمین‌شناسی", field: "تجربی", grade: "دهم", icon: "🪨", color: "#B7791F" },
   { id: "sub_chem", name: "شیمی", field: "تجربی", grade: "دهم", icon: "⚗️", color: "#FF9F1C" },
   { id: "sub_physics", name: "فیزیک", field: "تجربی", grade: "دهم", icon: "⚡", color: "#6D4DFF" },
   { id: "sub_math", name: "ریاضی", field: "تجربی", grade: "دهم", icon: "📐", color: "#2F80FF" },
