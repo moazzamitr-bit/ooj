@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { ChevronsUpDown } from "lucide-react";
 import { provinceMaxRankRows } from "@/lib/data/province-max-ranks";
 import styles from "./admission-pencil.module.css";
@@ -24,10 +25,22 @@ function BookEmblemIcon() {
 }
 
 export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps) {
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const selectedRowRef = useRef<HTMLTableRowElement>(null);
+
+  useEffect(() => {
+    selectedRowRef.current?.scrollIntoView({
+      block: "nearest",
+      behavior: "smooth",
+    });
+  }, [selectedCode]);
+
   return (
     <div className={styles.pencilWrap}>
-      <div className={styles.pencil} role="group" aria-label="ستون حداقل رتبه قبولی استان‌ها">
-        <div className={`${styles.eraser} ${styles.curv}`} aria-hidden />
+      <div className={styles.pencil} role="group" aria-label="ستون حداقل رتبه قبولی شهرستان‌ها">
+        <div className={`${styles.eraser} ${styles.curv}`}>
+          <span className={styles.eraserTitle}>حداقل رتبه قبولی</span>
+        </div>
 
         <div className={styles.ferrule} aria-hidden>
           <div className={styles.emblem}>
@@ -35,17 +48,12 @@ export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps
           </div>
         </div>
 
-        <div className={styles.body}>
+        <div className={styles.body} ref={bodyRef}>
           <table className={styles.table}>
             <thead>
               <tr>
-                <th className={styles.hTitle} colSpan={2}>
-                  حداقل رتبه قبولی
-                </th>
-              </tr>
-              <tr>
-                <th className={styles.hName}>سراسری</th>
-                <th className={styles.hRank}>آزاد</th>
+                <th className={styles.hName}>شهرستان</th>
+                <th className={styles.hRank}>حداقل رتبه</th>
               </tr>
             </thead>
             <tbody>
@@ -54,9 +62,11 @@ export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps
                 return (
                   <tr
                     key={row.code}
+                    ref={isSelected ? selectedRowRef : undefined}
                     className={`${styles.row} ${isSelected ? styles.rowActive : ""}`}
                     role="button"
                     tabIndex={0}
+                    aria-pressed={isSelected}
                     onClick={() => onSelect(row.code)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {

@@ -2,16 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { BookOpen, Info } from "lucide-react";
-import { SegmentedControl } from "@/components/ui/segmented-control";
 import { AdmissionPencil } from "@/components/dashboard/admission-pencil";
 import { AlbertoCard } from "@/components/dashboard/alberto-card";
 import { iranProvinces } from "@/lib/data/iran-provinces";
 import { getProvinceMaxAcceptanceRank } from "@/lib/data/province-max-ranks";
 import { getProvinceMedicalRanks } from "@/lib/services/admission.service";
-import type { UniversityType } from "@/types";
 
 export function AdmissionAlbertoSection() {
-  const [universityType, setUniversityType] = useState<UniversityType>("دولتی");
   const [selectedCode, setSelectedCode] = useState("Ham");
 
   const selectedProvince = useMemo(
@@ -20,8 +17,8 @@ export function AdmissionAlbertoSection() {
   );
 
   const rankRows = useMemo(
-    () => getProvinceMedicalRanks(selectedProvince.name_fa, selectedProvince.code, universityType),
-    [selectedProvince.name_fa, selectedProvince.code, universityType]
+    () => getProvinceMedicalRanks(selectedProvince.name_fa, selectedProvince.code, "دولتی"),
+    [selectedProvince.name_fa, selectedProvince.code]
   );
 
   const provinceMaxRank = getProvinceMaxAcceptanceRank(selectedProvince.code);
@@ -41,60 +38,50 @@ export function AdmissionAlbertoSection() {
         </div>
 
         <div className="grid flex-1 lg:grid-cols-[13fr_7fr]">
-          <div className="order-2 flex min-h-[480px] flex-col items-center justify-start overflow-hidden bg-gradient-to-b from-[#F7F4FF] to-[#EEF4FF] px-2 py-4 lg:order-1 lg:min-h-[520px] lg:px-3 lg:py-5">
+          <div className="order-2 flex min-h-[480px] flex-col items-center justify-start overflow-hidden bg-gradient-to-b from-[#EFF6FF] to-[#F8FAFC] px-2 py-4 lg:order-1 lg:min-h-[520px] lg:px-3 lg:py-5">
             <AdmissionPencil selectedCode={selectedCode} onSelect={setSelectedCode} />
-
-            <div className="mt-3 w-full max-w-[320px]">
-              <div className="flex justify-center">
-                <SegmentedControl
-                  options={[
-                    { value: "آزاد" as UniversityType, label: "آزاد" },
-                    { value: "دولتی" as UniversityType, label: "دولتی" },
-                  ]}
-                  value={universityType}
-                  onChange={setUniversityType}
-                />
-              </div>
-            </div>
           </div>
 
           <div className="order-1 flex min-w-0 flex-col border-r border-slate-100 p-4 lg:order-2 lg:p-5">
-            <div className="mb-4 overflow-hidden rounded-xl bg-gradient-to-br from-[#2563eb] via-[#1d4ed8] to-[#1e40af] px-3 py-5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.22)]">
+            <div className="overflow-hidden rounded-xl bg-gradient-to-br from-[#2563eb] via-[#1d4ed8] to-[#1e40af] px-3 py-5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.22)]">
               <p className="text-[10px] font-semibold text-blue-100/90">شهر انتخاب‌شده</p>
               <p className="mt-2 text-2xl font-black leading-tight tracking-tight text-white drop-shadow-sm lg:text-3xl">
                 {selectedProvince.name_fa}
               </p>
             </div>
 
-            <p className="mb-2 text-[11px] text-slate-500">
-              حداقل رتبه قبولی استان:{" "}
-              <span className="font-bold text-primary tabular-nums">
-                {provinceMaxRank.toLocaleString("fa-IR")}
-              </span>
-            </p>
+            {/* Align medical ranks with the city rows under the column header */}
+            <div className="mt-4 flex flex-1 flex-col lg:mt-[150px]">
+              <p className="mb-2 text-[11px] text-slate-500">
+                حداقل رتبه قبولی استان:{" "}
+                <span className="font-bold text-primary tabular-nums">
+                  {provinceMaxRank.toLocaleString("fa-IR")}
+                </span>
+              </p>
 
-            <p className="mb-3 text-xs font-bold text-slate-500">
-              حداقل رتبه قبولی رشته‌های پزشکی
-            </p>
+              <p className="mb-3 text-xs font-bold text-slate-500">
+                حداقل رتبه قبولی رشته‌های پزشکی
+              </p>
 
-            <ul className="flex-1 space-y-0">
-              {rankRows.map((row) => (
-                <li
-                  key={row.major}
-                  className="flex items-center justify-between gap-2 border-t border-slate-50 py-3 first:border-t-0 first:pt-0"
-                >
-                  <span className="text-sm font-medium text-primary-deep">{row.major}</span>
-                  <span className="shrink-0 tabular-nums text-sm font-bold text-primary">
-                    {row.rank.toLocaleString("fa-IR")} رتبه
-                  </span>
-                </li>
-              ))}
-            </ul>
+              <ul className="flex-1 space-y-0">
+                {rankRows.map((row) => (
+                  <li
+                    key={row.major}
+                    className="flex items-center justify-between gap-2 border-t border-slate-50 py-3 first:border-t-0 first:pt-0"
+                  >
+                    <span className="text-sm font-medium text-primary-deep">{row.major}</span>
+                    <span className="shrink-0 tabular-nums text-sm font-bold text-primary">
+                      {row.rank.toLocaleString("fa-IR")} رتبه
+                    </span>
+                  </li>
+                ))}
+              </ul>
 
-            <p className="mt-4 flex items-center gap-1.5 text-[10px] leading-5 text-slate-400">
-              <Info className="h-3.5 w-3.5 shrink-0" aria-hidden />
-              اعداد بر اساس کارنامه‌های سال قبل می‌باشد
-            </p>
+              <p className="mt-4 flex items-center gap-1.5 text-[10px] leading-5 text-slate-400">
+                <Info className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                اعداد بر اساس کارنامه‌های سال قبل می‌باشد
+              </p>
+            </div>
           </div>
         </div>
       </div>
