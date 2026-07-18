@@ -24,7 +24,7 @@ export function AdmissionAlbertoSection() {
   const provinceMaxRank = getProvinceMaxAcceptanceRank(selectedProvince.code);
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[8.3fr_11.7fr] lg:items-stretch">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr_13fr] lg:items-stretch">
       <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_4px_20px_rgb(17_26_76_0.04)]">
         <div className="border-b border-slate-100 px-5 py-4 lg:px-6">
           <div className="flex items-start gap-3">
