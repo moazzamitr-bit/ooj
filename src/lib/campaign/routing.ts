@@ -3,10 +3,12 @@ import type { CampaignStep } from "@/types/campaign";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export function childInviteUrl(code: string) {
+  const encoded = encodeURIComponent(code);
+  // Query-param form works with static GitHub Pages export (dynamic /invite/[code] does not).
   if (typeof window !== "undefined") {
-    return `${window.location.origin}${basePath}/invite/${code}`;
+    return `${window.location.origin}${basePath}/invite/?code=${encoded}`;
   }
-  return `${basePath}/invite/${code}`;
+  return `${basePath}/invite/?code=${encoded}`;
 }
 
 export function getNextCampaignHref(step: CampaignStep): string {

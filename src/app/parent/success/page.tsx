@@ -71,7 +71,7 @@ export default function ParentSuccessPage() {
 
             <div className="mt-8 flex flex-col gap-3">
               {inviteCode ? (
-                <Link href={`/invite/${inviteCode}`}>
+                <Link href={`/invite/?code=${encodeURIComponent(inviteCode)}`}>
                   <Button variant="outline" className="w-full">
                     پیش‌نمایش لینک فرزند
                   </Button>

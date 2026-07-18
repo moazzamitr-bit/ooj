@@ -12,14 +12,15 @@ import {
   getStudentInvitedFriends,
   getStudentReferralStats,
 } from "@/lib/services/referral.service";
+import { childInviteUrl } from "@/lib/campaign/routing";
 
 export default function StudentReferralPage() {
   const { student } = useApp();
   const stats = getStudentReferralStats(student.id);
   const invitedFriends = getStudentInvitedFriends(student.id);
 
-  const shareText = `با لینک دعوت من به اوج بپیوند! https://owj.app/invite/${student.referral_code}`;
-  const shareUrl = `https://owj.app/invite/${student.referral_code}`;
+  const shareUrl = childInviteUrl(student.referral_code);
+  const shareText = `با لینک دعوت من به اوج بپیوند! ${shareUrl}`;
 
   return (
     <div className="min-h-dvh bg-[#FAFBFF]">

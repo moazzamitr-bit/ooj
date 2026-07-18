@@ -1,21 +1,36 @@
 "use client";
 
-import { use, useEffect } from "react";
+import { Suspense, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getLocalStudentByReferralCode } from "@/lib/local-db";
 import { useCampaignStore } from "@/store/campaign-store";
 import albertoPortrait from "@/assets/images/alberto-portrait.png";
 
-export default function InvitePageClient({ params }: { params: Promise<{ code: string }> }) {
-  const { code } = use(params);
-  const referrer = getLocalStudentByReferralCode(code);
+function InviteContent() {
+  const searchParams = useSearchParams();
+  const code = useMemo(() => {
+    const fromQuery = searchParams.get("code")?.trim();
+    if (fromQuery) return fromQuery;
+    if (typeof window === "undefined") return "";
+    // Support legacy path /invite/OWJ-xxx/ via 404 redirect query
+    const parts = window.location.pathname.split("/").filter(Boolean);
+    const inviteIdx = parts.indexOf("invite");
+    if (inviteIdx >= 0 && parts[inviteIdx + 1] && parts[inviteIdx + 1] !== "index.html") {
+      return decodeURIComponent(parts[inviteIdx + 1]);
+    }
+    return "";
+  }, [searchParams]);
+
+  const referrer = code ? getLocalStudentByReferralCode(code) : null;
   const setInviteCode = useCampaignStore((s) => s.setInviteCode);
   const setStep = useCampaignStore((s) => s.setStep);
 
   useEffect(() => {
+    if (!code) return;
     setInviteCode(code);
     setStep("intro");
   }, [code, setInviteCode, setStep]);
@@ -34,14 +49,23 @@ export default function InvitePageClient({ params }: { params: Promise<{ code: s
             ) : (
               <p className="mt-3 text-slate-600">۷ روز رایگان مشاور هوشمند کنکور منتظرته.</p>
             )}
-            <p className="mt-2 text-xs text-slate-400" dir="ltr">
-              کد: {code}
-            </p>
+            {code ? (
+              <p className="mt-2 text-xs text-slate-400" dir="ltr">
+                کد: {code}
+              </p>
+            ) : (
+              <p className="mt-3 text-sm text-amber-600">کد دعوت در لینک پیدا نشد.</p>
+            )}
 
             <div className="mt-8 flex flex-col gap-3">
               <Link href="/student/onboarding">
-                <Button variant="gradient" size="lg" className="w-full">
+                <Button variant="gradient" size="lg" className="w-full" disabled={!code}>
                   شروع با آلبرتو
+                </Button>
+              </Link>
+              <Link href="/">
+                <Button variant="outline" size="lg" className="w-full">
+                  بازگشت
                 </Button>
               </Link>
             </div>
@@ -49,5 +73,17 @@ export default function InvitePageClient({ params }: { params: Promise<{ code: s
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function InvitePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center text-slate-500">در حال بارگذاری...</div>
+      }
+    >
+      <InviteContent />
+    </Suspense>
   );
 }

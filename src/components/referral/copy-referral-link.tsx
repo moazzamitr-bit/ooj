@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { childInviteUrl } from "@/lib/campaign/routing";
 
 interface CopyReferralLinkProps {
   referralCode: string;
@@ -11,7 +12,7 @@ interface CopyReferralLinkProps {
 
 export function CopyReferralLink({ referralCode }: CopyReferralLinkProps) {
   const [copied, setCopied] = useState(false);
-  const link = `https://owj.app/invite/${referralCode}`;
+  const link = childInviteUrl(referralCode);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(link);
