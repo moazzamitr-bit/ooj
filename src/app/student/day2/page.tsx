@@ -26,8 +26,12 @@ export default function Day2Page() {
   const shareUrl = useMemo(() => childInviteUrl(code), [code]);
 
   useEffect(() => {
-    startDay2();
-  }, [startDay2]);
+    if (campaign.day !== 2) startDay2();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only bootstrap once when needed
+  }, []);
+
+  const chest = campaign.chance_chest ?? 0;
+  const opens = campaign.link_opens ?? 0;
 
   async function copy() {
     await navigator.clipboard.writeText(shareUrl);
@@ -89,10 +93,10 @@ export default function Day2Page() {
             <CardContent className="space-y-2 p-4 text-center">
               <p className="text-sm text-slate-500">صندوقچه شانس</p>
               <p className="text-3xl font-extrabold text-primary">
-                {formatPersianNumber(campaign.chance_chest)}
+                {formatPersianNumber(chest)}
               </p>
               <p className="text-xs text-slate-500">
-                باز شدن لینک: {formatPersianNumber(campaign.link_opens)} نفر
+                باز شدن لینک: {formatPersianNumber(opens)} نفر
               </p>
               <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => recordOpen()}>
                 شبیه‌سازی: یک دوست لینک را باز کرد (+۵)

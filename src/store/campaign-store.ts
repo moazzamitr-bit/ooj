@@ -165,14 +165,19 @@ export const useCampaignStore = create<CampaignState>()(
         })),
 
       startDay2: () =>
-        set((s) => ({
-          campaign: {
-            ...s.campaign,
-            day: 2,
-            step: "day2_intro",
-            updated_at: new Date().toISOString(),
-          },
-        })),
+        set((s) => {
+          if (s.campaign.day === 2 && s.campaign.step === "day2_intro") return s;
+          return {
+            campaign: {
+              ...s.campaign,
+              day: 2,
+              step: "day2_intro",
+              link_opens: s.campaign.link_opens ?? 0,
+              chance_chest: s.campaign.chance_chest ?? s.campaign.golden_chances ?? 0,
+              updated_at: new Date().toISOString(),
+            },
+          };
+        }),
 
       recordLinkOpenForMe: () =>
         set((s) => {

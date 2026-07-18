@@ -5,7 +5,8 @@ export function toPersianDigits(value: string | number): string {
 }
 
 export function formatPersianNumber(value: number): string {
-  return toPersianDigits(value.toLocaleString("fa-IR"));
+  const n = Number.isFinite(value) ? value : 0;
+  return toPersianDigits(n.toLocaleString("fa-IR"));
 }
 
 export function formatStudyTime(minutes: number): string {
