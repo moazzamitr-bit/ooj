@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { MessageCircle, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { getAlbertBullets } from "@/lib/data/profile-mock-data";
 import { AlbertoChatModal } from "@/components/dashboard/alberto-chat-modal";
 import { useApp } from "@/providers/app-provider";
-
-const albertoVideoSrc = `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/videos/alberto-idle-loop.mp4`;
+import albertoPortrait from "@/assets/images/alberto-portrait.png";
 
 interface AlbertoCardProps {
   className?: string;
@@ -63,16 +63,14 @@ export function AlbertoCard({ className, compact }: AlbertoCardProps) {
             </button>
           </div>
 
-          <div className="relative order-first h-64 w-full shrink-0 overflow-hidden md:order-none md:h-full md:min-h-0 md:w-[54%]">
-            <video
-              src={albertoVideoSrc}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              className="absolute inset-0 h-full w-full scale-100 object-cover object-[center_30%]"
-              aria-label="آلبرتو، مشاور هوشمند اوج"
+          <div className="relative order-first h-64 w-full shrink-0 overflow-hidden bg-[#F3F0FF] md:order-none md:h-full md:min-h-0 md:w-[54%]">
+            <Image
+              src={albertoPortrait}
+              alt="آلبرتو، مشاور هوشمند اوج"
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-contain object-bottom"
             />
           </div>
         </div>
