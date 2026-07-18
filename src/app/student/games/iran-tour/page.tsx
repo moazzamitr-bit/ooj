@@ -190,8 +190,13 @@ export default function IranTourPage() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <Link href="/student/quiz">
+            <Link href="/student/day5/">
               <Button variant="gradient" size="lg" className="w-full">
+                شروع روز پنجم — دوی ماراتون
+              </Button>
+            </Link>
+            <Link href="/student/quiz">
+              <Button variant="outline" size="lg" className="w-full">
                 برو تست بزن و استان کشف کن
               </Button>
             </Link>

@@ -36,6 +36,9 @@
 | `/student/games/treasure` | روز سوم — برج گنج قارون |
 | `/student/day4` | هدایت به تور ایران‌گردی |
 | `/student/games/iran-tour` | روز چهارم — نقشه ۳۱ استان |
+| `/student/day5` | هدایت به ماراتون / عضویت طلایی |
+| `/student/games/marathon` | روز پنجم — دوی ماراتون |
+| `/student/membership` | عضویت طلایی (paywall شبیه‌سازی) |
 | `/parent/day2` | پیام مادر شب دوم |
 | `/student/referral` | دعوت دوستان |
 | `/student/profile` | داشبورد دانش‌آموز |

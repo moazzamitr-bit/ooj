@@ -44,7 +44,7 @@ export default function StudentHomePage() {
         <section className="rounded-2xl border border-primary/15 bg-gradient-to-l from-[#F3F0FF] to-[#EEF4FF] p-5 md:p-6">
           <p className="text-sm font-bold text-primary">مسیر کمپین ۷ روزه</p>
           <p className="mt-2 text-sm leading-7 text-slate-600">
-            روز ۲ دعوت دوستان، روز ۳ صعود در برج گنج قارون.
+            از دعوت دوستان تا ماراتون و عضویت طلایی — مسیر ۷ روزه را ادامه بده.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <Link
@@ -61,9 +61,15 @@ export default function StudentHomePage() {
             </Link>
             <Link
               href="/student/games/iran-tour/"
+              className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium text-primary-deep"
+            >
+              روز ۴
+            </Link>
+            <Link
+              href="/student/day5/"
               className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-white"
             >
-              روز ۴ — ایران‌گردی
+              روز ۵ — ماراتون
             </Link>
           </div>
         </section>

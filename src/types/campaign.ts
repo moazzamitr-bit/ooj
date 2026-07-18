@@ -71,6 +71,30 @@ export const TREASURE_STEPS_PER_FLOOR = 9;
 export const TREASURE_FLOORS = 3;
 export const TREASURE_MAX_STEPS = TREASURE_STEPS_PER_FLOOR * TREASURE_FLOORS;
 
+/** Week 1 requires 5h; each next week +30 min. */
+export const MARATHON_BASE_MINUTES = 5 * 60;
+export const MARATHON_WEEK_INCREMENT = 30;
+export const MARATHON_MAX_WEEKS = 12;
+export const MARATHON_WINNER_SLOTS = 50;
+
+export function getMarathonWeekMinutes(weekNumber: number) {
+  const week = Math.max(1, Math.floor(weekNumber) || 1);
+  return MARATHON_BASE_MINUTES + (week - 1) * MARATHON_WEEK_INCREMENT;
+}
+
+export function getMarathonProgress(completedWeeks: number) {
+  const safe = Math.max(0, Math.min(MARATHON_MAX_WEEKS, Number(completedWeeks) || 0));
+  const currentWeek = safe >= MARATHON_MAX_WEEKS ? MARATHON_MAX_WEEKS : safe + 1;
+  const done = safe >= MARATHON_MAX_WEEKS;
+  return {
+    completedWeeks: safe,
+    currentWeek,
+    currentWeekMinutes: getMarathonWeekMinutes(currentWeek),
+    done,
+    maxWeeks: MARATHON_MAX_WEEKS,
+  };
+}
+
 export function getTreasureProgress(step: number) {
   const safe = Math.max(0, Math.min(TREASURE_MAX_STEPS, Number(step) || 0));
   const completedFloors = Math.floor(safe / TREASURE_STEPS_PER_FLOOR);

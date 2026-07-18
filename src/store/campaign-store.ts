@@ -6,6 +6,7 @@ import type { CampaignDay, CampaignStep, ChanceToast, StudentCampaign } from "@/
 import {
   CAMPAIGN_STORAGE_KEY,
   CHANCES_PER_LINK_OPEN,
+  MARATHON_MAX_WEEKS,
   TREASURE_MAX_STEPS,
 } from "@/types/campaign";
 
@@ -63,8 +64,11 @@ interface CampaignState {
   startDay2: () => void;
   startDay3: () => void;
   startDay4: () => void;
+  startDay5: () => void;
   climbTreasureStep: () => void;
   unlockProvince: (code: string) => boolean;
+  advanceMarathonWeek: () => boolean;
+  activateGoldenMembership: () => void;
   /** When someone opens THIS student's invite link */
   recordLinkOpenForMe: () => void;
   clearChanceToast: () => void;
@@ -215,6 +219,22 @@ export const useCampaignStore = create<CampaignState>()(
           };
         }),
 
+      startDay5: () =>
+        set((s) => {
+          const step = s.campaign.is_golden_member ? "marathon" : "membership";
+          if (s.campaign.day === 5 && s.campaign.step === step) return s;
+          return {
+            campaign: {
+              ...s.campaign,
+              day: 5,
+              step,
+              marathon_week: s.campaign.marathon_week ?? 0,
+              is_golden_member: s.campaign.is_golden_member ?? false,
+              updated_at: new Date().toISOString(),
+            },
+          };
+        }),
+
       climbTreasureStep: () =>
         set((s) => {
           const nextStep = Math.min(TREASURE_MAX_STEPS, (s.campaign.treasure_step ?? 0) + 1);
@@ -250,6 +270,39 @@ export const useCampaignStore = create<CampaignState>()(
         });
         return added;
       },
+
+      advanceMarathonWeek: () => {
+        let advanced = false;
+        set((s) => {
+          if (!s.campaign.is_golden_member) return s;
+          const week = s.campaign.marathon_week ?? 0;
+          if (week >= MARATHON_MAX_WEEKS) return s;
+          advanced = true;
+          return {
+            campaign: {
+              ...s.campaign,
+              marathon_week: week + 1,
+              golden_chances: (s.campaign.golden_chances ?? 0) + 1,
+              chance_chest: (s.campaign.chance_chest ?? 0) + 1,
+              last_test_at: new Date().toISOString(),
+              step: "marathon",
+              updated_at: new Date().toISOString(),
+            },
+          };
+        });
+        return advanced;
+      },
+
+      activateGoldenMembership: () =>
+        set((s) => ({
+          campaign: {
+            ...s.campaign,
+            is_golden_member: true,
+            day: 5,
+            step: "marathon",
+            updated_at: new Date().toISOString(),
+          },
+        })),
 
       recordLinkOpenForMe: () =>
         set((s) => {
