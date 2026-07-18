@@ -31,20 +31,22 @@ export function AlbertoCard({ className, compact }: AlbertoCardProps) {
         <div
           className={cn(
             "flex h-full min-h-0",
-            compact ? "flex-col md:flex-row md:items-stretch" : "flex-col gap-4 md:flex-row md:items-stretch"
+            compact
+              ? "flex-col md:flex-row md:items-stretch"
+              : "flex-col gap-4 md:flex-row md:items-stretch"
           )}
         >
-          <div className="z-10 m-3 flex min-h-0 min-w-0 flex-1 flex-col rounded-2xl bg-white p-5 shadow-[0_8px_30px_rgb(17_26_76_0.06)] md:m-4 md:p-8">
-            <div className="mb-5 flex items-center justify-start gap-3">
-              <h2 className="text-2xl font-extrabold text-primary-deep md:text-3xl">آلبرتو</h2>
-              <Sparkles className="h-7 w-7 shrink-0 text-primary md:h-8 md:w-8" aria-hidden />
+          <div className="z-10 m-3 flex min-h-0 min-w-0 flex-1 flex-col rounded-2xl bg-white p-5 shadow-[0_8px_30px_rgb(17_26_76_0.06)] md:m-4 md:p-7">
+            <div className="mb-4 flex items-center justify-start gap-2.5">
+              <h2 className="text-xl font-extrabold text-primary-deep md:text-2xl">آلبرتو</h2>
+              <Sparkles className="h-6 w-6 shrink-0 text-primary md:h-7 md:w-7" aria-hidden />
             </div>
 
-            <ul className="flex flex-1 flex-col justify-center gap-4 overflow-y-auto py-1 md:gap-6 md:py-2">
+            <ul className="flex flex-1 flex-col justify-start gap-3 overflow-y-auto py-1 md:gap-3.5">
               {bullets.map((item) => (
                 <li
                   key={item.text}
-                  className="text-lg font-medium leading-9 text-primary-deep md:text-xl md:leading-10"
+                  className="text-base font-medium leading-8 text-primary-deep md:text-lg md:leading-9"
                 >
                   <span className="whitespace-pre-line">{item.text}</span>
                 </li>
@@ -54,7 +56,7 @@ export function AlbertoCard({ className, compact }: AlbertoCardProps) {
             <button
               type="button"
               onClick={() => setChatOpen(true)}
-              className="mt-6 flex h-14 w-full shrink-0 items-center justify-center gap-2.5 rounded-full bg-gradient-to-l from-primary to-electric-blue px-4 text-lg font-bold text-white shadow-lg shadow-primary/25 transition hover:opacity-95 md:h-16 md:text-xl"
+              className="mt-5 flex h-14 w-full shrink-0 items-center justify-center gap-2.5 rounded-full bg-gradient-to-l from-primary to-electric-blue px-4 text-base font-bold text-white shadow-lg shadow-primary/25 transition hover:opacity-95 md:text-lg"
             >
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20">
                 <MessageCircle className="h-4 w-4" aria-hidden />
@@ -63,14 +65,14 @@ export function AlbertoCard({ className, compact }: AlbertoCardProps) {
             </button>
           </div>
 
-          <div className="relative order-first h-64 w-full shrink-0 overflow-hidden bg-[#F3F0FF] md:order-none md:h-full md:min-h-0 md:w-[54%]">
+          <div className="relative order-first h-64 w-full shrink-0 overflow-hidden bg-[#F3F0FF] md:order-none md:h-full md:min-h-0 md:w-[44%]">
             <Image
               src={albertoPortrait}
               alt="آلبرتو، مشاور هوشمند اوج"
               fill
               priority
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-contain object-bottom"
+              sizes="(max-width: 768px) 100vw, 40vw"
+              className="object-cover object-[center_28%]"
             />
           </div>
         </div>

@@ -24,7 +24,7 @@ export function AdmissionAlbertoSection() {
   const provinceMaxRank = getProvinceMaxAcceptanceRank(selectedProvince.code);
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr_13fr] lg:items-stretch">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr_13fr] lg:items-start">
       <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_4px_20px_rgb(17_26_76_0.04)]">
         <div className="border-b border-slate-100 px-5 py-4 lg:px-6">
           <div className="flex items-start gap-3">
@@ -43,9 +43,12 @@ export function AdmissionAlbertoSection() {
           </div>
 
           <div className="order-1 flex min-w-0 flex-col border-r border-slate-100 p-4 lg:order-2 lg:p-5">
-            {/* City + ranks sit together, aligned with pencil city rows */}
-            <div className="flex flex-1 flex-col lg:pt-[148px]">
-              <div className="overflow-hidden rounded-2xl border border-blue-100/80 bg-gradient-to-br from-[#2563eb] via-[#1d4ed8] to-[#1e40af] px-4 py-4 text-center shadow-[0_10px_24px_rgba(37,99,235,0.22)]">
+            {/*
+              Push city + ranks as one block so they sit beside the pencil city rows
+              (eraser 72 + ferrule ~78 + table header ~36 ≈ 186px).
+            */}
+            <div className="flex flex-col gap-3 lg:mt-[186px]">
+              <div className="overflow-hidden rounded-xl bg-gradient-to-br from-[#2563eb] via-[#1d4ed8] to-[#1e40af] px-3 py-4 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.22)]">
                 <p className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-100/90">
                   <MapPin className="h-3 w-3" aria-hidden />
                   شهر انتخاب‌شده
@@ -55,47 +58,41 @@ export function AdmissionAlbertoSection() {
                 </p>
               </div>
 
-              <div className="mt-3 flex flex-1 flex-col rounded-2xl border border-slate-100 bg-slate-50/70 p-3.5">
-                <div className="mb-3 flex items-center justify-between gap-2 rounded-xl bg-white px-3 py-2.5 shadow-sm">
-                  <span className="text-[11px] font-semibold text-slate-500">
-                    حداقل رتبه قبولی استان
-                  </span>
-                  <span className="text-sm font-extrabold tabular-nums text-primary">
-                    {provinceMaxRank.toLocaleString("fa-IR")}
-                  </span>
-                </div>
+              <p className="text-[11px] text-slate-500">
+                حداقل رتبه قبولی استان:{" "}
+                <span className="font-bold tabular-nums text-primary">
+                  {provinceMaxRank.toLocaleString("fa-IR")}
+                </span>
+              </p>
 
-                <p className="mb-2 px-1 text-xs font-bold text-slate-600">
-                  حداقل رتبه قبولی رشته‌های پزشکی
-                </p>
+              <p className="text-xs font-bold text-slate-500">
+                حداقل رتبه قبولی رشته‌های پزشکی
+              </p>
 
-                <ul className="space-y-0 overflow-hidden rounded-xl border border-slate-100 bg-white">
-                  {rankRows.map((row, index) => (
-                    <li
-                      key={row.major}
-                      className={`flex items-center justify-between gap-2 px-3 py-2.5 ${
-                        index > 0 ? "border-t border-slate-100" : ""
-                      }`}
-                    >
-                      <span className="text-sm font-medium text-primary-deep">{row.major}</span>
-                      <span className="shrink-0 tabular-nums text-sm font-bold text-primary">
-                        {row.rank.toLocaleString("fa-IR")}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+              <ul className="space-y-0">
+                {rankRows.map((row) => (
+                  <li
+                    key={row.major}
+                    className="flex items-center justify-between gap-2 border-t border-slate-50 py-2.5 first:border-t-0 first:pt-0"
+                  >
+                    <span className="text-sm font-medium text-primary-deep">{row.major}</span>
+                    <span className="shrink-0 tabular-nums text-sm font-bold text-primary">
+                      {row.rank.toLocaleString("fa-IR")}
+                    </span>
+                  </li>
+                ))}
+              </ul>
 
-                <p className="mt-auto flex items-center gap-1.5 pt-3 text-[10px] leading-5 text-slate-400">
-                  <Info className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                  اعداد بر اساس کارنامه‌های سال قبل می‌باشد
-                </p>
-              </div>
+              <p className="mt-2 flex items-center gap-1.5 text-[10px] leading-5 text-slate-400">
+                <Info className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                اعداد بر اساس کارنامه‌های سال قبل می‌باشد
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      <AlbertoCard className="h-full min-h-[440px] min-w-0" compact />
+      <AlbertoCard className="min-h-[440px] min-w-0 lg:h-[520px]" compact />
     </div>
   );
 }
