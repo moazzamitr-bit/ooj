@@ -34,6 +34,8 @@
 | `/student/day2` | روز دوم — دعوت دوستان و صندوقچه شانس |
 | `/student/day3` | هدایت به گنج قارون |
 | `/student/games/treasure` | روز سوم — برج گنج قارون |
+| `/student/day4` | هدایت به تور ایران‌گردی |
+| `/student/games/iran-tour` | روز چهارم — نقشه ۳۱ استان |
 | `/parent/day2` | پیام مادر شب دوم |
 | `/student/referral` | دعوت دوستان |
 | `/student/profile` | داشبورد دانش‌آموز |

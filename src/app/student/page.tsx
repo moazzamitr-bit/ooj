@@ -51,19 +51,19 @@ export default function StudentHomePage() {
               href="/student/day2"
               className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium text-primary-deep"
             >
-              روز دوم
+              روز ۲
             </Link>
             <Link
               href="/student/games/treasure/"
-              className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-white"
-            >
-              روز سوم — گنج قارون
-            </Link>
-            <Link
-              href="/student/lottery/result/?result=lose"
               className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium text-primary-deep"
             >
-              نتیجه قرعه‌کشی
+              روز ۳
+            </Link>
+            <Link
+              href="/student/games/iran-tour/"
+              className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-white"
+            >
+              روز ۴ — ایران‌گردی
             </Link>
           </div>
         </section>

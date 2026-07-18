@@ -62,7 +62,9 @@ interface CampaignState {
   setLotteryResult: (won: boolean) => void;
   startDay2: () => void;
   startDay3: () => void;
+  startDay4: () => void;
   climbTreasureStep: () => void;
+  unlockProvince: (code: string) => boolean;
   /** When someone opens THIS student's invite link */
   recordLinkOpenForMe: () => void;
   clearChanceToast: () => void;
@@ -199,6 +201,20 @@ export const useCampaignStore = create<CampaignState>()(
           };
         }),
 
+      startDay4: () =>
+        set((s) => {
+          if (s.campaign.day === 4 && s.campaign.step === "iran_tour") return s;
+          return {
+            campaign: {
+              ...s.campaign,
+              day: 4,
+              step: "iran_tour",
+              iran_provinces_unlocked: s.campaign.iran_provinces_unlocked ?? [],
+              updated_at: new Date().toISOString(),
+            },
+          };
+        }),
+
       climbTreasureStep: () =>
         set((s) => {
           const nextStep = Math.min(TREASURE_MAX_STEPS, (s.campaign.treasure_step ?? 0) + 1);
@@ -214,6 +230,26 @@ export const useCampaignStore = create<CampaignState>()(
             },
           };
         }),
+
+      unlockProvince: (code) => {
+        let added = false;
+        set((s) => {
+          const list = s.campaign.iran_provinces_unlocked ?? [];
+          if (!code || list.includes(code)) return s;
+          added = true;
+          return {
+            campaign: {
+              ...s.campaign,
+              iran_provinces_unlocked: [...list, code],
+              golden_chances: (s.campaign.golden_chances ?? 0) + 1,
+              chance_chest: (s.campaign.chance_chest ?? 0) + 1,
+              last_test_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            },
+          };
+        });
+        return added;
+      },
 
       recordLinkOpenForMe: () =>
         set((s) => {

@@ -148,8 +148,13 @@ export default function TreasureGamePage() {
           </div>
 
           <div className="flex flex-col gap-2 pt-1">
-            <Link href="/student/quiz">
+            <Link href="/student/games/iran-tour/">
               <Button variant="gradient" size="lg" className="w-full">
+                شروع روز چهارم — تور ایران‌گردی
+              </Button>
+            </Link>
+            <Link href="/student/quiz">
+              <Button variant="outline" size="lg" className="w-full">
                 برو تست بزن و صعود کن
               </Button>
             </Link>
