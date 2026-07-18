@@ -33,6 +33,8 @@ function InviteContent() {
     if (!code) return;
     setInviteCode(code);
     setStep("intro");
+    // Notify referrer (other tab / same browser listeners)
+    void import("@/lib/campaign/invite-opens").then((m) => m.broadcastInviteOpen(code));
   }, [code, setInviteCode, setStep]);
 
   return (

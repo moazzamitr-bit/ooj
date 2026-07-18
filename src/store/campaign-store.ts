@@ -2,8 +2,8 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { CampaignDay, CampaignStep, StudentCampaign } from "@/types/campaign";
-import { CAMPAIGN_STORAGE_KEY } from "@/types/campaign";
+import type { CampaignDay, CampaignStep, ChanceToast, StudentCampaign } from "@/types/campaign";
+import { CAMPAIGN_STORAGE_KEY, CHANCES_PER_LINK_OPEN } from "@/types/campaign";
 
 function uid(prefix: string) {
   return `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
@@ -20,10 +20,12 @@ function emptyCampaign(partial?: Partial<StudentCampaign>): StudentCampaign {
     field: null,
     golden_chances: 0,
     chance_chest: 0,
+    link_opens: 0,
     last_test_at: null,
     riddle_answered: false,
     profile_completed: false,
     lottery_entered: false,
+    lottery_won: null,
     treasure_step: 0,
     iran_provinces_unlocked: [],
     marathon_week: 0,
@@ -38,6 +40,7 @@ interface CampaignState {
   campaign: StudentCampaign;
   motherPhone: string | null;
   inviteCode: string | null;
+  chanceToast: ChanceToast | null;
   setMotherLead: (phone: string, inviteCode: string, leadId?: string) => void;
   setInviteCode: (inviteCode: string) => void;
   setStep: (step: CampaignStep) => void;
@@ -52,6 +55,11 @@ interface CampaignState {
     phone: string;
   }) => void;
   markLotteryEntered: () => void;
+  setLotteryResult: (won: boolean) => void;
+  startDay2: () => void;
+  /** When someone opens THIS student's invite link */
+  recordLinkOpenForMe: () => void;
+  clearChanceToast: () => void;
   hydrateFromServer: (campaign: StudentCampaign) => void;
   resetCampaign: () => void;
 }
@@ -62,6 +70,7 @@ export const useCampaignStore = create<CampaignState>()(
       campaign: emptyCampaign(),
       motherPhone: null,
       inviteCode: null,
+      chanceToast: null,
 
       setMotherLead: (phone, inviteCode, leadId) =>
         set((s) => ({
@@ -145,6 +154,49 @@ export const useCampaignStore = create<CampaignState>()(
           },
         })),
 
+      setLotteryResult: (won) =>
+        set((s) => ({
+          campaign: {
+            ...s.campaign,
+            lottery_won: won,
+            step: "lottery_result",
+            updated_at: new Date().toISOString(),
+          },
+        })),
+
+      startDay2: () =>
+        set((s) => ({
+          campaign: {
+            ...s.campaign,
+            day: 2,
+            step: "day2_intro",
+            updated_at: new Date().toISOString(),
+          },
+        })),
+
+      recordLinkOpenForMe: () =>
+        set((s) => {
+          const opens = (s.campaign.link_opens ?? 0) + 1;
+          const golden = (s.campaign.golden_chances ?? 0) + CHANCES_PER_LINK_OPEN;
+          const chest = (s.campaign.chance_chest ?? 0) + CHANCES_PER_LINK_OPEN;
+          return {
+            campaign: {
+              ...s.campaign,
+              link_opens: opens,
+              golden_chances: golden,
+              chance_chest: chest,
+              updated_at: new Date().toISOString(),
+            },
+            chanceToast: {
+              added: CHANCES_PER_LINK_OPEN,
+              total: chest,
+              at: Date.now(),
+            },
+          };
+        }),
+
+      clearChanceToast: () => set({ chanceToast: null }),
+
       hydrateFromServer: (campaign) => set({ campaign }),
 
       resetCampaign: () =>
@@ -152,6 +204,7 @@ export const useCampaignStore = create<CampaignState>()(
           campaign: emptyCampaign(),
           motherPhone: null,
           inviteCode: null,
+          chanceToast: null,
         }),
     }),
     { name: CAMPAIGN_STORAGE_KEY }

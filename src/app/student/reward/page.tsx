@@ -43,17 +43,20 @@ export default function StudentRewardPage() {
           </Card>
 
           <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <Link href="/student" onClick={() => setStep("home")}>
+            <Link href="/student/lottery/result/?result=lose" onClick={() => setStep("lottery_result")}>
               <Button variant="gradient" size="lg" className="w-full sm:w-auto">
-                رفتن به صفحه اصلی
+                نتیجه قرعه‌کشی (شبیه‌سازی)
               </Button>
             </Link>
-            <Link href="/student/referral" onClick={() => setStep("referral")}>
+            <Link href="/student/day2" onClick={() => setStep("day2_intro")}>
               <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                دعوت دوستان
+                روز دوم — دعوت دوستان
               </Button>
             </Link>
           </div>
+          <Link href="/student" onClick={() => setStep("home")} className="mt-4 inline-block text-sm text-primary underline">
+            رفتن به صفحه اصلی
+          </Link>
         </motion.div>
       </div>
     </div>

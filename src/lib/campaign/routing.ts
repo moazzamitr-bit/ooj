@@ -33,8 +33,12 @@ export function getNextCampaignHref(step: CampaignStep): string {
       return "/student/complete-profile";
     case "reward":
       return "/student/reward";
+    case "lottery_result":
+      return "/student/lottery/result";
     case "home":
       return "/student";
+    case "day2_intro":
+      return "/student/day2";
     case "referral":
       return "/student/referral";
     case "treasure":
