@@ -16,15 +16,20 @@
 
 | Route | Description |
 |-------|-------------|
-| `/` | صفحه فرود والدین |
+| `/` | لندینگ مادر — ثبت شماره و شروع ۷ روز رایگان |
 | `/login` | ورود با OTP |
-| `/invite/[code]` | لندینگ دعوت |
-| `/parent/register` | ثبت‌نام فرزند |
-| `/parent/success` | تأیید ثبت‌نام |
+| `/invite/[code]` | لینک اختصاصی فرزند / دعوت |
+| `/parent/register` | ثبت‌نام فرزند (فرم قدیمی) |
+| `/parent/success` | موفقیت مادر + لینک فرزند |
 | `/parent/dashboard` | گزارش روزانه والد |
-| `/student/onboarding` | معرفی دانش‌آموز |
-| `/student/quiz` | تست ۲ دقیقه‌ای |
-| `/student/reward` | جایزه اولین شانس |
+| `/student/onboarding` | معرفی آلبرتو |
+| `/student/riddle` | معمای روز اول |
+| `/student/riddle/success` | آفرین + اولین شانس |
+| `/student/lottery-intro` | معرفی قرعه‌کشی افتتاحیه |
+| `/student/field` | انتخاب رشته |
+| `/student/quiz` | ۲ تست |
+| `/student/complete-profile` | ثبت مشخصات دانش‌آموز |
+| `/student/reward` | ۲ شانس طلایی + قوانین |
 | `/student/referral` | دعوت دوستان |
 | `/student/profile` | داشبورد دانش‌آموز |
 | `/admin` | پنل مدیریت |

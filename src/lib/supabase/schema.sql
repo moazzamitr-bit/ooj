@@ -138,3 +138,46 @@ CREATE TABLE admission_rank_data (
 CREATE INDEX idx_students_referral_code ON students(referral_code);
 CREATE INDEX idx_referrals_referrer ON referrals(referrer_student_id);
 CREATE INDEX idx_admission_rank_province ON admission_rank_data(province, city, university_type);
+
+-- Campaign funnel (Day 1–5)
+CREATE TABLE IF NOT EXISTS mother_leads (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  phone TEXT UNIQUE NOT NULL,
+  child_invite_code TEXT UNIQUE NOT NULL,
+  student_id UUID REFERENCES students(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS student_campaigns (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  student_id UUID REFERENCES students(id) ON DELETE CASCADE UNIQUE,
+  mother_lead_id UUID REFERENCES mother_leads(id) ON DELETE SET NULL,
+  day INTEGER NOT NULL DEFAULT 1 CHECK (day BETWEEN 1 AND 5),
+  step TEXT NOT NULL DEFAULT 'intro',
+  field TEXT,
+  golden_chances INTEGER NOT NULL DEFAULT 0,
+  chance_chest INTEGER NOT NULL DEFAULT 0,
+  last_test_at TIMESTAMPTZ,
+  riddle_answered BOOLEAN NOT NULL DEFAULT FALSE,
+  profile_completed BOOLEAN NOT NULL DEFAULT FALSE,
+  lottery_entered BOOLEAN NOT NULL DEFAULT FALSE,
+  treasure_step INTEGER NOT NULL DEFAULT 0,
+  iran_provinces_unlocked TEXT[] NOT NULL DEFAULT '{}',
+  marathon_week INTEGER NOT NULL DEFAULT 0,
+  is_golden_member BOOLEAN NOT NULL DEFAULT FALSE,
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS campaign_sms_log (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  phone TEXT NOT NULL,
+  template_key TEXT NOT NULL,
+  body TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'simulated',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_mother_leads_invite ON mother_leads(child_invite_code);
+CREATE INDEX IF NOT EXISTS idx_campaign_student ON student_campaigns(student_id);
+CREATE INDEX IF NOT EXISTS idx_sms_log_phone ON campaign_sms_log(phone);

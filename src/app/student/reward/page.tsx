@@ -4,76 +4,57 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useApp } from "@/providers/app-provider";
+import { chanceRules } from "@/lib/campaign/copy";
+import { useCampaignStore } from "@/store/campaign-store";
 import { formatPersianNumber } from "@/lib/utils/persian";
 
-const prizes = [
-  { icon: "🏆", title: "لپ‌تاپ", chances: 500 },
-  { icon: "📱", title: "گوشی هوشمند", chances: 300 },
-  { icon: "🎧", title: "هدفون", chances: 100 },
-  { icon: "📚", title: "کتاب کمک‌درسی", chances: 50 },
-  { icon: "💰", title: "جایزه نقدی", chances: 20 },
-];
-
 export default function StudentRewardPage() {
-  const { student } = useApp();
+  const chances = useCampaignStore((s) => s.campaign.golden_chances);
+  const setStep = useCampaignStore((s) => s.setStep);
 
   return (
     <div className="min-h-screen gradient-hero">
       <div className="mx-auto max-w-[700px] px-6 py-16 text-center">
         <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", duration: 0.6 }}
-          className="mx-auto mb-6 text-7xl"
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", duration: 0.5 }}
         >
-          🎉
-        </motion.div>
+          <div className="mx-auto mb-6 text-6xl">🎉</div>
+          <h1 className="text-2xl font-extrabold text-primary-deep md:text-3xl">
+            تبریک! با ۲ شانس طلایی وارد قرعه‌کشی شدی
+          </h1>
 
-        <h1 className="text-3xl font-extrabold text-primary-deep">
-          تبریک! اولین شانس طلایی‌ات رو گرفتی
-        </h1>
+          <Card className="mx-auto mt-8 max-w-sm border-violet-100 shadow-lg">
+            <CardContent className="p-6">
+              <p className="text-sm text-slate-500">شانس‌های طلایی</p>
+              <p className="mt-2 text-4xl font-extrabold text-primary">
+                {formatPersianNumber(Math.max(2, chances))}
+              </p>
+            </CardContent>
+          </Card>
 
-        <Card className="mx-auto mt-8 max-w-sm border-violet-100 shadow-lg">
-          <CardContent className="p-6">
-            <p className="text-sm text-slate-500">شانس‌های فعلی</p>
-            <p className="mt-2 text-4xl font-extrabold text-primary">
-              {formatPersianNumber(student.total_chances)}
-            </p>
-          </CardContent>
-        </Card>
+          <Card className="mx-auto mt-6 max-w-md border-violet-100 text-right">
+            <CardContent className="space-y-3 p-6 text-sm leading-7 text-slate-600">
+              <p className="font-bold text-primary-deep">{chanceRules.title}</p>
+              <p className="whitespace-pre-line">{chanceRules.body}</p>
+              <p className="whitespace-pre-line">{chanceRules.tip}</p>
+            </CardContent>
+          </Card>
 
-        <div className="mt-10">
-          <h2 className="mb-4 text-lg font-bold text-primary-deep">جوایز</h2>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-            {prizes.map((prize) => (
-              <Card key={prize.title} className="border-violet-100">
-                <CardContent className="p-4 text-center">
-                  <span className="text-2xl">{prize.icon}</span>
-                  <p className="mt-2 text-sm font-medium text-primary-deep">{prize.title}</p>
-                  <p className="text-xs text-slate-400">{formatPersianNumber(prize.chances)} شانس</p>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <Link href="/student" onClick={() => setStep("home")}>
+              <Button variant="gradient" size="lg" className="w-full sm:w-auto">
+                رفتن به صفحه اصلی
+              </Button>
+            </Link>
+            <Link href="/student/referral" onClick={() => setStep("referral")}>
+              <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                دعوت دوستان
+              </Button>
+            </Link>
           </div>
-        </div>
-
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <Link href="/student/quiz">
-            <Button variant="outline" size="lg" className="w-full sm:w-auto">
-              ۲ تست کنکوری دیگر حل کن
-            </Button>
-          </Link>
-          <Link href="/student/referral">
-            <Button variant="gradient" size="lg" className="w-full sm:w-auto">
-              دوستاتو دعوت کن
-            </Button>
-          </Link>
-        </div>
-
-        <Link href="/student/profile" className="mt-6 inline-block text-sm text-primary hover:underline">
-          رفتن به داشبورد
-        </Link>
+        </motion.div>
       </div>
     </div>
   );

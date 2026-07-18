@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useStudentStore } from "@/store/student-store";
 import { useApp } from "@/providers/app-provider";
+import { useCampaignStore } from "@/store/campaign-store";
 import { getQuizQuestions, submitQuiz } from "@/lib/services/quiz.service";
 import { cn } from "@/lib/utils/cn";
 import { toPersianDigits } from "@/lib/utils/persian";
@@ -19,7 +20,9 @@ export default function StudentQuizPage() {
   const router = useRouter();
   const { student, refresh } = useApp();
   const { toggleBookmark, bookmarkedQuestions, setQuizCompleted } = useStudentStore();
-  const questions = getQuizQuestions();
+  const addChances = useCampaignStore((s) => s.addChances);
+  const setStep = useCampaignStore((s) => s.setStep);
+  const questions = getQuizQuestions().slice(0, 2);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(QUIZ_DURATION);
@@ -42,8 +45,10 @@ export default function StudentQuizPage() {
     }
 
     setQuizCompleted(true);
-    router.push("/student/reward");
-  }, [answers, questions, refresh, router, setQuizCompleted, startTime, student.id]);
+    addChances(1); // second golden chance (first came from riddle)
+    setStep("complete_profile");
+    router.push("/student/complete-profile");
+  }, [addChances, answers, questions, refresh, router, setQuizCompleted, setStep, startTime, student.id]);
 
   useEffect(() => {
     if (timeLeft <= 0) {
