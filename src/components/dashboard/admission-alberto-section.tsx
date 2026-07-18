@@ -24,7 +24,7 @@ export function AdmissionAlbertoSection() {
   const provinceMaxRank = getProvinceMaxAcceptanceRank(selectedProvince.code);
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr_13fr] lg:items-stretch">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[8.3fr_11.7fr] lg:items-stretch">
       <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_4px_20px_rgb(17_26_76_0.04)]">
         <div className="border-b border-slate-100 px-5 py-4 lg:px-6">
           <div className="flex items-start gap-3">
@@ -43,15 +43,17 @@ export function AdmissionAlbertoSection() {
           </div>
 
           <div className="order-1 flex min-w-0 flex-col border-r border-slate-100 p-4 lg:order-2 lg:p-5">
-            <div className="overflow-hidden rounded-xl bg-gradient-to-br from-[#2563eb] via-[#1d4ed8] to-[#1e40af] px-3 py-5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.22)]">
-              <p className="text-[10px] font-semibold text-blue-100/90">شهر انتخاب‌شده</p>
-              <p className="mt-2 text-2xl font-black leading-tight tracking-tight text-white drop-shadow-sm lg:text-3xl">
-                {selectedProvince.name_fa}
-              </p>
+            {/* City sits lower so it stays close to the majors list */}
+            <div className="lg:mt-[110px]">
+              <div className="overflow-hidden rounded-xl bg-gradient-to-br from-[#2563eb] via-[#1d4ed8] to-[#1e40af] px-3 py-5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.22)]">
+                <p className="text-[10px] font-semibold text-blue-100/90">شهر انتخاب‌شده</p>
+                <p className="mt-2 text-2xl font-black leading-tight tracking-tight text-white drop-shadow-sm lg:text-3xl">
+                  {selectedProvince.name_fa}
+                </p>
+              </div>
             </div>
 
-            {/* Align medical ranks with the city rows under the column header */}
-            <div className="mt-4 flex flex-1 flex-col lg:mt-[150px]">
+            <div className="mt-4 flex flex-1 flex-col">
               <p className="mb-2 text-[11px] text-slate-500">
                 حداقل رتبه قبولی استان:{" "}
                 <span className="font-bold text-primary tabular-nums">
