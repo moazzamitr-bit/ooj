@@ -117,8 +117,13 @@ export default function Day2Page() {
           </div>
 
           <div className="flex flex-col gap-2 pt-2">
-            <Link href="/student/referral" onClick={() => setStep("referral")}>
+            <Link href="/student/games/treasure/" onClick={() => setStep("treasure")}>
               <Button variant="gradient" size="lg" className="w-full">
+                شروع روز سوم — گنج قارون
+              </Button>
+            </Link>
+            <Link href="/student/referral" onClick={() => setStep("referral")}>
+              <Button variant="outline" size="lg" className="w-full">
                 مدیریت دعوت‌ها
               </Button>
             </Link>

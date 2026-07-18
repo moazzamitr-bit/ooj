@@ -67,3 +67,25 @@ export interface StudentCampaign {
 export const CAMPAIGN_STORAGE_KEY = "owj_campaign_v1";
 export const INVITE_OPEN_EVENT = "owj-invite-open";
 export const CHANCES_PER_LINK_OPEN = 5;
+export const TREASURE_STEPS_PER_FLOOR = 9;
+export const TREASURE_FLOORS = 3;
+export const TREASURE_MAX_STEPS = TREASURE_STEPS_PER_FLOOR * TREASURE_FLOORS;
+
+export function getTreasureProgress(step: number) {
+  const safe = Math.max(0, Math.min(TREASURE_MAX_STEPS, Number(step) || 0));
+  const completedFloors = Math.floor(safe / TREASURE_STEPS_PER_FLOOR);
+  const stepInFloor = safe % TREASURE_STEPS_PER_FLOOR;
+  const currentFloor =
+    safe >= TREASURE_MAX_STEPS ? TREASURE_FLOORS : Math.min(TREASURE_FLOORS, completedFloors + 1);
+  const stepsToNextFloor =
+    safe >= TREASURE_MAX_STEPS ? 0 : TREASURE_STEPS_PER_FLOOR - stepInFloor || TREASURE_STEPS_PER_FLOOR;
+
+  return {
+    step: safe,
+    completedFloors,
+    currentFloor,
+    stepInFloor,
+    stepsToNextFloor,
+    maxSteps: TREASURE_MAX_STEPS,
+  };
+}

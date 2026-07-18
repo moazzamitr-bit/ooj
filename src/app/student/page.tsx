@@ -42,16 +42,22 @@ export default function StudentHomePage() {
         </section>
 
         <section className="rounded-2xl border border-primary/15 bg-gradient-to-l from-[#F3F0FF] to-[#EEF4FF] p-5 md:p-6">
-          <p className="text-sm font-bold text-primary">🌙 روز دوم — ترفند مخفی آلبرتو</p>
+          <p className="text-sm font-bold text-primary">مسیر کمپین ۷ روزه</p>
           <p className="mt-2 text-sm leading-7 text-slate-600">
-            لینک را برای دوستات بفرست؛ هر باز شدن لینک = ۵ شانس طلایی در صندوقچه.
+            روز ۲ دعوت دوستان، روز ۳ صعود در برج گنج قارون.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <Link
               href="/student/day2"
+              className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium text-primary-deep"
+            >
+              روز دوم
+            </Link>
+            <Link
+              href="/student/games/treasure/"
               className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-white"
             >
-              شروع روز دوم
+              روز سوم — گنج قارون
             </Link>
             <Link
               href="/student/lottery/result/?result=lose"

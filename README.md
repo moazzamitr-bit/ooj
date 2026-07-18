@@ -32,6 +32,8 @@
 | `/student/reward` | ۲ شانس طلایی + قوانین |
 | `/student/lottery/result` | نتیجه قرعه‌کشی (برنده/بازنده) |
 | `/student/day2` | روز دوم — دعوت دوستان و صندوقچه شانس |
+| `/student/day3` | هدایت به گنج قارون |
+| `/student/games/treasure` | روز سوم — برج گنج قارون |
 | `/parent/day2` | پیام مادر شب دوم |
 | `/student/referral` | دعوت دوستان |
 | `/student/profile` | داشبورد دانش‌آموز |

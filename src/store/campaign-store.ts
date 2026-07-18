@@ -3,7 +3,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { CampaignDay, CampaignStep, ChanceToast, StudentCampaign } from "@/types/campaign";
-import { CAMPAIGN_STORAGE_KEY, CHANCES_PER_LINK_OPEN } from "@/types/campaign";
+import {
+  CAMPAIGN_STORAGE_KEY,
+  CHANCES_PER_LINK_OPEN,
+  TREASURE_MAX_STEPS,
+} from "@/types/campaign";
 
 function uid(prefix: string) {
   return `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
@@ -57,6 +61,8 @@ interface CampaignState {
   markLotteryEntered: () => void;
   setLotteryResult: (won: boolean) => void;
   startDay2: () => void;
+  startDay3: () => void;
+  climbTreasureStep: () => void;
   /** When someone opens THIS student's invite link */
   recordLinkOpenForMe: () => void;
   clearChanceToast: () => void;
@@ -174,6 +180,36 @@ export const useCampaignStore = create<CampaignState>()(
               step: "day2_intro",
               link_opens: s.campaign.link_opens ?? 0,
               chance_chest: s.campaign.chance_chest ?? s.campaign.golden_chances ?? 0,
+              updated_at: new Date().toISOString(),
+            },
+          };
+        }),
+
+      startDay3: () =>
+        set((s) => {
+          if (s.campaign.day === 3 && s.campaign.step === "treasure") return s;
+          return {
+            campaign: {
+              ...s.campaign,
+              day: 3,
+              step: "treasure",
+              treasure_step: s.campaign.treasure_step ?? 0,
+              updated_at: new Date().toISOString(),
+            },
+          };
+        }),
+
+      climbTreasureStep: () =>
+        set((s) => {
+          const nextStep = Math.min(TREASURE_MAX_STEPS, (s.campaign.treasure_step ?? 0) + 1);
+          if (nextStep === (s.campaign.treasure_step ?? 0)) return s;
+          return {
+            campaign: {
+              ...s.campaign,
+              treasure_step: nextStep,
+              golden_chances: (s.campaign.golden_chances ?? 0) + 1,
+              chance_chest: (s.campaign.chance_chest ?? 0) + 1,
+              last_test_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
             },
           };
