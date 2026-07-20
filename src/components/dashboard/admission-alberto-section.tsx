@@ -46,11 +46,14 @@ export function AdmissionAlbertoSection() {
             {/* City sits lower so it stays close to the majors list */}
             <div className="lg:mt-[110px]">
               <div className="overflow-hidden rounded-xl bg-gradient-to-br from-[#2563eb] via-[#1d4ed8] to-[#1e40af] px-3 py-5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.22)]">
-                <p className="text-[10px] font-semibold text-blue-100/90">شهر انتخاب‌شده</p>
+                <p className="text-[10px] font-semibold text-blue-100/90">شهر روبه‌رو</p>
                 <p className="mt-2 text-2xl font-black leading-tight tracking-tight text-white drop-shadow-sm lg:text-3xl">
                   {selectedProvince.name_fa}
                 </p>
               </div>
+              <p className="mt-2 text-center text-[10px] leading-5 text-slate-400">
+                با اسکرول لیست یا کلیک روی هر شهر، جزئیات این‌جا به‌روز می‌شود
+              </p>
             </div>
 
             <div className="mt-4 flex flex-1 flex-col">
