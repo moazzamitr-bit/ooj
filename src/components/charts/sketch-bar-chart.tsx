@@ -30,9 +30,10 @@ const BAR_COLORS = {
 };
 
 const DEPTH_X = 7;
-/** Shared SVG height so plot tops align across the chart row. */
-const CHART_BASE_HEIGHT = 236;
-const HEIGHT_SCALE = 1.2;
+/** Shared canvas so every chart tile has the same aspect ratio and axis line. */
+const CHART_WIDTH = 400;
+const CHART_HEIGHT = 280;
+const CHART_PAD = { top: 8, right: 10, bottom: 56, left: 28 } as const;
 
 function barWidth(kind: ChartBarKind = "default", dataLength = 0) {
   if (kind === "total") return 12;
@@ -42,24 +43,6 @@ function barWidth(kind: ChartBarKind = "default", dataLength = 0) {
   if (dataLength >= 13) return 11;
   if (dataLength >= 10) return 14;
   return 20;
-}
-
-function getPadding(labelMode: LabelMode) {
-  // Keep top padding identical so y-axes start on one horizontal line.
-  const top = 4;
-  if (labelMode === "monthly") {
-    return { top, right: 8, bottom: 44, left: 28 };
-  }
-  if (labelMode === "angled") {
-    return { top, right: 8, bottom: 58, left: 28 };
-  }
-  if (labelMode === "compact") {
-    return { top, right: 8, bottom: 48, left: 28 };
-  }
-  if (labelMode === "grade") {
-    return { top, right: 8, bottom: 54, left: 28 };
-  }
-  return { top, right: 8, bottom: 42, left: 28 };
 }
 
 function Bar3D({
@@ -195,10 +178,9 @@ export function SketchBarChart({
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const padding = getPadding(labelMode);
-  const width =
-    data.length >= 15 ? 440 : data.length >= 12 ? 400 : data.length >= 10 ? 380 : 356;
-  const height = Math.round(CHART_BASE_HEIGHT * HEIGHT_SCALE);
+  const padding = CHART_PAD;
+  const width = CHART_WIDTH;
+  const height = CHART_HEIGHT;
   const plotWidth = width - padding.left - padding.right;
   const plotHeight = height - padding.top - padding.bottom;
   const baseline = padding.top + plotHeight;
@@ -221,7 +203,7 @@ export function SketchBarChart({
   return (
     <div
       ref={containerRef}
-      className="relative"
+      className="relative h-full w-full"
       onMouseLeave={() => {
         setTooltip(null);
         setHoveredIndex(null);
@@ -229,7 +211,8 @@ export function SketchBarChart({
     >
       <svg
         viewBox={`0 0 ${width} ${height}`}
-        className="h-auto w-full"
+        className="block h-full w-full"
+        preserveAspectRatio="none"
         role="img"
         aria-label="نمودار مطالعه"
       >
