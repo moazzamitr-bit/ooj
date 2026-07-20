@@ -63,14 +63,14 @@ export function AlbertoCard({ className, compact }: AlbertoCardProps) {
             </button>
           </div>
 
-          <div className="relative order-first h-64 w-full shrink-0 overflow-hidden bg-[#F3F0FF] md:order-none md:h-full md:min-h-0 md:w-[54%]">
+          <div className="relative order-first h-64 w-full shrink-0 overflow-hidden bg-[#E8E8E8] md:order-none md:h-full md:min-h-0 md:w-[54%]">
             <Image
               src={albertoPortrait}
               alt="آلبرتو، مشاور هوشمند اوج"
               fill
               priority
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-contain object-bottom"
+              sizes="(max-width: 768px) 100vw, 54vw"
+              className="object-cover object-[center_20%] md:object-[center_18%]"
             />
           </div>
         </div>
