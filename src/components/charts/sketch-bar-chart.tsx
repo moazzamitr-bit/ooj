@@ -30,6 +30,8 @@ const BAR_COLORS = {
 };
 
 const DEPTH_X = 7;
+/** Shared SVG height so plot tops align across the chart row. */
+const CHART_BASE_HEIGHT = 236;
 const HEIGHT_SCALE = 1.2;
 
 function barWidth(kind: ChartBarKind = "default", dataLength = 0) {
@@ -43,19 +45,21 @@ function barWidth(kind: ChartBarKind = "default", dataLength = 0) {
 }
 
 function getPadding(labelMode: LabelMode) {
+  // Keep top padding identical so y-axes start on one horizontal line.
+  const top = 4;
   if (labelMode === "monthly") {
-    return { top: 6, right: 8, bottom: 44, left: 28 };
+    return { top, right: 8, bottom: 44, left: 28 };
   }
   if (labelMode === "angled") {
-    return { top: 6, right: 8, bottom: 58, left: 28 };
+    return { top, right: 8, bottom: 58, left: 28 };
   }
   if (labelMode === "compact") {
-    return { top: 6, right: 8, bottom: 48, left: 28 };
+    return { top, right: 8, bottom: 48, left: 28 };
   }
   if (labelMode === "grade") {
-    return { top: 6, right: 8, bottom: 54, left: 28 };
+    return { top, right: 8, bottom: 54, left: 28 };
   }
-  return { top: 6, right: 8, bottom: 42, left: 28 };
+  return { top, right: 8, bottom: 42, left: 28 };
 }
 
 function Bar3D({
@@ -194,8 +198,7 @@ export function SketchBarChart({
   const padding = getPadding(labelMode);
   const width =
     data.length >= 15 ? 440 : data.length >= 12 ? 400 : data.length >= 10 ? 380 : 356;
-  const baseHeight = labelMode === "monthly" || labelMode === "angled" || labelMode === "grade" ? 236 : 222;
-  const height = Math.round(baseHeight * HEIGHT_SCALE);
+  const height = Math.round(CHART_BASE_HEIGHT * HEIGHT_SCALE);
   const plotWidth = width - padding.left - padding.right;
   const plotHeight = height - padding.top - padding.bottom;
   const baseline = padding.top + plotHeight;

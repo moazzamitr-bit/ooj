@@ -12,7 +12,7 @@ interface ChartPanelProps {
 function ChartPanel({ title, unit, children }: ChartPanelProps) {
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-[20px] border border-slate-200/80 bg-gradient-to-b from-[#F4F6FC] to-[#E9EDF8] p-2 shadow-[0_10px_26px_rgba(30,41,59,0.09)]">
-      <header className="mb-1.5 flex min-h-9 items-center justify-between gap-2 px-2">
+      <header className="mb-1 flex shrink-0 items-center justify-between gap-2 px-2">
         <span className="rounded-full border border-white/90 bg-white/75 px-2 py-1 text-[10px] font-bold text-slate-500 shadow-sm">
           {unit}
         </span>
@@ -20,7 +20,7 @@ function ChartPanel({ title, unit, children }: ChartPanelProps) {
           {title}
         </h3>
       </header>
-      <div className="flex min-h-0 flex-1 flex-col justify-end overflow-hidden rounded-2xl border border-white/80 bg-white/30">
+      <div className="flex min-h-0 flex-1 flex-col justify-start overflow-hidden rounded-2xl border border-white/80 bg-white/30 pt-0.5">
         {children}
       </div>
     </article>
