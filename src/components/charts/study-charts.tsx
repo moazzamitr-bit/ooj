@@ -48,14 +48,12 @@ export function StudyCharts() {
         </ChartPanel>
 
         <ChartPanel title="مقایسه هفته‌ها" unit="ساعت">
-          <div dir="ltr" className="min-w-0">
+          <div dir="ltr">
             <SketchBarChart
               data={weekly}
               yMax={9}
               yStep={1}
               labelMode="compact"
-              visibleBars={9}
-              showScrollControls
               persianYAxis
             />
           </div>
