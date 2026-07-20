@@ -214,8 +214,8 @@ export const admissionRankData: AdmissionRankData[] = [
 ];
 
 export const mockReferrals: Referral[] = [
-  { id: "ref1", referrer_student_id: "student_1", referred_phone: "09123456789", referred_student_id: "student_2", status: "quiz_completed", reward_chances: 3, cash_reward_amount: 1000000, created_at: "2026-02-01" },
-  { id: "ref2", referrer_student_id: "student_1", referred_phone: "09121234567", referred_student_id: "student_3", status: "registered", reward_chances: 1, cash_reward_amount: 1000000, created_at: "2026-02-10" },
+  { id: "ref1", referrer_student_id: "student_1", referred_phone: "09123456789", referred_student_id: "student_2", status: "quiz_completed", reward_chances: 3, cash_reward_amount: 500000, created_at: "2026-02-01" },
+  { id: "ref2", referrer_student_id: "student_1", referred_phone: "09121234567", referred_student_id: "student_3", status: "registered", reward_chances: 1, cash_reward_amount: 500000, created_at: "2026-02-10" },
   { id: "ref3", referrer_student_id: "student_1", referred_phone: "09131234567", referred_student_id: null, status: "sent", reward_chances: 0, cash_reward_amount: 0, created_at: "2026-03-01" },
 ];
 

@@ -7,7 +7,7 @@ export const referralPageStats = {
   registered: 16,
   quizCompleted: 9,
   totalChances: 34,
-  maxInvites: 10,
+  maxInvites: 1,
 };
 
 export const referralPageFriends: InvitedFriend[] = [

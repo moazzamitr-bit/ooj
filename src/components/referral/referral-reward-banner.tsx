@@ -8,9 +8,9 @@ import rial500 from "@/assets/images/rial-500.png";
 import styles from "@/components/referral/referral-reward-banner.module.css";
 
 const rewardCopy =
-  "هر دوستی که با دعوت تو عضو بشه ۱,۰۰۰,۰۰۰ تومان فوری به حسابت واریز می‌شه!";
+  "هر دوستی که با دعوت تو عضو بشه ۵۰۰,۰۰۰ هزار تومان فوری به حسابت واریز می‌شه!";
 
-const weeklyInviteLimit = "حداکثر ۲ دعوت موفق در هر هفته";
+const weeklyInviteLimit = "حداکثر ۱ دعوت موفق";
 
 const fallingNotes: { src: string; className: string }[] = [
   { src: rial100.src, className: styles.note1 },
@@ -49,8 +49,8 @@ export function ReferralRewardBanner() {
 
       <div className={styles.copyStack}>
         <h1 className={styles.title}>
-          <span>۲,۰۰۰,۰۰۰</span>
-          <span className={styles.titleUnit}>تومان</span>
+          <span>۵۰۰,۰۰۰</span>
+          <span className={styles.titleUnit}>هزار تومان</span>
         </h1>
         <h2 className={styles.subtitle}>جایزه نقدی هفتگی!</h2>
 
@@ -70,8 +70,8 @@ export function ReferralRewardBanner() {
         </div>
 
         <Link href="/student/referral" className={styles.inviteButton}>
-          <UserPlus aria-hidden />
           <span>کلیک برای دعوت دوستات</span>
+          <UserPlus aria-hidden />
         </Link>
       </div>
     </section>

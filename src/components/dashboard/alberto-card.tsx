@@ -56,10 +56,10 @@ export function AlbertoCard({ className, compact }: AlbertoCardProps) {
               onClick={() => setChatOpen(true)}
               className="mt-6 flex h-14 w-full shrink-0 items-center justify-center gap-2.5 rounded-full bg-gradient-to-l from-primary to-electric-blue px-4 text-lg font-bold text-white shadow-lg shadow-primary/25 transition hover:opacity-95 md:h-16 md:text-xl"
             >
+              من همیشه بیدارم... کلیکم کن!
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20">
                 <MessageCircle className="h-4 w-4" aria-hidden />
               </span>
-              من همیشه بیدارم... کلیکم کن!
             </button>
           </div>
 
