@@ -127,7 +127,7 @@ export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps
     <div className={styles.pencilWrap}>
       <div className={styles.pencil} role="group" aria-label="ستون حداقل رتبه قبولی شهرستان‌ها">
         <div className={`${styles.eraser} ${styles.curv}`}>
-          <span className={styles.eraserTitle}>حداقل رتبه قبولی</span>
+          <span className={styles.eraserTitle}>حداقل رتبه قبولی دانشگاه‌ها</span>
         </div>
 
         <div className={styles.ferrule} aria-hidden>

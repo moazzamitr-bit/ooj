@@ -47,4 +47,4 @@ export const provinceMaxRankRows = iranProvinces
     name: province.name_fa,
     maxRank: getProvinceMaxAcceptanceRank(province.code),
   }))
-  .sort((a, b) => a.maxRank - b.maxRank);
+  .sort((a, b) => a.name.localeCompare(b.name, "fa"));
