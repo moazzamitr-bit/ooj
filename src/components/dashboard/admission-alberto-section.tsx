@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { BookOpen, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import { AdmissionPencil } from "@/components/dashboard/admission-pencil";
 import { AlbertoCard } from "@/components/dashboard/alberto-card";
 import { iranProvinces } from "@/lib/data/iran-provinces";
@@ -26,17 +26,6 @@ export function AdmissionAlbertoSection() {
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr_13fr] lg:items-stretch">
       <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_4px_20px_rgb(17_26_76_0.04)]">
-        <div className="border-b border-slate-100 px-5 py-4 lg:px-6">
-          <div className="flex items-start gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-              <BookOpen className="h-5 w-5" aria-hidden />
-            </div>
-            <h2 className="text-sm font-extrabold leading-6 text-primary-deep">
-              نقشه قبولی رشته‌ها در استان‌ها
-            </h2>
-          </div>
-        </div>
-
         <div className="grid flex-1 lg:grid-cols-[13fr_7fr]">
           <div className="order-2 flex min-h-[480px] flex-col items-center justify-start overflow-hidden bg-gradient-to-b from-[#EFF6FF] to-[#F8FAFC] px-2 py-4 lg:order-1 lg:min-h-[520px] lg:px-3 lg:py-5">
             <AdmissionPencil selectedCode={selectedCode} onSelect={setSelectedCode} />
