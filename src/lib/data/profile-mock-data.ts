@@ -43,6 +43,8 @@ export const chemSubchaptersMockup = [
 ];
 
 export type ChartBarKind = "default" | "total" | "surplus" | "grade";
+export type ChartBarTone = "blue" | "green" | "red" | "orange" | "black";
+export type ChartPalette = "green" | "orange" | "black" | "blue";
 
 export interface ProfileChartBar {
   label: string;
@@ -50,25 +52,29 @@ export interface ProfileChartBar {
   kind?: ChartBarKind;
   /** Group label for clustered bars (e.g. subject name above grade trio). */
   group?: string;
+  /** Per-bar color override (used for grade columns). */
+  tone?: ChartBarTone;
+  /** Cap for this bar (e.g. 100 / 100 / 30 hours). */
+  maxValue?: number;
 }
 
-/** نمودار دروس - درصد تکمیل تست هر پایه (۰ تا ۱۰۰) */
+/** نمودار دروس - ساعت مطالعه هر پایه (آبی/سبز تا ۱۰۰، قرمز تا ۳۰) */
 export const subjectGradeTestChartData: ProfileChartBar[] = [
-  { label: "۱۰", value: 72, kind: "grade", group: "زیست" },
-  { label: "۱۱", value: 48, kind: "grade", group: "زیست" },
-  { label: "۱۲", value: 35, kind: "grade", group: "زیست" },
-  { label: "۱۰", value: 55, kind: "grade", group: "زمین" },
-  { label: "۱۱", value: 40, kind: "grade", group: "زمین" },
-  { label: "۱۲", value: 28, kind: "grade", group: "زمین" },
-  { label: "۱۰", value: 80, kind: "grade", group: "شیمی" },
-  { label: "۱۱", value: 62, kind: "grade", group: "شیمی" },
-  { label: "۱۲", value: 44, kind: "grade", group: "شیمی" },
-  { label: "۱۰", value: 58, kind: "grade", group: "فیزیک" },
-  { label: "۱۱", value: 46, kind: "grade", group: "فیزیک" },
-  { label: "۱۲", value: 33, kind: "grade", group: "فیزیک" },
-  { label: "۱۰", value: 70, kind: "grade", group: "ریاضی" },
-  { label: "۱۱", value: 52, kind: "grade", group: "ریاضی" },
-  { label: "۱۲", value: 38, kind: "grade", group: "ریاضی" },
+  { label: "۱۰", value: 100, kind: "grade", group: "زیست", tone: "blue", maxValue: 100 },
+  { label: "۱۱", value: 72, kind: "grade", group: "زیست", tone: "green", maxValue: 100 },
+  { label: "۱۲", value: 18, kind: "grade", group: "زیست", tone: "red", maxValue: 30 },
+  { label: "۱۰", value: 100, kind: "grade", group: "زمین", tone: "blue", maxValue: 100 },
+  { label: "۱۱", value: 55, kind: "grade", group: "زمین", tone: "green", maxValue: 100 },
+  { label: "۱۲", value: 12, kind: "grade", group: "زمین", tone: "red", maxValue: 30 },
+  { label: "۱۰", value: 100, kind: "grade", group: "شیمی", tone: "blue", maxValue: 100 },
+  { label: "۱۱", value: 88, kind: "grade", group: "شیمی", tone: "green", maxValue: 100 },
+  { label: "۱۲", value: 24, kind: "grade", group: "شیمی", tone: "red", maxValue: 30 },
+  { label: "۱۰", value: 92, kind: "grade", group: "فیزیک", tone: "blue", maxValue: 100 },
+  { label: "۱۱", value: 61, kind: "grade", group: "فیزیک", tone: "green", maxValue: 100 },
+  { label: "۱۲", value: 15, kind: "grade", group: "فیزیک", tone: "red", maxValue: 30 },
+  { label: "۱۰", value: 100, kind: "grade", group: "ریاضی", tone: "blue", maxValue: 100 },
+  { label: "۱۱", value: 70, kind: "grade", group: "ریاضی", tone: "green", maxValue: 100 },
+  { label: "۱۲", value: 20, kind: "grade", group: "ریاضی", tone: "red", maxValue: 30 },
 ];
 
 /** @deprecated use subjectGradeTestChartData */
@@ -89,19 +95,19 @@ export const monthlyHoursChartData: ProfileChartBar[] = [
 
 /** نمودار هفتگی - ساعت (یک ترم ۱۳ هفته‌ای، بدون ستون مجموع — مقیاس ۰ تا ۹) */
 export const weeklyHoursChartData: ProfileChartBar[] = [
-  { label: "هفته\n۱", value: 4.5 },
-  { label: "هفته\n۲", value: 5 },
-  { label: "هفته\n۳", value: 6.5 },
-  { label: "هفته\n۴", value: 7 },
-  { label: "هفته\n۵", value: 5.5 },
-  { label: "هفته\n۶", value: 8 },
-  { label: "هفته\n۷", value: 6 },
-  { label: "هفته\n۸", value: 7.5 },
-  { label: "هفته\n۹", value: 5 },
-  { label: "هفته\n۱۰", value: 6.5 },
-  { label: "هفته\n۱۱", value: 7 },
-  { label: "هفته\n۱۲", value: 8.5 },
-  { label: "هفته\n۱۳", value: 6 },
+  { label: "هفته ۱", value: 4.5 },
+  { label: "هفته ۲", value: 5 },
+  { label: "هفته ۳", value: 6.5 },
+  { label: "هفته ۴", value: 7 },
+  { label: "هفته ۵", value: 5.5 },
+  { label: "هفته ۶", value: 8 },
+  { label: "هفته ۷", value: 6 },
+  { label: "هفته ۸", value: 7.5 },
+  { label: "هفته ۹", value: 5 },
+  { label: "هفته ۱۰", value: 6.5 },
+  { label: "هفته ۱۱", value: 7 },
+  { label: "هفته ۱۲", value: 8.5 },
+  { label: "هفته ۱۳", value: 6 },
 ];
 
 /** نمودار روزانه - دقیقه: ۳ مجموع کوچک، مازاد ابتدا، ۷ روز، مازاد آخر — مقیاس ۰ تا ۱۸۰ */

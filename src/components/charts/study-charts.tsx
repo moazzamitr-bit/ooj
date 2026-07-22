@@ -42,6 +42,7 @@ export function StudyCharts() {
               yStep={20}
               labelMode="angled"
               valueUnit="دقیقه"
+              palette="green"
               persianYAxis
             />
           </div>
@@ -53,7 +54,8 @@ export function StudyCharts() {
               data={weekly}
               yMax={9}
               yStep={1}
-              labelMode="compact"
+              labelMode="angled"
+              palette="orange"
               persianYAxis
             />
           </div>
@@ -65,20 +67,22 @@ export function StudyCharts() {
               data={monthly}
               yMax={50}
               yStep={5}
-              labelMode="monthly"
+              labelMode="angled"
+              palette="black"
               persianYAxis
             />
           </div>
         </ChartPanel>
 
-        <ChartPanel title="پیشرفت تست دروس" unit="درصد">
+        <ChartPanel title="پیشرفت تست دروس" unit="ساعت">
           <div className="h-full w-full" dir="ltr">
             <SketchBarChart
               data={subjects}
               yMax={100}
               yStep={10}
               labelMode="grade"
-              valueUnit="درصد"
+              valueUnit="ساعت"
+              palette="blue"
               persianYAxis
             />
           </div>

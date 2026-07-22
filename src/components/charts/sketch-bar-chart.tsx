@@ -1,7 +1,12 @@
 "use client";
 
 import { useRef, useState } from "react";
-import type { ChartBarKind, ProfileChartBar } from "@/lib/data/profile-mock-data";
+import type {
+  ChartBarKind,
+  ChartBarTone,
+  ChartPalette,
+  ProfileChartBar,
+} from "@/lib/data/profile-mock-data";
 import { toPersianDigits } from "@/lib/utils/persian";
 
 type LabelMode = "default" | "compact" | "monthly" | "angled" | "grade";
@@ -13,6 +18,8 @@ interface SketchBarChartProps {
   labelMode?: LabelMode;
   valueUnit?: string;
   persianYAxis?: boolean;
+  /** Default bar color for the whole chart. */
+  palette?: ChartPalette;
 }
 
 interface TooltipState {
@@ -22,27 +29,71 @@ interface TooltipState {
   y: number;
 }
 
-const BAR_COLORS = {
-  front: "#2563EB",
-  top: "#60A5FA",
-  side: "#1D4ED8",
-  hover: "#1E40AF",
+interface BarColorSet {
+  front: string;
+  top: string;
+  side: string;
+  hover: string;
+  shade: string;
+}
+
+const PALETTES: Record<ChartPalette | ChartBarTone, BarColorSet> = {
+  blue: {
+    front: "#2563EB",
+    top: "#60A5FA",
+    side: "#1D4ED8",
+    hover: "#1E40AF",
+    shade: "#1E3A8A",
+  },
+  green: {
+    front: "#16A34A",
+    top: "#4ADE80",
+    side: "#15803D",
+    hover: "#166534",
+    shade: "#14532D",
+  },
+  orange: {
+    front: "#EA580C",
+    top: "#FB923C",
+    side: "#C2410C",
+    hover: "#9A3412",
+    shade: "#7C2D12",
+  },
+  red: {
+    front: "#DC2626",
+    top: "#F87171",
+    side: "#B91C1C",
+    hover: "#991B1B",
+    shade: "#7F1D1D",
+  },
+  black: {
+    front: "#1F2937",
+    top: "#6B7280",
+    side: "#111827",
+    hover: "#030712",
+    shade: "#000000",
+  },
 };
 
 const DEPTH_X = 7;
-/** Shared canvas so every chart tile has the same aspect ratio and axis line. */
 const CHART_WIDTH = 400;
 const CHART_HEIGHT = 280;
 const CHART_PAD = { top: 8, right: 10, bottom: 56, left: 28 } as const;
+const AXIS_LABEL_CLASS =
+  "pointer-events-none fill-slate-700 text-[8.5px] font-medium leading-[1.2]";
 
 function barWidth(kind: ChartBarKind = "default", dataLength = 0) {
   if (kind === "total") return 12;
   if (kind === "surplus") return 9;
   if (kind === "grade") return 10;
-  // Dense term charts (e.g. 13 weeks) match subject-progress bar scale.
   if (dataLength >= 13) return 11;
   if (dataLength >= 10) return 14;
   return 20;
+}
+
+function resolveColors(palette: ChartPalette, tone?: ChartBarTone): BarColorSet {
+  if (tone) return PALETTES[tone];
+  return PALETTES[palette];
 }
 
 function Bar3D({
@@ -51,12 +102,14 @@ function Bar3D({
   height,
   width,
   hovered,
+  colors,
 }: {
   x: number;
   baseline: number;
   height: number;
   width: number;
   hovered: boolean;
+  colors: BarColorSet;
 }) {
   if (height <= 0) return null;
 
@@ -64,15 +117,15 @@ function Bar3D({
   const right = x + width;
   const sideRight = right + DEPTH_X;
   const capital = Math.min(6, Math.max(3, height * 0.08));
-  const front = hovered ? BAR_COLORS.hover : BAR_COLORS.front;
-  const leftShade = hovered ? "#1E3A8A" : "#1E40AF";
-  const capitalFill = hovered ? "#93C5FD" : BAR_COLORS.top;
+  const front = hovered ? colors.hover : colors.front;
+  const leftShade = hovered ? colors.shade : colors.side;
+  const capitalFill = hovered ? colors.top : colors.top;
 
   return (
     <g>
       <polygon
         points={`${right},${top} ${sideRight},${top} ${sideRight},${baseline} ${right},${baseline}`}
-        fill={BAR_COLORS.side}
+        fill={colors.side}
       />
       <polygon
         points={`${x},${top} ${x},${baseline} ${x + 2},${baseline} ${x + 2},${top}`}
@@ -166,6 +219,15 @@ function getGroupRanges(data: ProfileChartBar[], centers: number[]) {
   return ranges;
 }
 
+function shouldAngleLabels(labelMode: LabelMode) {
+  return (
+    labelMode === "angled" ||
+    labelMode === "monthly" ||
+    labelMode === "compact" ||
+    labelMode === "grade"
+  );
+}
+
 export function SketchBarChart({
   data,
   yMax,
@@ -173,6 +235,7 @@ export function SketchBarChart({
   labelMode = "default",
   valueUnit = "ساعت",
   persianYAxis = false,
+  palette = "blue",
 }: SketchBarChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
@@ -187,6 +250,7 @@ export function SketchBarChart({
   const ticks = Array.from({ length: Math.floor(yMax / yStep) + 1 }, (_, i) => i * yStep);
   const centers = buildSlotCenters(data, padding.left, plotWidth);
   const groupRanges = labelMode === "grade" ? getGroupRanges(data, centers) : [];
+  const angled = shouldAngleLabels(labelMode);
 
   const showTooltip = (bar: ProfileChartBar, event: React.MouseEvent<SVGRectElement>) => {
     const rect = containerRef.current?.getBoundingClientRect();
@@ -266,26 +330,18 @@ export function SketchBarChart({
 
         {data.map((bar, index) => {
           const kind = bar.kind ?? "default";
+          const colors = resolveColors(palette, bar.tone);
           const barW = barWidth(kind, data.length);
           const slotCenter = centers[index];
           const barX = slotCenter - barW / 2;
+          const capped = Math.min(bar.value, bar.maxValue ?? yMax);
           const barHeight = Math.max(
-            (bar.value / yMax) * plotHeight,
-            bar.value > 0 ? (kind === "surplus" ? 4 : 5) : 0
+            (capped / yMax) * plotHeight,
+            capped > 0 ? (kind === "surplus" ? 4 : 5) : 0
           );
           const labelLines = splitLabel(bar.label);
           const isHovered = hoveredIndex === index;
-          const labelY =
-            baseline +
-            (labelMode === "monthly"
-              ? 15
-              : labelMode === "compact"
-                ? 16
-                : labelMode === "angled"
-                  ? 18
-                  : labelMode === "grade"
-                    ? 14
-                    : 14);
+          const labelY = baseline + 18;
 
           return (
             <g key={`${bar.group ?? ""}-${bar.label}-${index}`}>
@@ -295,6 +351,7 @@ export function SketchBarChart({
                 height={barHeight}
                 width={barW}
                 hovered={isHovered}
+                colors={colors}
               />
               <rect
                 x={barX - 2}
@@ -316,15 +373,9 @@ export function SketchBarChart({
                 <text
                   x={slotCenter}
                   y={labelY}
-                  textAnchor={labelMode === "monthly" || labelMode === "angled" ? "end" : "middle"}
-                  transform={
-                    labelMode === "monthly"
-                      ? undefined
-                      : labelMode === "angled"
-                        ? `rotate(-38, ${slotCenter}, ${labelY})`
-                        : undefined
-                  }
-                  className="pointer-events-none fill-slate-700 text-[8.5px] font-medium leading-[1.2]"
+                  textAnchor={angled ? "end" : "middle"}
+                  transform={angled ? `rotate(-38, ${slotCenter}, ${labelY})` : undefined}
+                  className={AXIS_LABEL_CLASS}
                 >
                   {labelLines.map((line, lineIndex) => (
                     <tspan key={lineIndex} x={slotCenter} dy={lineIndex === 0 ? 0 : 9}>
@@ -339,13 +390,15 @@ export function SketchBarChart({
 
         {groupRanges.map((group) => {
           const mid = (group.start + group.end) / 2;
+          const groupY = baseline + 40;
           return (
             <text
               key={`group-${group.name}-${group.firstIndex}`}
               x={mid}
-              y={baseline + 36}
-              textAnchor="middle"
-              className="pointer-events-none fill-slate-800 text-[10px] font-extrabold"
+              y={groupY}
+              textAnchor="end"
+              transform={`rotate(-38, ${mid}, ${groupY})`}
+              className={AXIS_LABEL_CLASS}
             >
               {group.name}
             </text>
