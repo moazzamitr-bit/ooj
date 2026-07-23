@@ -10,20 +10,6 @@ interface AdmissionPencilProps {
   onSelect: (code: string) => void;
 }
 
-function BookEmblemIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <path
-        d="M12 6.5C10.3 5 7.5 4.7 4 5.2v11.2c3.5-.5 6.3-.2 8 1.3 1.7-1.5 4.5-1.8 8-1.3V5.2C16.5 4.7 13.7 5 12 6.5Z"
-        stroke="#fff"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <path d="M12 6.5v11.5" stroke="#fff" strokeWidth="1.5" />
-    </svg>
-  );
-}
-
 export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps) {
   const bodyRef = useRef<HTMLDivElement>(null);
   const selectedRowRef = useRef<HTMLTableRowElement>(null);
@@ -42,17 +28,14 @@ export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps
     if (!body || rowRefs.current.size === 0) return;
 
     const bodyRect = body.getBoundingClientRect();
-    const thead = body.querySelector("thead");
-    const headerH = thead?.getBoundingClientRect().height ?? 36;
-    // City under the sticky header lines up with the detail panel on the side.
-    const focusY = bodyRect.top + headerH + 14;
+    const focusY = bodyRect.top + 14;
 
     let activeCode: string | null = null;
     let bestScore = Number.POSITIVE_INFINITY;
 
     for (const [code, el] of rowRefs.current) {
       const rect = el.getBoundingClientRect();
-      if (rect.bottom <= bodyRect.top + headerH || rect.top >= bodyRect.bottom) continue;
+      if (rect.bottom <= bodyRect.top || rect.top >= bodyRect.bottom) continue;
 
       const containsFocus = focusY >= rect.top && focusY <= rect.bottom;
       const dist = containsFocus
@@ -130,20 +113,13 @@ export function AdmissionPencil({ selectedCode, onSelect }: AdmissionPencilProps
           <span className={styles.eraserTitle}>حداقل رتبه قبولی دانشگاه‌ها</span>
         </div>
 
-        <div className={styles.ferrule} aria-hidden>
-          <div className={styles.emblem}>
-            <BookEmblemIcon />
-          </div>
+        <div className={`${styles.ferrule} ${styles.ferruleHeader}`} role="row">
+          <span className={styles.ferruleName}>شهرستان</span>
+          <span className={styles.ferruleRank}>حداقل رتبه</span>
         </div>
 
         <div className={styles.body} ref={bodyRef}>
           <table className={styles.table}>
-            <thead>
-              <tr>
-                <th className={styles.hName}>شهرستان</th>
-                <th className={styles.hRank}>حداقل رتبه</th>
-              </tr>
-            </thead>
             <tbody>
               {provinceMaxRankRows.map((row) => {
                 const isSelected = row.code === selectedCode;
