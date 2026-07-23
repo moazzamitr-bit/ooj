@@ -26,7 +26,7 @@ export function AdmissionAlbertoSection() {
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr_13fr] lg:items-stretch">
       <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_4px_20px_rgb(17_26_76_0.04)]">
         <div className="grid min-h-0 flex-1 lg:grid-cols-[10fr_12fr] lg:items-stretch">
-          <div className="order-2 flex min-h-[640px] flex-col items-center justify-stretch overflow-hidden bg-white px-1 py-2 lg:order-1 lg:h-full lg:min-h-0 lg:px-2 lg:py-3">
+          <div className="order-2 flex flex-col items-center justify-start overflow-hidden bg-white px-1 py-2 lg:order-1 lg:px-2 lg:py-3">
             <AdmissionPencil selectedCode={selectedCode} onSelect={setSelectedCode} />
           </div>
 
@@ -71,7 +71,7 @@ export function AdmissionAlbertoSection() {
         </div>
       </div>
 
-      <AlbertoCard className="h-full min-h-[640px] min-w-0" compact />
+      <AlbertoCard className="h-full min-h-[440px] min-w-0" compact />
     </div>
   );
 }
