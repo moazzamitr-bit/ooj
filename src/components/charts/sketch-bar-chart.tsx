@@ -156,16 +156,8 @@ function splitLabel(label: string) {
   return label.split("\n");
 }
 
-/** Keep a trailing digit on the visual right in LTR SVG (Persian bidi otherwise pulls it left). */
-function splitTrailingDigit(line: string): { text: string; digit: string | null } {
-  const cleaned = line.replace(/\u200E/g, "").trim();
-  const match = cleaned.match(/^(.*?)[\s\u00A0]*([۰-۹0-9]+)$/u);
-  if (!match || !match[1]?.trim()) return { text: cleaned, digit: null };
-  return { text: match[1].trim(), digit: match[2] };
-}
-
 function formatTooltipLabel(label: string, group?: string) {
-  const clean = label.replace(/\u200E/g, "").replace(/\n/g, " ").trim();
+  const clean = label.replace(/\n/g, " ").trim();
   if (group && clean) return `${group} پایه ${clean}`;
   if (group) return group;
   return clean;
@@ -390,23 +382,11 @@ export function SketchBarChart({
                   transform={angled ? `rotate(-38, ${slotCenter}, ${labelY})` : undefined}
                   className={AXIS_LABEL_CLASS}
                 >
-                  {labelLines.map((line, lineIndex) => {
-                    const { text, digit } = splitTrailingDigit(line);
-                    return (
-                      <tspan key={lineIndex} x={slotCenter} dy={lineIndex === 0 ? 0 : 9}>
-                        {digit ? (
-                          <>
-                            <tspan direction="rtl" unicodeBidi="embed">
-                              {text}
-                            </tspan>
-                            <tspan>{` ${digit}`}</tspan>
-                          </>
-                        ) : (
-                          text
-                        )}
-                      </tspan>
-                    );
-                  })}
+                  {labelLines.map((line, lineIndex) => (
+                    <tspan key={lineIndex} x={slotCenter} dy={lineIndex === 0 ? 0 : 9}>
+                      {line}
+                    </tspan>
+                  ))}
                 </text>
               ) : null}
             </g>
