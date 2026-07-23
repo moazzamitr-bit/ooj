@@ -93,21 +93,37 @@ export const monthlyHoursChartData: ProfileChartBar[] = [
   { label: "خرداد", value: 40 },
 ];
 
-/** نمودار هفتگی - ساعت (یک ترم ۱۳ هفته‌ای، بدون ستون مجموع — مقیاس ۰ تا ۹) */
+/** نمودار هفتگی - ساعت (۱۳ بازهٔ ۷روزه، بدون ستون مجموع — مقیاس ۰ تا ۹) */
+const SEVEN_DAY_ORDINALS = [
+  "اول",
+  "دوم",
+  "سوم",
+  "چهارم",
+  "پنجم",
+  "ششم",
+  "هفتم",
+  "هشتم",
+  "نهم",
+  "دهم",
+  "یازدهم",
+  "دوازدهم",
+  "سیزدهم",
+] as const;
+
 export const weeklyHoursChartData: ProfileChartBar[] = [
-  { label: "هفته ۱", value: 4.5 },
-  { label: "هفته ۲", value: 5 },
-  { label: "هفته ۳", value: 6.5 },
-  { label: "هفته ۴", value: 7 },
-  { label: "هفته ۵", value: 5.5 },
-  { label: "هفته ۶", value: 8 },
-  { label: "هفته ۷", value: 6 },
-  { label: "هفته ۸", value: 7.5 },
-  { label: "هفته ۹", value: 5 },
-  { label: "هفته ۱۰", value: 6.5 },
-  { label: "هفته ۱۱", value: 7 },
-  { label: "هفته ۱۲", value: 8.5 },
-  { label: "هفته ۱۳", value: 6 },
+  { label: `۷ روز ${SEVEN_DAY_ORDINALS[0]}`, value: 4.5 },
+  { label: `۷ روز ${SEVEN_DAY_ORDINALS[1]}`, value: 5 },
+  { label: `۷ روز ${SEVEN_DAY_ORDINALS[2]}`, value: 6.5 },
+  { label: `۷ روز ${SEVEN_DAY_ORDINALS[3]}`, value: 7 },
+  { label: `۷ روز ${SEVEN_DAY_ORDINALS[4]}`, value: 5.5 },
+  { label: `۷ روز ${SEVEN_DAY_ORDINALS[5]}`, value: 8 },
+  { label: `۷ روز ${SEVEN_DAY_ORDINALS[6]}`, value: 6 },
+  { label: `۷ روز ${SEVEN_DAY_ORDINALS[7]}`, value: 7.5 },
+  { label: `۷ روز ${SEVEN_DAY_ORDINALS[8]}`, value: 5 },
+  { label: `۷ روز ${SEVEN_DAY_ORDINALS[9]}`, value: 6.5 },
+  { label: `۷ روز ${SEVEN_DAY_ORDINALS[10]}`, value: 7 },
+  { label: `۷ روز ${SEVEN_DAY_ORDINALS[11]}`, value: 8.5 },
+  { label: `۷ روز ${SEVEN_DAY_ORDINALS[12]}`, value: 6 },
 ];
 
 /** نمودار روزانه - دقیقه: ۳ مجموع کوچک، مازاد ابتدا، ۷ روز، مازاد آخر — مقیاس ۰ تا ۱۸۰ */

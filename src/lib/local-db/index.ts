@@ -510,7 +510,7 @@ export function getReferralStats(studentId: string) {
     sent: mine.length,
     registered: mine.filter((r) => r.status !== "sent").length,
     quizCompleted: mine.filter((r) => r.status === "quiz_completed" || r.status === "rewarded").length,
-    maxInvites: 1,
+    maxInvites: 3,
   };
 }
 

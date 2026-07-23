@@ -240,7 +240,7 @@ export const referralStats = {
   registered: 2,
   quizCompleted: 1,
   totalChances: 4,
-  maxInvites: 5,
+  maxInvites: 3,
 };
 
 export const provinces = [

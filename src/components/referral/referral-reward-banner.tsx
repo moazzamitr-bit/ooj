@@ -10,7 +10,7 @@ import styles from "@/components/referral/referral-reward-banner.module.css";
 const rewardCopy =
   "هر دوستی که با دعوت تو عضو بشه ۵۰۰,۰۰۰ هزار تومان فوری به حسابت واریز می‌شه!";
 
-const weeklyInviteLimit = "حداکثر ۱ دعوت موفق";
+const weeklyInviteLimit = "هر عضو می‌تواند فقط ۳ نفر را دعوت کند!";
 
 const fallingNotes: { src: string; className: string }[] = [
   { src: rial100.src, className: styles.note1 },
