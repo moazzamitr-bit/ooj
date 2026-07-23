@@ -38,49 +38,54 @@ interface BarColorSet {
 }
 
 const PALETTES: Record<ChartPalette | ChartBarTone, BarColorSet> = {
+  // Soft indigo — subjects / grade 10
   blue: {
-    front: "#2563EB",
-    top: "#60A5FA",
-    side: "#1D4ED8",
-    hover: "#1E40AF",
-    shade: "#1E3A8A",
+    front: "#6366F1",
+    top: "#A5B4FC",
+    side: "#4F46E5",
+    hover: "#4338CA",
+    shade: "#3730A3",
   },
+  // Soft teal — daily / grade 11 (not classic green; better contrast with blue)
   green: {
-    front: "#16A34A",
-    top: "#4ADE80",
-    side: "#15803D",
-    hover: "#166534",
-    shade: "#14532D",
+    front: "#14B8A6",
+    top: "#5EEAD4",
+    side: "#0D9488",
+    hover: "#0F766E",
+    shade: "#115E59",
   },
+  // Soft amber — weekly
   orange: {
-    front: "#EA580C",
-    top: "#FB923C",
-    side: "#C2410C",
-    hover: "#9A3412",
-    shade: "#7C2D12",
+    front: "#F59E0B",
+    top: "#FCD34D",
+    side: "#D97706",
+    hover: "#B45309",
+    shade: "#92400E",
   },
+  // Soft rose — grade 12
   red: {
-    front: "#DC2626",
-    top: "#F87171",
-    side: "#B91C1C",
-    hover: "#991B1B",
-    shade: "#7F1D1D",
+    front: "#F43F5E",
+    top: "#FDA4AF",
+    side: "#E11D48",
+    hover: "#BE123C",
+    shade: "#9F1239",
   },
+  // Soft slate ink — monthly
   black: {
-    front: "#1F2937",
-    top: "#6B7280",
-    side: "#111827",
-    hover: "#030712",
-    shade: "#000000",
+    front: "#475569",
+    top: "#94A3B8",
+    side: "#334155",
+    hover: "#1E293B",
+    shade: "#0F172A",
   },
 };
 
 const DEPTH_X = 7;
 const CHART_WIDTH = 400;
 const CHART_HEIGHT = 280;
-const CHART_PAD = { top: 8, right: 10, bottom: 56, left: 28 } as const;
+const CHART_PAD = { top: 8, right: 10, bottom: 62, left: 28 } as const;
 const AXIS_LABEL_CLASS =
-  "pointer-events-none fill-slate-700 text-[8.5px] font-medium leading-[1.2]";
+  "pointer-events-none fill-slate-800 text-[11px] font-semibold leading-[1.2]";
 
 function barWidth(kind: ChartBarKind = "default", dataLength = 0) {
   if (kind === "total") return 12;
@@ -311,7 +316,7 @@ export function SketchBarChart({
                 x={padding.left - 6}
                 y={y + 3}
                 textAnchor="end"
-                className="fill-slate-700 text-[9px] font-medium"
+                className="fill-slate-600 text-[10px] font-medium"
               >
                 {persianYAxis ? toPersianDigits(tick) : tick}
               </text>
@@ -341,7 +346,7 @@ export function SketchBarChart({
           );
           const labelLines = splitLabel(bar.label);
           const isHovered = hoveredIndex === index;
-          const labelY = baseline + 18;
+          const labelY = baseline + 17;
 
           return (
             <g key={`${bar.group ?? ""}-${bar.label}-${index}`}>
@@ -390,7 +395,7 @@ export function SketchBarChart({
 
         {groupRanges.map((group) => {
           const mid = (group.start + group.end) / 2;
-          const groupY = baseline + 40;
+          const groupY = baseline + 42;
           return (
             <text
               key={`group-${group.name}-${group.firstIndex}`}
