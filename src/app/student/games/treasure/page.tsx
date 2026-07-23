@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AppHeader } from "@/components/layout/app-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { day3Treasure } from "@/lib/campaign/copy";
 import { useCampaignStore } from "@/store/campaign-store";
+import { useApp } from "@/providers/app-provider";
+import { studentHasValidTestToday } from "@/lib/services/test-session.service";
 import { formatPersianNumber } from "@/lib/utils/persian";
 import {
   TREASURE_FLOORS,
@@ -19,12 +21,23 @@ export default function TreasureGamePage() {
   const startDay3 = useCampaignStore((s) => s.startDay3);
   const climb = useCampaignStore((s) => s.climbTreasureStep);
   const campaign = useCampaignStore((s) => s.campaign);
+  const { student } = useApp();
   const progress = getTreasureProgress(campaign.treasure_step ?? 0);
+  const [canClimb, setCanClimb] = useState(true);
 
   useEffect(() => {
     if (campaign.day !== 3) startDay3();
+    setCanClimb(studentHasValidTestToday(student.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [student.id]);
+
+  const handleClimb = () => {
+    if (!studentHasValidTestToday(student.id)) {
+      setCanClimb(false);
+      return;
+    }
+    climb();
+  };
 
   return (
     <div className="min-h-screen gradient-hero">
@@ -41,7 +54,6 @@ export default function TreasureGamePage() {
             ))}
           </div>
 
-          {/* Tower visual */}
           <Card className="overflow-hidden border-amber-200/80 bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] text-white shadow-xl">
             <CardContent className="space-y-3 p-5">
               <p className="text-center text-sm font-bold text-amber-200">🏰 برج قارون</p>
@@ -65,7 +77,11 @@ export default function TreasureGamePage() {
                     >
                       <p className="text-xs font-bold">طبقه {formatPersianNumber(floor)}</p>
                       <p className="mt-1 text-[10px] opacity-80">
-                        {unlocked ? "باز شد 🎁" : active ? `${formatPersianNumber(progress.stepInFloor)}/${formatPersianNumber(TREASURE_STEPS_PER_FLOOR)} پله` : "قفل"}
+                        {unlocked
+                          ? "باز شد 🎁"
+                          : active
+                            ? `${formatPersianNumber(progress.stepInFloor)}/${formatPersianNumber(TREASURE_STEPS_PER_FLOOR)} پله`
+                            : "قفل"}
                       </p>
                     </div>
                   );
@@ -76,7 +92,10 @@ export default function TreasureGamePage() {
                 <p className="text-xs text-white/70">پله‌های صعود</p>
                 <p className="mt-1 text-3xl font-extrabold text-amber-300">
                   {formatPersianNumber(progress.step)}
-                  <span className="text-base text-white/50"> / {formatPersianNumber(progress.maxSteps)}</span>
+                  <span className="text-base text-white/50">
+                    {" "}
+                    / {formatPersianNumber(progress.maxSteps)}
+                  </span>
                 </p>
                 {progress.stepsToNextFloor > 0 ? (
                   <p className="mt-1 text-[11px] text-sky-200">
@@ -87,14 +106,20 @@ export default function TreasureGamePage() {
                 )}
               </div>
 
+              {!canClimb && (
+                <p className="rounded-xl bg-rose-500/20 px-3 py-2 text-center text-xs leading-6 text-rose-100">
+                  برای صعود، امروز حداقل یک جلسه تست معتبر (≥۱۰ سوال) بزن.
+                </p>
+              )}
+
               <Button
                 type="button"
                 variant="gradient"
                 className="w-full"
-                onClick={() => climb()}
+                onClick={handleClimb}
                 disabled={progress.step >= progress.maxSteps}
               >
-                شبیه‌سازی ۲۰ دقیقه تست (+۱ پله و +۱ شانس)
+                ثبت صعود بعد از تست امروز (+۱ پله و +۱ شانس)
               </Button>
             </CardContent>
           </Card>
@@ -120,7 +145,9 @@ export default function TreasureGamePage() {
                       <p className="font-bold text-primary-deep">
                         {f.floor === 1 ? "🥉" : f.floor === 2 ? "🥈" : "🥇"} {f.title}
                       </p>
-                      <span className={`text-xs font-semibold ${unlocked ? "text-amber-700" : "text-slate-400"}`}>
+                      <span
+                        className={`text-xs font-semibold ${unlocked ? "text-amber-700" : "text-slate-400"}`}
+                      >
                         {unlocked ? "باز" : "قفل"}
                       </span>
                     </div>
@@ -153,7 +180,7 @@ export default function TreasureGamePage() {
                 شروع روز چهارم — تور ایران‌گردی
               </Button>
             </Link>
-            <Link href="/student/quiz">
+            <Link href="/student/practice/?mode=practice&subjectId=sub_chem&chapterId=ch_chem_2&difficulty=medium&count=10&autostart=1">
               <Button variant="outline" size="lg" className="w-full">
                 برو تست بزن و صعود کن
               </Button>

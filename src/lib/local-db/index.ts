@@ -11,6 +11,11 @@ import type {
   Subject,
   User,
 } from "@/types";
+import type {
+  DailyTestRewards,
+  MistakeItem,
+  TestSessionRecord,
+} from "@/types/test-session";
 import {
   admissionRankData,
   mockChapters,
@@ -47,6 +52,9 @@ export interface LocalDatabase {
     created_at: string;
   }>;
   study_sessions: StudySession[];
+  test_sessions: TestSessionRecord[];
+  mistakes: MistakeItem[];
+  daily_test_rewards: Record<string, DailyTestRewards>;
   referrals: Referral[];
   admission_ranks: AdmissionRankData[];
   chapter_progress: Record<string, Record<string, number>>;
@@ -99,6 +107,9 @@ function defaultDb(): LocalDatabase {
     questions: mockQuestions,
     answers: [],
     study_sessions: [],
+    test_sessions: [],
+    mistakes: [],
+    daily_test_rewards: {},
     referrals: mockReferrals,
     admission_ranks: admissionRankData,
     chapter_progress: {
@@ -134,6 +145,9 @@ export function loadLocalDb(): LocalDatabase {
       questions: parsed.questions?.length ? parsed.questions : defaults.questions,
       answers: parsed.answers ?? defaults.answers,
       study_sessions: parsed.study_sessions ?? defaults.study_sessions,
+      test_sessions: parsed.test_sessions ?? defaults.test_sessions,
+      mistakes: parsed.mistakes ?? defaults.mistakes,
+      daily_test_rewards: parsed.daily_test_rewards ?? defaults.daily_test_rewards,
       referrals: parsed.referrals ?? defaults.referrals,
       admission_ranks: parsed.admission_ranks?.length ? parsed.admission_ranks : defaults.admission_ranks,
       chapter_progress: { ...defaults.chapter_progress, ...parsed.chapter_progress },
@@ -235,10 +249,13 @@ export function getChapterProgress(studentId: string, subjectId: string) {
 
 export function recordQuizAnswers(
   studentId: string,
-  answers: Array<{ questionId: string; selected: string; isCorrect: boolean; timeSpent: number }>
+  answers: Array<{ questionId: string; selected: string; isCorrect: boolean; timeSpent: number }>,
+  meta?: { subjectId?: string; chapterId?: string; awardChance?: boolean }
 ) {
   const db = loadLocalDb();
   const now = new Date().toISOString();
+  const subjectId = meta?.subjectId ?? "sub_chem";
+  const chapterId = meta?.chapterId ?? "ch_chem_2";
 
   for (const a of answers) {
     db.answers.push({
@@ -256,8 +273,8 @@ export function recordQuizAnswers(
   db.study_sessions.push({
     id: uid("sess"),
     student_id: studentId,
-    subject_id: "sub_chem",
-    chapter_id: "ch_chem_2",
+    subject_id: subjectId,
+    chapter_id: chapterId,
     duration_minutes: Math.max(1, Math.round(answers.reduce((s, a) => s + a.timeSpent, 0) / 60)),
     test_count: answers.length,
     correct_count: correct,
@@ -266,16 +283,207 @@ export function recordQuizAnswers(
 
   const student = db.students.find((s) => s.id === studentId);
   if (student) {
-    student.total_chances += 1;
+    if (meta?.awardChance !== false) {
+      student.total_chances += 1;
+    }
     db.quiz_completed[studentId] = true;
 
     const progress = db.chapter_progress[studentId] ?? {};
-    progress["ch_chem_2"] = Math.min(100, (progress["ch_chem_2"] ?? 65) + 5);
+    const bump = answers.length >= 10 ? 8 : 5;
+    progress[chapterId] = Math.min(100, (progress[chapterId] ?? 0) + bump);
     db.chapter_progress[studentId] = progress;
   }
 
   saveLocalDb(db);
   return { correct, total: answers.length };
+}
+
+export function saveTestSessionRecord(session: TestSessionRecord) {
+  const db = loadLocalDb();
+  db.test_sessions.unshift(session);
+  saveLocalDb(db);
+}
+
+export function ensureQuestionsPersisted(questions: Question[]) {
+  const db = loadLocalDb();
+  const existing = new Set(db.questions.map((q) => q.id));
+  let changed = false;
+  for (const q of questions) {
+    if (!existing.has(q.id)) {
+      db.questions.push(q);
+      existing.add(q.id);
+      changed = true;
+    }
+  }
+  if (changed) saveLocalDb(db);
+}
+
+export function getMistakeBank(studentId: string, subjectId?: string): MistakeItem[] {
+  const db = loadLocalDb();
+  return db.mistakes.filter(
+    (m) =>
+      m.student_id === studentId &&
+      !m.mastered &&
+      (!subjectId || m.subject_id === subjectId)
+  );
+}
+
+export function upsertMistakesFromAnswers(
+  studentId: string,
+  items: Array<{
+    questionId: string;
+    subjectId: string;
+    chapterId: string;
+    topicId: string | null;
+    isCorrect: boolean;
+  }>,
+  masteryStreak: number
+) {
+  const db = loadLocalDb();
+  const now = new Date().toISOString();
+  let newlyMastered = 0;
+
+  for (const item of items) {
+    const existing = db.mistakes.find(
+      (m) => m.student_id === studentId && m.question_id === item.questionId
+    );
+
+    if (!item.isCorrect) {
+      if (existing) {
+        existing.wrong_count += 1;
+        existing.streak_correct = 0;
+        existing.mastered = false;
+        existing.last_seen = now;
+        existing.chapter_id = item.chapterId;
+        existing.topic_id = item.topicId;
+      } else {
+        db.mistakes.push({
+          question_id: item.questionId,
+          student_id: studentId,
+          subject_id: item.subjectId,
+          chapter_id: item.chapterId,
+          topic_id: item.topicId,
+          wrong_count: 1,
+          streak_correct: 0,
+          last_seen: now,
+          mastered: false,
+        });
+      }
+      continue;
+    }
+
+    if (!existing || existing.mastered) continue;
+    existing.streak_correct += 1;
+    existing.last_seen = now;
+    if (existing.streak_correct >= masteryStreak) {
+      existing.mastered = true;
+      newlyMastered += 1;
+    }
+  }
+
+  saveLocalDb(db);
+  return { newlyMastered };
+}
+
+export function getDailyTestRewards(studentId: string, dateKey: string): DailyTestRewards {
+  const db = loadLocalDb();
+  const key = `${studentId}:${dateKey}`;
+  return (
+    db.daily_test_rewards[key] ?? {
+      date: dateKey,
+      practice: 0,
+      exam_pass: 0,
+      mistake_clear: 0,
+    }
+  );
+}
+
+export function bumpDailyTestReward(
+  studentId: string,
+  dateKey: string,
+  kind: keyof Omit<DailyTestRewards, "date">,
+  amount = 1
+) {
+  const db = loadLocalDb();
+  const key = `${studentId}:${dateKey}`;
+  const current = getDailyTestRewards(studentId, dateKey);
+  const next = { ...current, [kind]: current[kind] + amount };
+  db.daily_test_rewards[key] = next;
+  saveLocalDb(db);
+  return next;
+}
+
+export function addStudentChances(studentId: string, amount: number) {
+  if (amount <= 0) return;
+  const db = loadLocalDb();
+  const student = db.students.find((s) => s.id === studentId);
+  if (!student) return;
+  student.total_chances += amount;
+  saveLocalDb(db);
+}
+
+export function hasValidTestToday(studentId: string, minQuestions: number): boolean {
+  const db = loadLocalDb();
+  const today = new Date().toDateString();
+  return db.study_sessions.some(
+    (s) =>
+      s.student_id === studentId &&
+      new Date(s.created_at).toDateString() === today &&
+      s.test_count >= minQuestions
+  );
+}
+
+export function getRecentTestSessions(studentId: string, limit = 10): TestSessionRecord[] {
+  const db = loadLocalDb();
+  return db.test_sessions.filter((s) => s.student_id === studentId).slice(0, limit);
+}
+
+export function getWeakestSubjectName(studentId: string): string | null {
+  const db = loadLocalDb();
+  const open = db.mistakes.filter((m) => m.student_id === studentId && !m.mastered);
+  if (open.length === 0) return null;
+  const counts = new Map<string, number>();
+  for (const m of open) {
+    counts.set(m.subject_id, (counts.get(m.subject_id) ?? 0) + 1);
+  }
+  let worstId = "";
+  let worstCount = -1;
+  for (const [id, count] of counts) {
+    if (count > worstCount) {
+      worstId = id;
+      worstCount = count;
+    }
+  }
+  return db.subjects.find((s) => s.id === worstId)?.name ?? null;
+}
+
+export function getStrongestSubjectFromSessions(studentId: string): string | null {
+  const db = loadLocalDb();
+  const today = new Date().toDateString();
+  const todaySessions = db.study_sessions.filter(
+    (s) => s.student_id === studentId && new Date(s.created_at).toDateString() === today
+  );
+  if (todaySessions.length === 0) return null;
+
+  const bySubject = new Map<string, { correct: number; total: number }>();
+  for (const s of todaySessions) {
+    const cur = bySubject.get(s.subject_id) ?? { correct: 0, total: 0 };
+    cur.correct += s.correct_count;
+    cur.total += s.test_count;
+    bySubject.set(s.subject_id, cur);
+  }
+
+  let bestId = "";
+  let bestAcc = -1;
+  for (const [id, stats] of bySubject) {
+    if (stats.total === 0) continue;
+    const acc = stats.correct / stats.total;
+    if (acc > bestAcc) {
+      bestAcc = acc;
+      bestId = id;
+    }
+  }
+  return db.subjects.find((s) => s.id === bestId)?.name ?? null;
 }
 
 export function createReferral(studentId: string, phone: string) {
@@ -379,14 +587,33 @@ export function getParentReport(studentId: string): ParentDailyReport {
   const correct = todaySessions.reduce((sum, s) => sum + s.correct_count, 0);
   const accuracy = testsAnswered > 0 ? Math.round((correct / testsAnswered) * 100) : 0;
 
+  const strongSubject =
+    getStrongestSubjectFromSessions(studentId) ??
+    db.subjects.find((s) => s.id === todaySessions[0]?.subject_id)?.name ??
+    "شیمی";
+  const needsAttention = getWeakestSubjectName(studentId) ?? "نیاز به تمرین بیشتر";
+
+  const lastExam = db.test_sessions.find(
+    (s) =>
+      s.student_id === studentId &&
+      s.mode === "exam" &&
+      new Date(s.created_at).toDateString() === today
+  );
+
+  const examBit = lastExam
+    ? lastExam.passed
+      ? " آخرین آزمون شبیه‌سازی را قبول شد."
+      : " آخرین آزمون شبیه‌سازی را مردود شد؛ مرور غلط‌ها پیشنهاد می‌شود."
+    : "";
+
   return {
     studyTimeMinutes,
     testsAnswered,
     accuracy,
-    weeklyProgress: Math.min(100, studyTimeMinutes),
-    strongSubject: "شیمی",
-    needsAttention: "فیزیک",
-    albertoSummary: `امروز ${studyTimeMinutes} دقیقه درس خواندی و ${testsAnswered} تست زدی. دقتت ${accuracy}٪ بود.`,
+    weeklyProgress: Math.min(100, Math.round(studyTimeMinutes / 2 + accuracy / 2)),
+    strongSubject,
+    needsAttention,
+    albertoSummary: `امروز ${studyTimeMinutes} دقیقه مطالعه و ${testsAnswered} تست ثبت شد؛ دقت ${accuracy}٪. نقطهٔ قوت: ${strongSubject}. نیازمند توجه: ${needsAttention}.${examBit}`,
   };
 }
 

@@ -10,13 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { mockStudent, mockSubjects } from "@/lib/data/mock-data";
-import {
-  dailyMinutesChartData,
-  monthlyHoursChartData,
-  subjectGradeTestChartData,
-  weeklyHoursChartData,
-  type ProfileChartBar,
-} from "@/lib/data/profile-mock-data";
+import { getStudentChartData } from "@/lib/testing/chart-from-sessions";
 import { loadLocalDb } from "@/lib/local-db";
 import {
   getCurrentStudent,
@@ -49,12 +43,7 @@ interface AppContextValue {
   ) => Promise<{ success: boolean; message: string }>;
   logout: () => void;
   getChaptersForSubject: (subjectId: string) => ReturnType<typeof getStudentChapters>;
-  chartData: {
-    daily: ProfileChartBar[];
-    weekly: ProfileChartBar[];
-    monthly: ProfileChartBar[];
-    subjects: ProfileChartBar[];
-  };
+  chartData: ReturnType<typeof getStudentChartData>;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -81,13 +70,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const profile = useMemo(() => getStudentProfile(student), [student]);
 
   const chartData = useMemo(
-    () => ({
-      daily: dailyMinutesChartData,
-      weekly: weeklyHoursChartData,
-      monthly: monthlyHoursChartData,
-      subjects: subjectGradeTestChartData,
-    }),
-    [tick]
+    () => getStudentChartData(student.id),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [student.id, tick]
   );
 
   const loginSendOtp = useCallback(async (phone: string) => sendOtp(phone), []);

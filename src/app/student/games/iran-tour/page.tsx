@@ -10,6 +10,8 @@ import { day4IranTour } from "@/lib/campaign/copy";
 import { getProvinceQuiz } from "@/lib/campaign/province-quiz";
 import { iranProvinces, IRAN_MAP_VIEWBOX } from "@/lib/data/iran-provinces";
 import { useCampaignStore } from "@/store/campaign-store";
+import { useApp } from "@/providers/app-provider";
+import { studentHasValidTestToday } from "@/lib/services/test-session.service";
 import { formatPersianNumber } from "@/lib/utils/persian";
 
 export default function IranTourPage() {
@@ -18,6 +20,8 @@ export default function IranTourPage() {
   const addChances = useCampaignStore((s) => s.addChances);
   const climbTreasureStep = useCampaignStore((s) => s.climbTreasureStep);
   const campaign = useCampaignStore((s) => s.campaign);
+  const { student } = useApp();
+  const [needTest, setNeedTest] = useState(false);
 
   const unlocked = useMemo(
     () => new Set(campaign.iran_provinces_unlocked ?? []),
@@ -39,6 +43,11 @@ export default function IranTourPage() {
   const quizParts = quiz ? [quiz.center, quiz.attraction, quiz.souvenir] : [];
 
   function discoverNext() {
+    if (!studentHasValidTestToday(student.id)) {
+      setNeedTest(true);
+      return;
+    }
+    setNeedTest(false);
     const next = iranProvinces.find((p) => !unlocked.has(p.code));
     if (!next) return;
     const ok = unlockProvince(next.code);
@@ -114,6 +123,11 @@ export default function IranTourPage() {
               </div>
 
               <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+                {needTest && (
+                  <p className="w-full rounded-xl bg-rose-50 px-3 py-2 text-center text-xs leading-6 text-rose-700 sm:col-span-2">
+                    برای کشف استان، امروز حداقل یک جلسه تست معتبر (≥۱۰ سوال) بزن.
+                  </p>
+                )}
                 <Button
                   type="button"
                   variant="gradient"
@@ -121,7 +135,7 @@ export default function IranTourPage() {
                   onClick={discoverNext}
                   disabled={unlockedCount >= 31}
                 >
-                  شبیه‌سازی ۱ ساعت تست (+۱ استان)
+                  ثبت کشف بعد از تست امروز (+۱ استان)
                 </Button>
                 <Button
                   type="button"
@@ -195,7 +209,7 @@ export default function IranTourPage() {
                 شروع روز پنجم — دوی ماراتون
               </Button>
             </Link>
-            <Link href="/student/quiz">
+            <Link href="/student/practice/?mode=practice&subjectId=sub_chem&chapterId=ch_chem_2&difficulty=medium&count=10&autostart=1">
               <Button variant="outline" size="lg" className="w-full">
                 برو تست بزن و استان کشف کن
               </Button>

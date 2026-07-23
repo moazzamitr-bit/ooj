@@ -23,6 +23,7 @@ import {
 import { formatPercent } from "@/lib/utils/persian";
 import { useApp } from "@/providers/app-provider";
 import { useStudentStore } from "@/store/student-store";
+import { getContinuePracticeHref } from "@/lib/services/test-session.service";
 import type { Subject } from "@/types";
 
 const subjectThemes: Record<string, { ring: string; bg: string; text: string }> = {
@@ -57,7 +58,11 @@ function HomeCard({
 }
 
 export function ContinueYesterdayCard() {
+  const { student } = useApp();
   const { setActiveSubject } = useStudentStore();
+  const continueHref =
+    getContinuePracticeHref(student.id) ??
+    `/student/practice/?mode=practice&subjectId=${yesterdayPath.subjectId}&chapterId=ch_chem_2&difficulty=medium&count=10&autostart=1`;
 
   const handleContinue = () => {
     setActiveSubject(yesterdayPath.subjectId);
@@ -70,11 +75,11 @@ export function ContinueYesterdayCard() {
           <Play className="h-5 w-5" aria-hidden />
         </div>
         <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary">
-          دیروز
+          ادامه
         </span>
       </div>
 
-      <h2 className="text-lg font-extrabold text-primary-deep">ادامه مسیر دیروز</h2>
+      <h2 className="text-lg font-extrabold text-primary-deep">ادامه مسیر تست‌زنی</h2>
       <p className="mt-2 text-sm leading-7 text-slate-600">
         {yesterdayPath.subjectName} · {yesterdayPath.chapterTitle}
       </p>
@@ -88,15 +93,15 @@ export function ContinueYesterdayCard() {
       </div>
 
       <p className="mt-3 text-xs text-slate-400">
-        حدود {yesterdayPath.minutesLeft} دقیقه تا اتمام این بخش باقی مانده
+        از آخرین مبحث ضعیف یا جلسهٔ قبلی‌ات ادامه بده
       </p>
 
       <Link
-        href="/student/profile"
+        href={continueHref}
         onClick={handleContinue}
         className="mt-auto flex items-center justify-center gap-2 rounded-full bg-gradient-to-l from-primary to-electric-blue py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:opacity-95"
       >
-        ادامه مطالعه
+        ادامه تست
         <ArrowLeft className="h-4 w-4" aria-hidden />
       </Link>
     </HomeCard>
