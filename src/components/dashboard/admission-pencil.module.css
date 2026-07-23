@@ -36,8 +36,8 @@
   --shadow: rgba(37, 99, 235, 0.18);
   --eraser-h: 72px;
   --ferrule-h: 40px;
-  /* ~10 province rows visible (row ≈ 42px) */
-  --body-h: 420px;
+  /* ~15 province rows visible (row ≈ 42px) */
+  --body-h: 630px;
 
   display: flex;
   flex-direction: column;
