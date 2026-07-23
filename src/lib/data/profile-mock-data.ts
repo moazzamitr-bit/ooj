@@ -111,19 +111,19 @@ const SEVEN_DAY_ORDINALS = [
 ] as const;
 
 export const weeklyHoursChartData: ProfileChartBar[] = [
-  { label: `۷ روز ${SEVEN_DAY_ORDINALS[0]}`, value: 4.5 },
-  { label: `۷ روز ${SEVEN_DAY_ORDINALS[1]}`, value: 5 },
-  { label: `۷ روز ${SEVEN_DAY_ORDINALS[2]}`, value: 6.5 },
-  { label: `۷ روز ${SEVEN_DAY_ORDINALS[3]}`, value: 7 },
-  { label: `۷ روز ${SEVEN_DAY_ORDINALS[4]}`, value: 5.5 },
-  { label: `۷ روز ${SEVEN_DAY_ORDINALS[5]}`, value: 8 },
-  { label: `۷ روز ${SEVEN_DAY_ORDINALS[6]}`, value: 6 },
-  { label: `۷ روز ${SEVEN_DAY_ORDINALS[7]}`, value: 7.5 },
-  { label: `۷ روز ${SEVEN_DAY_ORDINALS[8]}`, value: 5 },
-  { label: `۷ روز ${SEVEN_DAY_ORDINALS[9]}`, value: 6.5 },
-  { label: `۷ روز ${SEVEN_DAY_ORDINALS[10]}`, value: 7 },
-  { label: `۷ روز ${SEVEN_DAY_ORDINALS[11]}`, value: 8.5 },
-  { label: `۷ روز ${SEVEN_DAY_ORDINALS[12]}`, value: 6 },
+  { label: `روز ${SEVEN_DAY_ORDINALS[0]} \u200E۷`, value: 4.5 },
+  { label: `روز ${SEVEN_DAY_ORDINALS[1]} \u200E۷`, value: 5 },
+  { label: `روز ${SEVEN_DAY_ORDINALS[2]} \u200E۷`, value: 6.5 },
+  { label: `روز ${SEVEN_DAY_ORDINALS[3]} \u200E۷`, value: 7 },
+  { label: `روز ${SEVEN_DAY_ORDINALS[4]} \u200E۷`, value: 5.5 },
+  { label: `روز ${SEVEN_DAY_ORDINALS[5]} \u200E۷`, value: 8 },
+  { label: `روز ${SEVEN_DAY_ORDINALS[6]} \u200E۷`, value: 6 },
+  { label: `روز ${SEVEN_DAY_ORDINALS[7]} \u200E۷`, value: 7.5 },
+  { label: `روز ${SEVEN_DAY_ORDINALS[8]} \u200E۷`, value: 5 },
+  { label: `روز ${SEVEN_DAY_ORDINALS[9]} \u200E۷`, value: 6.5 },
+  { label: `روز ${SEVEN_DAY_ORDINALS[10]} \u200E۷`, value: 7 },
+  { label: `روز ${SEVEN_DAY_ORDINALS[11]} \u200E۷`, value: 8.5 },
+  { label: `روز ${SEVEN_DAY_ORDINALS[12]} \u200E۷`, value: 6 },
 ];
 
 /** نمودار روزانه - دقیقه: ۳ مجموع کوچک، مازاد ابتدا، ۷ روز، مازاد آخر — مقیاس ۰ تا ۱۸۰ */
